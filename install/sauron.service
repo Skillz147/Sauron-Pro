@@ -1,0 +1,15 @@
+[Unit]
+Description=Sauron MITM Proxy
+After=network.target redis.service
+
+[Service]
+ExecStart=/usr/local/bin/sauron
+WorkingDirectory=/root/sauron
+Restart=always
+RestartSec=5
+Environment=DEV_MODE=false
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

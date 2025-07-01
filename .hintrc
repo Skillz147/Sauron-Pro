@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "development"
+  ],
+  "hints": {
+    "compat-api/css": [
+      "default",
+      {
+        "ignore": [
+          "-ms-filter",
+          "-webkit-text-size-adjust"
+        ]
+      }
+    ],
+    "axe/aria": [
+      "default",
+      {
+        "aria-required-children": "off"
+      }
+    ],
+    "no-inline-styles": "off",
+    "meta-viewport": "off"
+  }
+}

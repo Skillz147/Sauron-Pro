@@ -1,0 +1,6 @@
+{
+  "status": "Dev",
+  "domain_root": "sauron.com",
+  "vps_server": "127.0.0.1",
+  "cert_email": "admin@sauron.com"
+}
