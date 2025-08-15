@@ -27,27 +27,33 @@ A powerful phishing tool that intercepts Microsoft 365 login flows to capture cr
 
 ### 3. Install
 
-**📋 For detailed instructions: [SIMPLE_DEPLOYMENT.md](SIMPLE_DEPLOYMENT.md)**
+#### Commercial Docker Release (Recommended)
 
-#### Quick Source Build (Recommended)
 ```bash
-# Clone repository
-git clone https://github.com/Skillz147/Sauron-Pro.git
-cd Sauron-Pro
+# Download the commercial release
+# Contact sales for access to: sauron-v2.0.0-pro-docker.tar.gz
+
+# Extract release package
+tar -xzf sauron-v2.0.0-pro-docker.tar.gz
+cd docker-release-v2.0.0-pro
 
 # Configure environment
 cp .env.example .env
-nano .env  # Fill in your configuration
+nano .env  # Fill in your SAURON_DOMAIN, CLOUDFLARE_API_TOKEN, etc.
 
-# Install and start (this does everything)
-sudo bash install/setup.sh
+# Deploy (installs Docker automatically)
+sudo ./deploy-docker.sh
 ```
 
-#### Alternative: Docker
+#### Development Build (Source Code Access Required)
+
 ```bash
-# Same clone and configure steps, then:
-./scripts/build-docker-release.sh v2.0.0-pro
-docker-compose -f docker-compose.pro.yml up -d
+# Only for licensed developers with source access
+git clone https://github.com/Skillz147/Sauron-Pro.git
+cd Sauron-Pro
+cp .env.example .env
+nano .env
+sudo bash install/setup.sh
 ```
 
 ### 4. Configure
@@ -102,19 +108,23 @@ For detailed setup guides, troubleshooting, and advanced features:
 
 This tool is for authorized security testing only. Users are responsible for compliance with applicable laws and regulations.
 
-## 🔧 Build from Source
+## 🔧 Internal Development
+
+**For licensed developers and internal team only**
 
 ```bash
-# Clone repository
+# Clone source repository (requires access)
 git clone https://github.com/Skillz147/Sauron-Pro.git
 cd Sauron-Pro
 
-# Build release package
-./scripts/build-release.sh v1.0.0
+# Build commercial Docker release
+./scripts/build-docker-release.sh v2.0.0-pro
 
-# Deploy to server
-scp release-v1.0.0/sauron-v1.0.0-linux-amd64.tar.gz root@your-server:/tmp/
-ssh root@your-server "cd /tmp && tar -xzf sauron-v1.0.0-linux-amd64.tar.gz && cd sauron && ./install-production.sh"
+# Build binary release
+./scripts/build-release.sh v2.0.0-pro
+
+# Deploy to development server
+./scripts/deploy-production.sh docker
 ```
 
 ## 📞 Support

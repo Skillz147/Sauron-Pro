@@ -202,7 +202,7 @@ The API provides detailed error reporting for each operation:
 
 ## Recommendations
 
-### Operational Security
+### Best Practices
 
 - Run cleanup operations regularly to minimize forensic traces
 - Use dry run mode before destructive operations
