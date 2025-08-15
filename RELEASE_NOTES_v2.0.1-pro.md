@@ -3,6 +3,7 @@
 ## 🚀 What's New
 
 ### **Ultra-Simple 3-Minute Deployment**
+
 - **One-command installation**: `sudo ./install-production.sh` handles everything
 - **Interactive Cloudflare setup** with step-by-step guidance
 - **Automatic Docker installation** (if not present on VPS)
@@ -10,12 +11,14 @@
 - **Professional progress display** throughout installation
 
 ### **Enterprise-Grade Security**
+
 - **Source code protection**: No Go source files in customer releases
 - **Compiled binary distribution**: 35MB statically-linked executable
 - **Stripped symbols**: `-w -s` compilation flags remove debug information
 - **Memory security**: Anti-forensics and memory protection built-in
 
 ### **Professional Customer Experience**
+
 - **Crystal-clear documentation** with troubleshooting guides
 - **Automated health checks** and service verification
 - **Beautiful admin panel** accessible immediately after deployment
@@ -44,18 +47,21 @@ sudo ./install-production.sh
 ## ✨ Key Features
 
 ### **Microsoft 365 MITM Capabilities**
+
 - Real-time OAuth2 token interception
 - Multi-factor authentication bypass
 - Session synchronization across devices
 - Cookie harvesting from Microsoft flows
 
 ### **Advanced Detection Systems**
+
 - Headless browser identification
 - Bot and automation detection
 - IP reputation filtering
 - Behavioral analysis
 
 ### **Enterprise Management**
+
 - Slug-based campaign isolation
 - WebSocket real-time interface
 - Statistics and analytics tracking
@@ -71,6 +77,7 @@ sudo ./install-production.sh
 ## 🌐 Access Points
 
 After successful installation:
+
 - **Admin Panel**: `https://yourdomain.com/admin`
 - **Statistics**: `https://yourdomain.com/stats`
 - **WebSocket**: `wss://yourdomain.com/ws`

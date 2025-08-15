@@ -31,25 +31,53 @@ cd sauron
 
 # 3. One-command setup (handles everything automatically)
 sudo ./install-production.sh
+
+# 4. Get help anytime
+./help.sh
 ```
 
 **That's it!** The installer will:
+
 - Install Docker and system dependencies automatically
 - Walk you through Cloudflare setup step-by-step
 - Configure SSL certificates with Let's Encrypt
 - Start Sauron service automatically
 
-### Development Build (Source Access)
+### 🎯 Quick Help
 
 ```bash
-# Only if you have source code access
-git clone https://github.com/Skillz147/Sauron-Pro.git
-cd Sauron-Pro
-sudo ./install/setup.sh
+# Show all available commands and current status
+./help.sh
 ```
 
-### Configuration
+This command shows you:
 
+- ✅ All available management commands
+- ✅ Configuration and troubleshooting options  
+- ✅ Current system status
+- ✅ Quick actions and emergency commands
+
+- Install Docker and system dependencies automatically
+- Walk you through Cloudflare setup step-by-step
+- Configure SSL certificates with Let's Encrypt
+- Start Sauron service automatically
+
+### 🔧 Configuration Management
+
+**Interactive Configuration Setup:**
+
+```bash
+# Run interactive configuration wizard
+./configure-env.sh
+
+# Validate current configuration
+./configure-env.sh --check
+
+# Show configuration status
+./configure-env.sh --status
+```
+
+**Manual Configuration:**
 Edit `.env` file with your settings:
 
 ```bash
@@ -61,6 +89,18 @@ CLOUDFLARE_API_TOKEN=your_token_here
 
 # Turnstile secret (optional bot protection)
 TURNSTILE_SECRET=your_secret_here
+```
+
+### 🔄 Updates
+
+**Automatic Updates:**
+
+```bash
+# Check for and install updates automatically
+sudo ./update-sauron.sh
+
+# Check for updates without installing
+sudo ./update-sauron.sh --check
 ```
 
 ## 📱 Usage
@@ -88,6 +128,89 @@ sudo journalctl -u sauron -f
 
 # Restart service
 sudo systemctl restart sauron
+
+# Check version
+/usr/local/bin/sauron --version
+
+# Full system verification
+./verify-installation.sh
+```
+
+### 🔧 Configuration Helpers
+
+```bash
+# Interactive configuration wizard (default)
+./configure-env.sh
+
+# Quick status check
+./configure-env.sh --status
+
+# Validate configuration
+./configure-env.sh --check
+
+# Test domain connectivity
+./configure-env.sh --test-domain
+
+# Check SSL certificates
+./configure-env.sh --check-ssl
+
+# Show current configuration
+./configure-env.sh show
+```
+
+## 🆘 Troubleshooting
+
+### Common Issues & Quick Fixes
+
+**🔴 Service won't start**
+
+```bash
+# Check service status and logs
+sudo systemctl status sauron
+sudo journalctl -u sauron --no-pager -l
+
+# Verify installation
+./verify-installation.sh
+
+# Check configuration
+./configure-env.sh --check
+```
+
+**🔴 "Domain not reachable" errors**
+
+```bash
+# Test DNS resolution
+dig yourdomain.com
+
+# Verify domain points to your server
+curl -I https://yourdomain.com
+
+# Check Cloudflare configuration
+./configure-env.sh --test-domain
+```
+
+**🔴 SSL certificate issues**
+
+```bash
+# Check certificate status
+./configure-env.sh --check-ssl
+
+# Manual certificate renewal
+sudo acme.sh --renew -d yourdomain.com
+
+# View certificate logs
+sudo journalctl -u acme.sh -f
+```
+
+**🔴 Configuration problems**
+
+```bash
+# Run configuration wizard
+./configure-env.sh
+
+# Reset to defaults
+cp .env.example .env
+./configure-env.sh
 ```
 
 ## 🛠️ Development
@@ -95,14 +218,23 @@ sudo systemctl restart sauron
 ### Building Releases
 
 ```bash
-# Build binary release package
-./scripts/build-release.sh v2.0.1
+# Build binary release package (auto-versioned)
+./scripts/build-release.sh
 
-# Build Docker release package
-./scripts/build-docker-release.sh v2.0.1
+# Build with specific version
+./scripts/build-release.sh v2025.08.15-custom
 
 # Deploy to production server
 ./scripts/deploy-production.sh
+```
+
+### Development Build (Source Access)
+
+```bash
+# Only if you have source code access
+git clone https://github.com/Skillz147/Sauron-Pro.git
+cd Sauron-Pro
+sudo ./install/setup.sh
 ```
 
 ### Project Structure
@@ -118,6 +250,7 @@ sudo systemctl restart sauron
 **[📖 Full Documentation](https://skillz147.github.io/Sauron-Pro)**
 
 Includes:
+
 - Advanced configuration options
 - API endpoint documentation
 - Troubleshooting guides
@@ -125,33 +258,38 @@ Includes:
 
 ## ⚠️ Legal Notice & Disclaimer
 
-**IMPORTANT: READ BEFORE USE**
+### IMPORTANT: READ BEFORE USE
 
 This software is provided for **educational and authorized security testing purposes only**. By downloading, installing, or using this software, you acknowledge and agree to the following:
 
 ### 🔒 Authorized Use Only
+
 - This tool is intended **ONLY** for authorized penetration testing, security research, and educational purposes
 - You must have **explicit written permission** from the target system owner before use
 - Unauthorized access to computer systems is **illegal** and may violate local, state, federal, and international laws
 
 ### 🚫 Prohibited Activities
+
 - **DO NOT** use this software for unauthorized access to any system
 - **DO NOT** use this software for malicious purposes, fraud, or illegal activities
 - **DO NOT** use this software to violate any applicable laws or regulations
 
 ### 🛡️ Disclaimer of Liability
+
 - The authors and contributors provide this software **"AS IS"** without any warranties
 - **NO LIABILITY** is accepted for any damages, losses, or legal consequences resulting from use
 - Users assume **FULL RESPONSIBILITY** for compliance with applicable laws
 - The authors **DISCLAIM ALL LIABILITY** for misuse of this software
 
 ### 📋 User Responsibilities
+
 - Verify legal compliance in your jurisdiction before use
 - Obtain proper authorization before conducting any security tests
 - Use responsibly and ethically in accordance with applicable laws
 - Report vulnerabilities through proper disclosure channels
 
 ### 🏛️ Jurisdiction & Compliance
+
 - Users are responsible for compliance with all applicable laws including but not limited to:
   - Computer Fraud and Abuse Act (CFAA)
   - Digital Millennium Copyright Act (DMCA)

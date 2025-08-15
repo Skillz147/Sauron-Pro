@@ -21,10 +21,10 @@ ENV_FILE=".env"
 
 echo -e "${BLUE}🔧 Sauron Environment Configuration Manager${NC}"
 echo -e "${BLUE}===========================================${NC}"
-# Fu        echo -e "${YELLOW}🚀 For deployment help, see: ${CYAN}https://github.com/Skillz147/Sauron-Pro#deployment${NC}"cho ""
-    echo -e "${YELLOW}🚀 For deployment help, see: ${CYAN}https://github.com/Skillz147/Sauron-Pro#deployment${NC}"
-    echo ""
-}on to generate random secrets
+echo -e "${YELLOW}🚀 For deployment help, see: ${CYAN}https://github.com/Skillz147/Sauron-Pro#deployment${NC}"
+echo ""
+
+# Function to generate random secrets
 generate_secret() {
     if command -v openssl >/dev/null 2>&1; then
         openssl rand -hex 32
@@ -538,7 +538,170 @@ reset_configuration() {
     esac
 }
 
-# Main script logic
+# Function to test domain connectivity
+test_domain_connectivity() {
+    if [ -z "$SAURON_DOMAIN" ]; then
+        echo -e "${RED}❌ SAURON_DOMAIN not configured${NC}"
+        return 1
+    fi
+    
+    echo -e "${BLUE}🌐 Testing domain connectivity for: ${CYAN}$SAURON_DOMAIN${NC}"
+    echo ""
+    
+    # DNS Resolution Test
+    echo -e "${YELLOW}🔍 DNS Resolution Test${NC}"
+    if command -v dig >/dev/null 2>&1; then
+        if dig "$SAURON_DOMAIN" +short | grep -q .; then
+            IP=$(dig "$SAURON_DOMAIN" +short | head -1)
+            echo -e "${GREEN}✅ DNS resolution successful: $IP${NC}"
+        else
+            echo -e "${RED}❌ DNS resolution failed${NC}"
+            return 1
+        fi
+    else
+        echo -e "${YELLOW}⚠️  dig command not available${NC}"
+    fi
+    
+    # HTTP Connectivity Test
+    echo -e "${YELLOW}🌐 HTTP Connectivity Test${NC}"
+    if command -v curl >/dev/null 2>&1; then
+        if curl -s -I "https://$SAURON_DOMAIN" --connect-timeout 10 | grep -q "HTTP"; then
+            STATUS=$(curl -s -I "https://$SAURON_DOMAIN" --connect-timeout 10 | head -1)
+            echo -e "${GREEN}✅ HTTPS connectivity working: $STATUS${NC}"
+        else
+            echo -e "${YELLOW}⚠️  HTTPS connectivity failed (normal during initial setup)${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  curl command not available${NC}"
+    fi
+    
+    # Ping Test
+    echo -e "${YELLOW}📡 Ping Test${NC}"
+    if ping -c 3 "$SAURON_DOMAIN" >/dev/null 2>&1; then
+        echo -e "${GREEN}✅ Ping successful${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Ping failed (may be blocked by firewall)${NC}"
+    fi
+    
+    echo ""
+    echo -e "${BLUE}🎯 Domain connectivity test completed${NC}"
+}
+
+# Function to check SSL certificates
+check_ssl_certificates() {
+    echo -e "${BLUE}🔒 SSL Certificate Status Check${NC}"
+    echo ""
+    
+    # Check local certificate files
+    if [ -f "tls/cert.pem" ]; then
+        echo -e "${GREEN}✅ Local certificate file exists (tls/cert.pem)${NC}"
+        
+        if command -v openssl >/dev/null 2>&1; then
+            # Check certificate details
+            CERT_SUBJECT=$(openssl x509 -in tls/cert.pem -noout -subject 2>/dev/null | sed 's/subject=//')
+            CERT_ISSUER=$(openssl x509 -in tls/cert.pem -noout -issuer 2>/dev/null | sed 's/issuer=//')
+            CERT_EXPIRY=$(openssl x509 -in tls/cert.pem -noout -enddate 2>/dev/null | cut -d= -f2)
+            
+            echo -e "${CYAN}Subject: $CERT_SUBJECT${NC}"
+            echo -e "${CYAN}Issuer: $CERT_ISSUER${NC}"
+            echo -e "${CYAN}Expires: $CERT_EXPIRY${NC}"
+            
+            # Check if certificate is still valid
+            if openssl x509 -in tls/cert.pem -noout -checkend 0 >/dev/null 2>&1; then
+                echo -e "${GREEN}✅ Certificate is currently valid${NC}"
+                
+                if openssl x509 -in tls/cert.pem -noout -checkend 604800 >/dev/null 2>&1; then
+                    echo -e "${GREEN}✅ Certificate valid for at least 7 more days${NC}"
+                else
+                    echo -e "${YELLOW}⚠️  Certificate expires within 7 days - renewal recommended${NC}"
+                fi
+            else
+                echo -e "${RED}❌ Certificate has expired${NC}"
+            fi
+        fi
+    else
+        echo -e "${YELLOW}⚠️  No local certificate found (tls/cert.pem)${NC}"
+    fi
+    
+    if [ -f "tls/key.pem" ]; then
+        echo -e "${GREEN}✅ Private key file exists (tls/key.pem)${NC}"
+    else
+        echo -e "${YELLOW}⚠️  No private key found (tls/key.pem)${NC}"
+    fi
+    
+    # Check acme.sh certificates
+    if command -v acme.sh >/dev/null 2>&1; then
+        echo ""
+        echo -e "${YELLOW}🏆 ACME.SH Managed Certificates${NC}"
+        
+        # List certificates managed by acme.sh
+        if acme.sh --list >/dev/null 2>&1; then
+            CERT_LIST=$(acme.sh --list 2>/dev/null)
+            if echo "$CERT_LIST" | grep -q "Main_Domain"; then
+                echo -e "${GREEN}✅ Certificates managed by acme.sh:${NC}"
+                echo "$CERT_LIST"
+            else
+                echo -e "${YELLOW}⚠️  No certificates managed by acme.sh${NC}"
+            fi
+        else
+            echo -e "${YELLOW}⚠️  Unable to list acme.sh certificates${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  acme.sh not installed${NC}"
+    fi
+    
+    echo ""
+    echo -e "${BLUE}🎯 SSL certificate check completed${NC}"
+}
+
+# Function to show current status
+show_status() {
+    echo -e "${BLUE}📊 Sauron Configuration Status${NC}"
+    echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    
+    # Load configuration
+    if [ -f "$ENV_FILE" ]; then
+        source "$ENV_FILE" 2>/dev/null || true
+        echo -e "${GREEN}✅ Configuration file exists${NC}"
+    else
+        echo -e "${RED}❌ Configuration file missing${NC}"
+        echo ""
+        return 1
+    fi
+    
+    # Show key configuration items
+    echo -e "${CYAN}📋 Configuration Summary:${NC}"
+    echo -e "  Domain: ${YELLOW}${SAURON_DOMAIN:-Not set}${NC}"
+    echo -e "  Cloudflare Token: ${YELLOW}${CLOUDFLARE_API_TOKEN:+Configured}${CLOUDFLARE_API_TOKEN:-Not set}${NC}"
+    echo -e "  Turnstile Secret: ${YELLOW}${TURNSTILE_SECRET:+Configured}${TURNSTILE_SECRET:-Not set}${NC}"
+    echo ""
+    
+    # Check service status
+    echo -e "${CYAN}🔧 Service Status:${NC}"
+    if systemctl is-active sauron.service >/dev/null 2>&1; then
+        echo -e "  Service: ${GREEN}Running${NC}"
+    else
+        echo -e "  Service: ${RED}Not running${NC}"
+    fi
+    
+    if systemctl is-enabled sauron.service >/dev/null 2>&1; then
+        echo -e "  Auto-start: ${GREEN}Enabled${NC}"
+    else
+        echo -e "  Auto-start: ${YELLOW}Disabled${NC}"
+    fi
+    
+    # Check binary
+    if [ -f "/usr/local/bin/sauron" ]; then
+        VERSION=$(/usr/local/bin/sauron --version 2>/dev/null || echo "unknown")
+        echo -e "  Binary: ${GREEN}Installed ($VERSION)${NC}"
+    else
+        echo -e "  Binary: ${RED}Not installed${NC}"
+    fi
+    
+    echo ""
+    echo -e "${BLUE}🎯 Status check completed${NC}"
+}
 case "${1:-}" in
     "show")
         show_configuration
@@ -552,14 +715,43 @@ case "${1:-}" in
     "reset")
         reset_configuration
         ;;
+    "status" | "--status")
+        show_status
+        ;;
+    "test-domain" | "--test-domain")
+        # Load configuration first
+        if [ -f "$ENV_FILE" ]; then
+            source "$ENV_FILE" 2>/dev/null || true
+        fi
+        test_domain_connectivity
+        ;;
+    "check-ssl" | "--check-ssl")
+        check_ssl_certificates
+        ;;
+    "validate" | "--check")
+        validate_configuration
+        ;;
+    "")
+        # No arguments - run interactive setup
+        interactive_setup
+        ;;
     *)
-        echo -e "${YELLOW}Usage: $0 {show|setup|validate|reset}${NC}"
+        echo -e "${YELLOW}Usage: $0 {show|setup|validate|reset|status|test-domain|check-ssl}${NC}"
         echo ""
         echo -e "${WHITE}Commands:${NC}"
-        echo -e "  ${GREEN}show${NC}     - Display current configuration"
-        echo -e "  ${GREEN}setup${NC}    - Interactive configuration setup"
-        echo -e "  ${GREEN}validate${NC} - Validate current configuration"
-        echo -e "  ${GREEN}reset${NC}    - Reset/delete configuration"
+        echo -e "  ${GREEN}show${NC}        - Display current configuration"
+        echo -e "  ${GREEN}setup${NC}       - Interactive configuration setup (default)"
+        echo -e "  ${GREEN}validate${NC}    - Validate current configuration (--check)"
+        echo -e "  ${GREEN}reset${NC}       - Reset/delete configuration"
+        echo -e "  ${GREEN}status${NC}      - Show configuration and service status (--status)"
+        echo -e "  ${GREEN}test-domain${NC} - Test domain connectivity (--test-domain)"
+        echo -e "  ${GREEN}check-ssl${NC}   - Check SSL certificate status (--check-ssl)"
+        echo ""
+        echo -e "${WHITE}Examples:${NC}"
+        echo -e "  ${CYAN}$0${NC}                    # Interactive setup"
+        echo -e "  ${CYAN}$0 --check${NC}           # Validate configuration"
+        echo -e "  ${CYAN}$0 --status${NC}          # Show current status"
+        echo -e "  ${CYAN}$0 --test-domain${NC}     # Test domain connectivity"
         echo ""
         exit 1
         ;;

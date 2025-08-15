@@ -22,7 +22,7 @@ SOFTWARE.
 
 ADDITIONAL DISCLAIMER FOR SECURITY TOOLS:
 
-This software is intended for authorized security testing and educational 
+This software is intended for authorized security testing and educational
 purposes only. The authors and contributors:
 
 1. DISCLAIM ALL LIABILITY for any illegal, unauthorized, or malicious use
@@ -32,6 +32,7 @@ purposes only. The authors and contributors:
 5. PROVIDE NO WARRANTY that the software is suitable for any purpose
 
 Users assume FULL RESPONSIBILITY for:
+
 - Legal compliance in their jurisdiction
 - Obtaining proper authorization before use
 - Any consequences resulting from use or misuse
