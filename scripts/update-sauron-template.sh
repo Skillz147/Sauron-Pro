@@ -31,27 +31,27 @@ download_latest_release() {
     local version="$1"
     local temp_dir="/tmp/sauron-update-$$"
     
-    echo "📥 Downloading Sauron $version..."
+    echo "📥 Downloading Sauron $version..." >&2
     mkdir -p "$temp_dir"
     cd "$temp_dir"
     
     # Download latest release
     if ! wget -q "https://github.com/Skillz147/Sauron-Pro/releases/latest/download/sauron-linux-amd64.tar.gz"; then
-        echo "❌ Failed to download release"
+        echo "❌ Failed to download release" >&2
         rm -rf "$temp_dir"
         exit 1
     fi
     
-    echo "📦 Extracting release..."
+    echo "📦 Extracting release..." >&2
     if ! tar -xzf sauron-linux-amd64.tar.gz; then
-        echo "❌ Failed to extract release"
+        echo "❌ Failed to extract release" >&2
         rm -rf "$temp_dir"
         exit 1
     fi
     
     # Check if binary exists in extracted files
     if [ ! -f "sauron/sauron" ]; then
-        echo "❌ Binary not found in release package"
+        echo "❌ Binary not found in release package" >&2
         rm -rf "$temp_dir"
         exit 1
     fi
@@ -111,12 +111,11 @@ if [ -f "./sauron" ] && [ "$FORCE_UPDATE" = false ]; then
     # Skip version comparison for local updates
     echo "ℹ️  Performing manual update with local binary..."
 else
-    # Force mode or no local binary - always download latest
     if [ "$FORCE_UPDATE" = true ]; then
         echo "🔄 Force mode: Downloading latest version regardless of local binary"
     fi
     
-    # Check if update is needed (only when not forcing)
+    # Check if update is needed (unless force mode)
     if [ "$current_version" = "$latest_version" ] && [ "$latest_version" != "unknown" ] && [ "$FORCE_UPDATE" = false ]; then
         echo "✅ Already running the latest version ($current_version)"
         echo "🔍 Check status: systemctl status sauron"
