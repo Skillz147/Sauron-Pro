@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  sauron:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    container_name: sauron-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "53:53/udp"
+      - "53:53/tcp"
+    environment:
+      - SAURON_DOMAIN=${SAURON_DOMAIN}
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+      - TURNSTILE_SECRET=${TURNSTILE_SECRET}
+      - LICENSE_TOKEN_SECRET=${LICENSE_TOKEN_SECRET}
+      - DEV_MODE=${DEV_MODE:-false}
+      - STAGING=${STAGING:-false}
+    volumes:
+      - ./tls:/app/tls
+      - ./logs:/app/logs
+      - ./config.db:/app/config.db
+      - acme_data:/root/.acme.sh
+    networks:
+      - sauron-network
+    depends_on:
+      - redis
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+
+  redis:
+    image: redis:7-alpine
+    container_name: sauron-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    networks:
+      - sauron-network
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  redis_data:
+  acme_data:
+
+networks:
+  sauron-network:
+    driver: bridge

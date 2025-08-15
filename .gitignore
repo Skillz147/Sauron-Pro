@@ -1,12 +1,26 @@
+# Sauron-Pro Production Repository
+# This repository contains deployment tools and documentation only
+# Source code is built locally and distributed as compiled packages
+
+# Environment and Secrets
 .env
 *.crt
 *.key
 firebaseAdmin.json
-mirror/
-logs/
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+config.db
 
-# dependencies
+# Build Artifacts and Releases (exclude from repository)
+release-*/
+docker-release-*/
+*.tar.gz
+*.zip
+
+# Logs and Runtime Data
+logs/
+mirror/
+/aa51f430ade4401f
+
+# Development Dependencies
 /node_modules
 /.pnp
 .pnp.*
@@ -16,42 +30,56 @@ logs/
 !.yarn/releases
 !.yarn/versions
 
-# testing
+# Testing
 /coverage
 
-# next.js
+# Next.js (if applicable)
 /.next/
 /out/
 
-# production
+# Production builds
 /build
 
-# misc
+# System files
 .DS_Store
 *.pem
+*.tsbuildinfo
+next-env.d.ts
 
-# debug
+# Debug logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-/firebaseAdmin.json
-
-# vercel
+# Vercel
 .vercel
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+# Source Code Files (exclude from Sauron-Pro repository)
+main.go
+auth/
+capture/
+cmd/
+configdb/
+firestore/
+handlers/
+inject/
+install/setup.sh
+proxy/
+slug/
+telegramq/
+tls/
+utils/
+ws/
+go.mod
+go.sum
 
-
-/aa51f430ade4401f
-.env
-*.crt
-*.key
-firebaseAdmin.json
-mirror/
-logs/
+# Include only deployment infrastructure
+!scripts/
+!docs/
+!docker-compose.pro.yml
+!docker-compose.production.yml
+!Dockerfile.production
+!.env.example
+!DEPLOYMENT.md
+!README.md

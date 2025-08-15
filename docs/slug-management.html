@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slug Management - Sauron Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-xl font-bold text-purple-600">← Back to Sauron</a>
+                <div class="text-sm text-gray-600">Slug Management</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <h1 class="text-4xl font-bold text-gray-800 mb-8">Slug Management</h1>
+        
+        <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-8">
+            <div class="flex">
+                <div class="ml-3">
+                    <p class="text-sm text-red-700">
+                        <strong>⚠️ Authorized Use Only:</strong> This system is designed for authorized security testing and penetration testing. 
+                        Always obtain proper written authorization before conducting any phishing simulation.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slug Overview -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">What are Slugs?</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <p class="text-gray-600 mb-4">
+                    In Sauron, <strong>slugs</strong> are unique identifiers that create isolated phishing operations. 
+                    Each slug generates a unique URL path that tracks victims and captures credentials separately.
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-blue-800 mb-2">Slug Format Examples</h3>
+                        <ul class="text-sm space-y-1 font-mono">
+                            <li>• <code>sales-q1</code> (4-16 characters)</li>
+                            <li>• <code>test_2024</code> (alphanumeric with _ -)</li>
+                            <li>• <code>a1b2c3d4-e5f6-7890-abcd-1234567890ab</code> (UUID)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800 mb-2">URL Structure</h3>
+                        <div class="text-sm space-y-1">
+                            <div><code>https://yourdomain.com/sales-q1</code></div>
+                            <div><code>https://yourdomain.com/test_2024</code></div>
+                            <div><code>https://yourdomain.com/uuid-slug</code></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How Slugs Work -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">How Slugs Work</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Request Flow</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-semibold">1</span>
+                            <div>
+                                <h4 class="font-semibold">Slug Extraction</h4>
+                                <p class="text-sm text-gray-600">Sauron extracts the slug from the URL path, query parameter, or cookie</p>
+                                <div class="bg-gray-100 p-2 rounded mt-2 text-xs font-mono">
+                                    Path: /sales-q1 → slug="sales-q1"<br>
+                                    Query: /?slug=test_2024 → slug="test_2024"<br>
+                                    Cookie: o365_slug=uuid-slug → slug="uuid-slug"
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-semibold">2</span>
+                            <div>
+                                <h4 class="font-semibold">Validation</h4>
+                                <p class="text-sm text-gray-600">Validates slug format and checks if it exists in the database</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-semibold">3</span>
+                            <div>
+                                <h4 class="font-semibold">Context Injection</h4>
+                                <p class="text-sm text-gray-600">Adds slug to request context and sets cookie for subsequent requests</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-semibold">4</span>
+                            <div>
+                                <h4 class="font-semibold">Data Tracking</h4>
+                                <p class="text-sm text-gray-600">All captured data (credentials, 2FA, cookies) is tagged with the slug</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Slug Validation Rules</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-2 text-green-600">✅ Valid Formats</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• 4-16 characters: <code>test</code>, <code>sales-2024</code></li>
+                                <li>• Alphanumeric with - and _: <code>team_1</code></li>
+                                <li>• UUID format: <code>123e4567-e89b-12d3-a456-426614174000</code></li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2 text-red-600">❌ Invalid Formats</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Too short: <code>ab</code> (less than 4 chars)</li>
+                                <li>• Too long: <code>verylongslugname123</code> (over 16 chars)</li>
+                                <li>• Special chars: <code>test@slug</code>, <code>slug%20</code></li>
+                                <li>• Spaces: <code>test slug</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Creating and Managing Slugs -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Creating and Managing Slugs</h2>
+            
+            <div class="space-y-6">
+                <!-- Database Management -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Database Management</h3>
+                    <p class="text-gray-600 mb-4">
+                        Slugs are stored in the SQLite database in the <code>user_links</code> table, mapped to user IDs for multi-tenant support.
+                    </p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre># Access SQLite database directly
+sqlite3 config.db
+
+# View existing slugs
+SELECT * FROM user_links;
+
+# Add a new slug for user
+INSERT INTO user_links (user_id, slug) VALUES ('user123', 'new-slug');
+
+# Remove a slug
+DELETE FROM user_links WHERE slug = 'old-slug';</pre>
+                    </div>
+                </div>
+
+                <!-- WebSocket Management -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">WebSocket Dashboard Management</h3>
+                    <p class="text-gray-600 mb-4">
+                        The WebSocket dashboard provides real-time slug management through the admin interface.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h4 class="font-semibold">Access Dashboard</h4>
+                            <p class="text-sm text-gray-600">Connect to: <code>wss://yourdomain.com/ws</code></p>
+                            <p class="text-sm text-gray-600">Authenticate with your admin key</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-green-400 pl-4">
+                            <h4 class="font-semibold">Create New Slug</h4>
+                            <p class="text-sm text-gray-600">Use the dashboard interface to generate new slugs</p>
+                            <p class="text-sm text-gray-600">Automatically validates format and uniqueness</p>
+                        </div>
+                        
+                        <div class="border-l-4 border-purple-400 pl-4">
+                            <h4 class="font-semibold">Monitor Activity</h4>
+                            <p class="text-sm text-gray-600">Real-time statistics for visits, logs, valid/invalid attempts</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slug Statistics -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Slug Statistics and Monitoring</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Tracked Metrics</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div class="border border-blue-200 rounded-lg p-4">
+                                <h4 class="font-semibold text-blue-600 mb-2">📊 Visits</h4>
+                                <p class="text-sm text-gray-600">Total number of unique visitors to the slug URL</p>
+                                <p class="text-xs text-gray-500">Incremented via: <code>configdb.IncVisit(slug)</code></p>
+                            </div>
+                            
+                            <div class="border border-green-200 rounded-lg p-4">
+                                <h4 class="font-semibold text-green-600 mb-2">📝 Logs</h4>
+                                <p class="text-sm text-gray-600">Number of actions/events logged for this slug</p>
+                                <p class="text-xs text-gray-500">Incremented via: <code>configdb.IncLog(slug)</code></p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="border border-green-200 rounded-lg p-4">
+                                <h4 class="font-semibold text-green-600 mb-2">✅ Valid</h4>
+                                <p class="text-sm text-gray-600">Successful credential captures or valid interactions</p>
+                                <p class="text-xs text-gray-500">Incremented via: <code>configdb.IncValid(slug)</code></p>
+                            </div>
+                            
+                            <div class="border border-red-200 rounded-lg p-4">
+                                <h4 class="font-semibold text-red-600 mb-2">❌ Invalid</h4>
+                                <p class="text-sm text-gray-600">Failed attempts or invalid submissions</p>
+                                <p class="text-xs text-gray-500">Incremented via: <code>configdb.IncInvalid(slug)</code></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Statistics API</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">Get Individual Slug Stats</h4>
+                            <div class="bg-gray-900 text-green-400 p-3 rounded font-mono text-sm">
+<pre>GET /stats?slug=your-slug-here
+
+Response:
+{
+  "visits": 150,
+  "logs": 89,
+  "valid": 23,
+  "invalid": 12
+}</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">WebSocket Real-time Stats</h4>
+                            <div class="bg-gray-900 text-green-400 p-3 rounded font-mono text-sm">
+<pre>// Connect to WebSocket and receive real-time updates
+{
+  "type": "slug_stats",
+  "slug": "sales-q1",
+  "data": {
+    "visits": 151,
+    "logs": 90,
+    "valid": 24,
+    "invalid": 12
+  }
+}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Firestore Integration -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Firestore Integration</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Cloud Storage</h3>
+                <p class="text-gray-600 mb-4">
+                    Slug statistics are automatically synced to Google Firestore for persistent storage and multi-instance synchronization.
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-blue-800 mb-2">Benefits</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• Persistent data across restarts</li>
+                            <li>• Multi-instance synchronization</li>
+                            <li>• Backup and recovery</li>
+                            <li>• Historical data retention</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h4 class="font-semibold text-green-800 mb-2">Automatic Operations</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• Increment operations sync to cloud</li>
+                            <li>• Real-time updates across instances</li>
+                            <li>• User-specific data isolation</li>
+                            <li>• Secure admin key authentication</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Best Practices -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Best Practices</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-green-50 border border-green-200 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-green-800 mb-4">✅ Recommended</h3>
+                    <ul class="space-y-2 text-sm text-green-700">
+                        <li>• Use descriptive slug names (e.g., "finance-q1", "hr-test")</li>
+                        <li>• Keep slugs short but meaningful</li>
+                        <li>• Use UUIDs for high-security operations</li>
+                        <li>• Monitor slug statistics regularly</li>
+                        <li>• Clean up unused slugs periodically</li>
+                        <li>• Document slug purposes for team coordination</li>
+                        <li>• Use consistent naming conventions</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-red-50 border border-red-200 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-red-800 mb-4">❌ Avoid</h3>
+                    <ul class="space-y-2 text-sm text-red-700">
+                        <li>• Using predictable sequential names</li>
+                        <li>• Reusing slugs across different operations</li>
+                        <li>• Including sensitive information in slug names</li>
+                        <li>• Creating too many unused slugs</li>
+                        <li>• Using easily guessable patterns</li>
+                        <li>• Ignoring validation errors</li>
+                        <li>• Leaving old slugs active indefinitely</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Topics -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Advanced Slug Management</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Slug Middleware Implementation</h3>
+                    <p class="text-gray-600 mb-4">
+                        Understanding how the slug middleware works internally can help with troubleshooting and custom implementations.
+                    </p>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Middleware Priority Order:</h4>
+                        <ol class="text-sm space-y-1">
+                            <li>1. <strong>URL Path:</strong> <code>/slug-name/rest/of/path</code></li>
+                            <li>2. <strong>Query Parameter:</strong> <code>?slug=slug-name</code></li>
+                            <li>3. <strong>Cookie:</strong> <code>o365_slug=slug-name</code></li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Multi-tenant Considerations</h3>
+                    <p class="text-gray-600 mb-4">
+                        Each slug is associated with a specific user ID, enabling multi-tenant deployments where different users can have isolated operations.
+                    </p>
+                    
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                        <p class="text-yellow-700 text-sm">
+                            <strong>Note:</strong> User ID mapping is handled automatically by the system. Manual user management requires direct database access.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

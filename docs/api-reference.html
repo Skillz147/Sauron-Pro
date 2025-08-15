@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Reference - Sauron Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-xl font-bold text-purple-600">← Back to Sauron</a>
+                <div class="text-sm text-gray-600">API Reference</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <h1 class="text-4xl font-bold text-gray-800 mb-8">API Reference</h1>
+        
+        <!-- Authentication -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Authentication</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <p class="text-gray-600 mb-4">
+                    All API endpoints require authentication using the admin credentials configured in <code>serverConfig.json</code>.
+                </p>
+                
+                <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "your-password"
+}
+
+Response:
+{
+  "success": true,
+  "token": "jwt-token-here",
+  "expires": "2024-01-01T00:00:00Z"
+}</pre>
+                </div>
+                
+                <div class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <p class="text-blue-700 text-sm">
+                        Include the JWT token in the <code>Authorization: Bearer &lt;token&gt;</code> header for all subsequent requests.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Captured Data Endpoints -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Captured Data</h2>
+            
+            <div class="space-y-6">
+                <!-- Get Credentials -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /api/credentials</h3>
+                    <p class="text-gray-600 mb-4">Retrieve all captured credentials</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">Query Parameters:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>limit</code> - Max results (default: 100)</li>
+                                <li><code>offset</code> - Skip records (default: 0)</li>
+                                <li><code>since</code> - ISO timestamp filter</li>
+                                <li><code>slug</code> - Filter by operation slug</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Response Fields:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>id</code> - Unique identifier</li>
+                                <li><code>email</code> - Captured email</li>
+                                <li><code>password</code> - Captured password</li>
+                                <li><code>ip</code> - Source IP address</li>
+                                <li><code>user_agent</code> - Browser info</li>
+                                <li><code>location</code> - Geographic data</li>
+                                <li><code>timestamp</code> - Capture time</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mt-4">
+<pre>GET /api/credentials?limit=10&since=2024-01-01T00:00:00Z
+
+Response:
+{
+  "success": true,
+  "data": [
+    {
+      "id": "cred_123",
+      "email": "user@company.com",
+      "password": "password123",
+      "ip": "192.168.1.100",
+      "user_agent": "Mozilla/5.0...",
+      "location": {
+        "country": "United States",
+        "region": "California",
+        "city": "San Francisco",
+        "coordinates": [37.7749, -122.4194]
+      },
+      "timestamp": "2024-01-01T12:00:00Z",
+      "slug": "customer123"
+    }
+  ],
+  "total": 1,
+  "has_more": false
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Get Sessions -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /api/sessions</h3>
+                    <p class="text-gray-600 mb-4">Retrieve active user sessions</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>GET /api/sessions
+
+Response:
+{
+  "success": true,
+  "data": [
+    {
+      "id": "sess_789",
+      "ip": "192.168.1.100",
+      "user_agent": "Mozilla/5.0...",
+      "location": {
+        "country": "United States",
+        "city": "San Francisco"
+      },
+      "created_at": "2024-01-01T12:00:00Z",
+      "last_activity": "2024-01-01T12:30:00Z",
+      "status": "active",
+      "pages_visited": 5
+    }
+  ]
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Get Visit Stats -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /api/visits/stats</h3>
+                    <p class="text-gray-600 mb-4">Get aggregated visit statistics</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>GET /api/visits/stats?period=24h
+
+Response:
+{
+  "success": true,
+  "data": {
+    "total_visits": 150,
+    "unique_visitors": 87,
+    "conversion_rate": 0.23,
+    "top_countries": [
+      {"country": "United States", "visits": 45},
+      {"country": "United Kingdom", "visits": 23}
+    ],
+    "hourly_breakdown": [
+      {"hour": "00:00", "visits": 5},
+      {"hour": "01:00", "visits": 12}
+    ]
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slug Management -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Slug Management</h2>
+            
+            <div class="space-y-6">
+                <!-- Create Slug -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">POST /api/slugs</h3>
+                    <p class="text-gray-600 mb-4">Create a new operation slug</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /api/slugs
+Content-Type: application/json
+
+{
+  "slug": "customer123",
+  "description": "Q1 Security Assessment",
+  "user_id": "usr_456",
+  "redirect_url": "https://intranet.company.com",
+  "capture_passwords": true,
+  "capture_2fa": false,
+  "active": true
+}
+
+Response:
+{
+  "success": true,
+  "data": {
+    "slug": "customer123",
+    "user_id": "usr_456",
+    "url": "https://your-domain.com/customer123",
+    "created_at": "2024-01-01T12:00:00Z",
+    "status": "active"
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- List Slugs -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /api/slugs</h3>
+                    <p class="text-gray-600 mb-4">List all operation slugs</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>GET /api/slugs
+
+Response:
+{
+  "success": true,
+  "data": [
+    {
+      "slug": "customer123",
+      "user_id": "usr_456",
+      "status": "active",
+      "created_at": "2024-01-01T12:00:00Z",
+      "stats": {
+        "visits": 45,
+        "captures": 12,
+        "conversion_rate": 0.27
+      }
+    }
+  ]
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Update Slug -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">PUT /api/slugs/{slug}</h3>
+                    <p class="text-gray-600 mb-4">Update an existing operation slug</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>PUT /api/slugs/customer123
+Content-Type: application/json
+
+{
+  "description": "Q1 Security Assessment - Updated",
+  "active": false
+}
+
+Response:
+{
+  "success": true,
+  "message": "Slug updated successfully"
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Management -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">System Management</h2>
+            
+            <div class="space-y-6">
+                <!-- System Status -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /api/system/status</h3>
+                    <p class="text-gray-600 mb-4">Get system health and status</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>GET /api/system/status
+
+Response:
+{
+  "success": true,
+  "data": {
+    "status": "healthy",
+    "uptime": 86400,
+    "version": "1.0.0",
+    "ssl_status": "valid",
+    "ssl_expires": "2024-04-01T00:00:00Z",
+    "database": {
+      "status": "connected",
+      "records": 1250
+    },
+    "telegram": {
+      "status": "connected",
+      "bot_username": "@your_bot"
+    }
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Configuration -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /api/system/config</h3>
+                    <p class="text-gray-600 mb-4">Get current system configuration</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>GET /api/system/config
+
+Response:
+{
+  "success": true,
+  "data": {
+    "domain": "your-domain.com",
+    "admin_panel_enabled": true,
+    "telegram_enabled": true,
+    "logging_level": "info",
+    "features": {
+      "2fa_capture": true,
+      "geolocation": true,
+      "session_tracking": true
+    }
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Logs -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /api/system/logs</h3>
+                    <p class="text-gray-600 mb-4">Retrieve system logs</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">Query Parameters:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>type</code> - Log type (system, bot, emits)</li>
+                                <li><code>level</code> - Log level (debug, info, error)</li>
+                                <li><code>limit</code> - Max lines (default: 100)</li>
+                                <li><code>since</code> - ISO timestamp filter</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Log Types:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>system</code> - Main application logs</li>
+                                <li><code>bot</code> - Telegram bot logs</li>
+                                <li><code>emits</code> - Event emission logs</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>GET /api/system/logs?type=system&level=info&limit=50
+
+Response:
+{
+  "success": true,
+  "data": {
+    "logs": [
+      {
+        "timestamp": "2024-01-01T12:00:00Z",
+        "level": "info",
+        "message": "Server started on port 443",
+        "component": "server"
+      },
+      {
+        "timestamp": "2024-01-01T12:01:00Z",
+        "level": "info",
+        "message": "SSL certificate loaded successfully",
+        "component": "tls"
+      }
+    ],
+    "total": 2
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Error Handling -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Error Handling</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Standard Error Responses</h3>
+                
+                <div class="space-y-4">
+                    <div class="border-l-4 border-red-400 pl-4">
+                        <h4 class="font-semibold text-red-600">400 Bad Request</h4>
+                        <p class="text-sm text-gray-600">Invalid request parameters or malformed JSON</p>
+                    </div>
+                    
+                    <div class="border-l-4 border-red-400 pl-4">
+                        <h4 class="font-semibold text-red-600">401 Unauthorized</h4>
+                        <p class="text-sm text-gray-600">Missing or invalid authentication token</p>
+                    </div>
+                    
+                    <div class="border-l-4 border-red-400 pl-4">
+                        <h4 class="font-semibold text-red-600">404 Not Found</h4>
+                        <p class="text-sm text-gray-600">Requested resource does not exist</p>
+                    </div>
+                    
+                    <div class="border-l-4 border-red-400 pl-4">
+                        <h4 class="font-semibold text-red-600">500 Internal Server Error</h4>
+                        <p class="text-sm text-gray-600">Server error - check system logs</p>
+                    </div>
+                </div>
+                
+                <div class="bg-red-50 p-4 rounded-lg mt-4">
+                    <h4 class="font-semibold mb-2">Error Response Format:</h4>
+                    <div class="bg-gray-900 text-red-400 p-3 rounded font-mono text-sm">
+<pre>{
+  "success": false,
+  "error": {
+    "code": "INVALID_CREDENTIALS",
+    "message": "Invalid username or password",
+    "details": "Authentication failed for user 'admin'"
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rate Limiting -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Rate Limiting</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">API Rate Limits</h3>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-semibold mb-2">Default Limits:</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• <strong>Authentication:</strong> 5 requests/minute</li>
+                            <li>• <strong>Data endpoints:</strong> 100 requests/minute</li>
+                            <li>• <strong>System endpoints:</strong> 20 requests/minute</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-semibold mb-2">Response Headers:</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• <code>X-RateLimit-Limit</code> - Max requests</li>
+                            <li>• <code>X-RateLimit-Remaining</code> - Remaining</li>
+                            <li>• <code>X-RateLimit-Reset</code> - Reset timestamp</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                    <p class="text-yellow-700 text-sm">
+                        <strong>429 Too Many Requests:</strong> Wait for the reset time before making additional requests.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SDK Examples -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">SDK Examples</h2>
+            
+            <div class="space-y-6">
+                <!-- Python Example -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Python Example</h3>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>import requests
+
+class SauronAPI:
+    def __init__(self, base_url, username, password):
+        self.base_url = base_url
+        self.token = None
+        self.login(username, password)
+    
+    def login(self, username, password):
+        response = requests.post(
+            f"{self.base_url}/api/auth/login",
+            json={"username": username, "password": password}
+        )
+        self.token = response.json()["token"]
+    
+    def get_credentials(self, limit=100):
+        headers = {"Authorization": f"Bearer {self.token}"}
+        response = requests.get(
+            f"{self.base_url}/api/credentials?limit={limit}",
+            headers=headers
+        )
+        return response.json()["data"]
+
+# Usage
+api = SauronAPI("https://your-domain.com", "admin", "password")
+credentials = api.get_credentials(limit=50)
+print(f"Retrieved {len(credentials)} credentials")</pre>
+                    </div>
+                </div>
+
+                <!-- JavaScript Example -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">JavaScript Example</h3>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>class SauronAPI {
+    constructor(baseUrl, username, password) {
+        this.baseUrl = baseUrl;
+        this.token = null;
+        this.login(username, password);
+    }
+    
+    async login(username, password) {
+        const response = await fetch(`${this.baseUrl}/api/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        const data = await response.json();
+        this.token = data.token;
+    }
+    
+    async getCredentials(limit = 100) {
+        const response = await fetch(
+            `${this.baseUrl}/api/credentials?limit=${limit}`,
+            {
+                headers: { 'Authorization': `Bearer ${this.token}` }
+            }
+        );
+        const data = await response.json();
+        return data.data;
+    }
+}
+
+// Usage
+const api = new SauronAPI('https://your-domain.com', 'admin', 'password');
+const credentials = await api.getCredentials(50);
+console.log(`Retrieved ${credentials.length} credentials`);</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

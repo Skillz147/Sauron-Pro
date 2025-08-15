@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup Guide - Sauron Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-xl font-bold text-purple-600">← Back to Sauron</a>
+                <div class="text-sm text-gray-600">Setup Guide</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <h1 class="text-4xl font-bold text-gray-800 mb-8">Complete Setup Guide</h1>
+        
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
+            <div class="flex">
+                <div class="ml-3">
+                    <p class="text-sm text-yellow-700">
+                        <strong>⚠️ Legal Notice:</strong> This tool is for authorized security testing only. 
+                        Ensure you have proper authorization before deployment.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prerequisites -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Prerequisites</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Server Requirements</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                            Ubuntu 20.04+ (64-bit)
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                            2GB+ RAM
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                            Root/sudo access
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                            Public IP address
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">External Services</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                            Domain name (any registrar)
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                            Cloudflare account (free)
+                        </li>
+                        <li class="flex items-center">
+                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                            Telegram bot (optional)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 1: Domain Setup -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Step 1: Domain Setup</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
+                <h3 class="text-lg font-semibold mb-4">1.1 Purchase Domain</h3>
+                <p class="text-gray-600 mb-4">
+                    Buy a convincing Microsoft-related domain from any registrar:
+                </p>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <p class="text-sm font-mono text-gray-700 mb-2">Good examples:</p>
+                    <ul class="text-sm space-y-1">
+                        <li>• <code>microsoftlogin365.com</code></li>
+                        <li>• <code>msftauthentication.com</code></li>
+                        <li>• <code>office365secure.com</code></li>
+                        <li>• <code>azureadlogin.com</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
+                <h3 class="text-lg font-semibold mb-4">1.2 Add to Cloudflare</h3>
+                <ol class="list-decimal list-inside space-y-2 text-gray-600">
+                    <li>Sign up for free Cloudflare account at <a href="https://cloudflare.com" class="text-blue-600">cloudflare.com</a></li>
+                    <li>Click "Add a Site" and enter your domain</li>
+                    <li>Choose the free plan</li>
+                    <li>Cloudflare will scan your existing DNS records</li>
+                    <li>Update nameservers at your registrar to Cloudflare's nameservers</li>
+                </ol>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">1.3 Configure DNS</h3>
+                <p class="text-gray-600 mb-4">Add these DNS records in Cloudflare:</p>
+                <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>Type    Name    Content         Proxy
+A       *       YOUR_SERVER_IP  ✅ Proxied
+A       @       YOUR_SERVER_IP  ✅ Proxied</pre>
+                </div>
+                <p class="text-sm text-gray-500 mt-2">
+                    Replace <code>YOUR_SERVER_IP</code> with your VPS public IP address.
+                </p>
+            </div>
+        </section>
+
+        <!-- Step 2: Cloudflare API Setup -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Step 2: Cloudflare API Setup</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
+                <h3 class="text-lg font-semibold mb-4">2.1 Create API Token</h3>
+                <ol class="list-decimal list-inside space-y-2 text-gray-600">
+                    <li>Go to <a href="https://dash.cloudflare.com/profile/api-tokens" class="text-blue-600">Cloudflare API Tokens</a></li>
+                    <li>Click "Create Token"</li>
+                    <li>Use "Custom token" template</li>
+                    <li>Configure permissions:</li>
+                </ol>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                    <p class="text-sm font-semibold mb-2">Token Configuration:</p>
+                    <ul class="text-sm space-y-1">
+                        <li>• <strong>Token name:</strong> Sauron SSL</li>
+                        <li>• <strong>Permissions:</strong> Zone:Zone:Read, Zone:DNS:Edit</li>
+                        <li>• <strong>Zone Resources:</strong> Include → Specific zone → yourdomain.com</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">2.2 Setup Turnstile</h3>
+                <ol class="list-decimal list-inside space-y-2 text-gray-600">
+                    <li>Go to Cloudflare dashboard → Your domain → Security → Turnstile</li>
+                    <li>Click "Add Site"</li>
+                    <li>Configure:</li>
+                </ol>
+                
+                <div class="bg-gray-50 p-4 rounded-lg mt-4">
+                    <ul class="text-sm space-y-1">
+                        <li>• <strong>Site name:</strong> Sauron Bot Protection</li>
+                        <li>• <strong>Domain:</strong> yourdomain.com</li>
+                        <li>• <strong>Widget type:</strong> Invisible</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mt-4">
+                    <p class="text-blue-700 text-sm">
+                        <strong>Important:</strong> Copy the <strong>Secret Key</strong>, not the Site Key!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 3: Installation -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Step 3: Installation</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">3.1 Download and Install</h3>
+                <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
+<pre># Download latest release
+wget https://github.com/Skillz147/Sauron-Pro/releases/latest/download/sauron-linux-amd64.tar.gz
+
+# Extract
+tar -xzf sauron-linux-amd64.tar.gz
+cd sauron
+
+# Make scripts executable
+chmod +x configure-env.sh install-production.sh
+
+# Run interactive setup
+./configure-env.sh setup</pre>
+                </div>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                    <p class="text-yellow-700 text-sm">
+                        The interactive setup will prompt you for your domain, Cloudflare API token, and Turnstile secret.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 4: Configuration -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Step 4: Configuration</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">4.1 Environment Setup</h3>
+                <p class="text-gray-600 mb-4">The setup script will ask for these values:</p>
+                
+                <div class="space-y-4">
+                    <div class="border-l-4 border-purple-400 pl-4">
+                        <h4 class="font-semibold">SAURON_DOMAIN</h4>
+                        <p class="text-sm text-gray-600">Your purchased domain (e.g., microsoftlogin365.com)</p>
+                    </div>
+                    
+                    <div class="border-l-4 border-purple-400 pl-4">
+                        <h4 class="font-semibold">CLOUDFLARE_API_TOKEN</h4>
+                        <p class="text-sm text-gray-600">The API token you created (starts with alphanumeric characters)</p>
+                    </div>
+                    
+                    <div class="border-l-4 border-purple-400 pl-4">
+                        <h4 class="font-semibold">TURNSTILE_SECRET</h4>
+                        <p class="text-sm text-gray-600">The Turnstile secret key (starts with 0x)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 5: Deployment -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Step 5: Deployment</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
+                <h3 class="text-lg font-semibold mb-4">5.1 Install and Start</h3>
+                <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre># Install as system service
+sudo ./install-production.sh
+
+# Check status
+sudo systemctl status sauron
+
+# View logs
+sudo journalctl -u sauron -f</pre>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">5.2 Verify Installation</h3>
+                <p class="text-gray-600 mb-4">Check that everything is working:</p>
+                <ul class="space-y-2 text-sm">
+                    <li class="flex items-center">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                        Service is running: <code>sudo systemctl status sauron</code>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                        SSL certificate obtained: Check logs for "Certificate obtained"
+                    </li>
+                    <li class="flex items-center">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                        Domain resolves: <code>nslookup yourdomain.com</code>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                        HTTPS works: Visit <code>https://yourdomain.com</code>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Next Steps</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <a href="campaign-management.html" class="block bg-purple-50 border border-purple-200 p-6 rounded-lg hover:shadow-md transition">
+                    <h3 class="text-lg font-semibold text-purple-800 mb-2">Campaign Management</h3>
+                    <p class="text-purple-600 text-sm">Learn how to create and manage phishing campaigns</p>
+                </a>
+                
+                <a href="troubleshooting.html" class="block bg-blue-50 border border-blue-200 p-6 rounded-lg hover:shadow-md transition">
+                    <h3 class="text-lg font-semibold text-blue-800 mb-2">Troubleshooting</h3>
+                    <p class="text-blue-600 text-sm">Common issues and how to resolve them</p>
+                </a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

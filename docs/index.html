@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sauron - Microsoft 365 MITM Proxy</title>
+    <meta name="description" content="Advanced phishing tool for Microsoft 365 credential capture with real-time monitoring and session harvesting.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom styles -->
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .code-block {
+            background: #1a1a1a;
+            border-left: 4px solid #667eea;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">S</span>
+                    </div>
+                    <span class="text-xl font-bold text-gray-800">Sauron</span>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#features" class="text-gray-600 hover:text-purple-600 transition">Features</a>
+                    <a href="#installation" class="text-gray-600 hover:text-purple-600 transition">Installation</a>
+                    <a href="#documentation" class="text-gray-600 hover:text-purple-600 transition">Docs</a>
+                    <a href="#support" class="text-gray-600 hover:text-purple-600 transition">Support</a>
+                </div>
+                                <a href="https://github.com/Skillz147/Sauron-Pro" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white pt-24 pb-20">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6">
+                Sauron
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 opacity-90">
+                Advanced Microsoft 365 MITM Proxy for Security Testing
+            </p>
+            <p class="text-lg mb-12 opacity-80 max-w-3xl mx-auto">
+                Capture credentials, harvest sessions, and monitor Microsoft 365 login flows in real-time with advanced evasion techniques and professional-grade infrastructure.
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="#installation" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                    Quick Start
+                </a>
+                                <a href="https://github.com/Skillz147/Sauron-Pro/releases" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition">
+                    Download Latest Release
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Powerful Features</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Built for security professionals who need reliable, advanced phishing infrastructure with enterprise-grade capabilities.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature Card 1 -->
+                <div class="feature-card bg-gray-50 p-6 rounded-xl shadow-sm">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">TLS Interception</h3>
+                    <p class="text-gray-600">Full SSL/TLS MITM with automatic certificate generation and seamless Microsoft 365 flow capture.</p>
+                </div>
+
+                <!-- Feature Card 2 -->
+                <div class="feature-card bg-gray-50 p-6 rounded-xl shadow-sm">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Real-time Monitoring</h3>
+                    <p class="text-gray-600">WebSocket dashboard for live operation tracking with instant credential and session capture notifications.</p>
+                </div>
+
+                <!-- Feature Card 3 -->
+                <div class="feature-card bg-gray-50 p-6 rounded-xl shadow-sm">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">2FA Bypass</h3>
+                    <p class="text-gray-600">Captures MFA tokens and maintains session persistence through cookie harvesting and replay attacks.</p>
+                </div>
+
+                <!-- Feature Card 4 -->
+                <div class="feature-card bg-gray-50 p-6 rounded-xl shadow-sm">
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 7.172V5L8 4z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Advanced Evasion</h3>
+                    <p class="text-gray-600">Bot detection bypass, traffic obfuscation, and anti-analysis measures to evade modern security systems.</p>
+                </div>
+
+                <!-- Feature Card 5 -->
+                <div class="feature-card bg-gray-50 p-6 rounded-xl shadow-sm">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Slug Management</h3>
+                    <p class="text-gray-600">Isolated operations with unique slugs, real-time statistics, and multi-target coordination capabilities.</p>
+                </div>
+
+                <!-- Feature Card 6 -->
+                <div class="feature-card bg-gray-50 p-6 rounded-xl shadow-sm">
+                    <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Auto Infrastructure</h3>
+                    <p class="text-gray-600">Automatic SSL certificates, DNS management, and Cloudflare integration for professional-grade infrastructure.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section id="installation" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Quick Installation</h2>
+                <p class="text-xl text-gray-600">Get up and running in minutes with our streamlined setup process</p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6">Requirements</h3>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Ubuntu 20.04+ server with root access
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Domain name (any registrar)
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            Cloudflare account (free)
+                        </li>
+                    </ul>
+
+                    <h3 class="text-2xl font-semibold mb-4">Domain Examples</h3>
+                    <div class="bg-white p-4 rounded-lg border">
+                        <p class="text-sm text-gray-600 mb-2">Choose professional-looking domains:</p>
+                        <ul class="text-sm space-y-1">
+                            <li><code class="bg-gray-100 px-2 py-1 rounded">microsoftlogin365.com</code></li>
+                            <li><code class="bg-gray-100 px-2 py-1 rounded">msftauthentication.com</code></li>
+                            <li><code class="bg-gray-100 px-2 py-1 rounded">office365secure.com</code></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-2xl font-semibold mb-6">Installation Steps</h3>
+                    <div class="code-block p-6 rounded-lg text-green-400 font-mono text-sm overflow-x-auto">
+<pre># Download latest release
+wget https://github.com/Skillz147/Sauron-Pro/releases/latest/download/sauron-linux-amd64.tar.gz
+
+# Extract and setup
+tar -xzf sauron-linux-amd64.tar.gz
+cd sauron
+
+# Interactive configuration
+./configure-env.sh setup
+
+# Install and start
+sudo ./install-production.sh</pre>
+                    </div>
+                    
+                    <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
+                        <p class="text-blue-700">
+                            <strong>💡 Tip:</strong> The interactive setup will guide you through getting your Cloudflare API token and Turnstile secret.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation Section -->
+            <!-- Documentation Links -->
+        <section class="py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Documentation</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">
+                    Comprehensive guides and technical documentation for the Sauron MITM proxy system.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <a href="setup-guide.html" class="block bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition border">
+                    <div class="text-purple-600 text-3xl mb-4">🚀</div>
+                    <h3 class="text-xl font-semibold mb-2">Setup Guide</h3>
+                    <p class="text-gray-600 text-sm">Complete installation and configuration walkthrough</p>
+                </a>
+                
+                <a href="configuration.html" class="block bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition border">
+                    <div class="text-blue-600 text-3xl mb-4">⚙️</div>
+                    <h3 class="text-xl font-semibold mb-2">Configuration</h3>
+                    <p class="text-gray-600 text-sm">Environment variables, SSL, and system settings</p>
+                </a>
+                
+                <a href="slug-management.html" class="block bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition border">
+                    <div class="text-green-600 text-3xl mb-4">🔗</div>
+                    <h3 class="text-xl font-semibold mb-2">Slug Management</h3>
+                    <p class="text-gray-600 text-sm">Creating and managing operation slugs</p>
+                </a>
+                
+                <a href="security-features.html" class="block bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition border">
+                    <div class="text-red-600 text-3xl mb-4">🔒</div>
+                    <h3 class="text-xl font-semibold mb-2">Security Features</h3>
+                    <p class="text-gray-600 text-sm">AES-256 encryption, threat detection, and anti-forensics</p>
+                </a>
+                
+                <a href="deployment-strategies.html" class="block bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition border">
+                    <div class="text-blue-600 text-3xl mb-4">🚀</div>
+                    <h3 class="text-xl font-semibold mb-2">Deployment Strategies</h3>
+                    <p class="text-gray-600 text-sm">Enterprise scaling and commercial distribution</p>
+                </a>
+                
+                <a href="admin-api.html" class="block bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition border">
+                    <div class="text-orange-600 text-3xl mb-4">🔧</div>
+                    <h3 class="text-xl font-semibold mb-2">Admin API</h3>
+                    <p class="text-gray-600 text-sm">Administrative endpoints and cleanup operations</p>
+                </a>
+                
+                <a href="websocket-dashboard.html" class="block bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition border">
+                    <div class="text-red-600 text-3xl mb-4">📊</div>
+                    <h3 class="text-xl font-semibold mb-2">WebSocket Dashboard</h3>
+                    <p class="text-gray-600 text-sm">Real-time monitoring and data capture</p>
+                </a>
+                
+                <a href="troubleshooting.html" class="block bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition border">
+                    <div class="text-indigo-600 text-3xl mb-4">🛠️</div>
+                    <h3 class="text-xl font-semibold mb-2">Troubleshooting</h3>
+                    <p class="text-gray-600 text-sm">Common issues and their solutions</p>
+                </a>
+            </div>
+        </section>
+
+    <!-- Support Section -->
+    <section id="support" class="py-20 bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Support & Community</h2>
+                <p class="text-xl text-gray-400">Get help, report issues, and connect with other users</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">GitHub Issues</h3>
+                    <p class="text-gray-400 mb-4">Report bugs, request features, and get technical support</p>
+                    <a href="https://github.com/Skillz147/Sauron-Pro/issues" class="text-purple-400 hover:text-purple-300">
+                        Open Issue →
+                    </a>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Documentation</h3>
+                    <p class="text-gray-400 mb-4">Comprehensive guides and API references</p>
+                    <a href="#documentation" class="text-purple-400 hover:text-purple-300">
+                        Browse Docs →
+                    </a>
+                </div>
+
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Security Reports</h3>
+                    <p class="text-gray-400 mb-4">Report security vulnerabilities privately</p>
+                    <a href="mailto:security@example.com" class="text-purple-400 hover:text-purple-300">
+                        Contact Security →
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">S</span>
+                        </div>
+                        <span class="text-xl font-bold text-white">Sauron</span>
+                    </div>
+                    <p class="text-sm">
+                        Advanced Microsoft 365 MITM proxy for security professionals and authorized testing.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Documentation</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="setup-guide.html" class="hover:text-purple-400">Setup Guide</a></li>
+                        <li><a href="configuration.html" class="hover:text-purple-400">Configuration</a></li>
+                        <li><a href="api-reference.html" class="hover:text-purple-400">API Reference</a></li>
+                        <li><a href="troubleshooting.html" class="hover:text-purple-400">Troubleshooting</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="https://github.com/Skillz147/Sauron-Pro" class="hover:text-purple-400">GitHub</a></li>
+                        <li><a href="https://github.com/Skillz147/Sauron-Pro/releases" class="hover:text-purple-400">Releases</a></li>
+                        <li><a href="https://github.com/Skillz147/Sauron-Pro/issues" class="hover:text-purple-400">Issues</a></li>
+                        <li><a href="#" class="hover:text-purple-400">Changelog</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-purple-400">License</a></li>
+                        <li><a href="#" class="hover:text-purple-400">Terms of Use</a></li>
+                        <li><a href="#" class="hover:text-purple-400">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-purple-400">Security Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm">
+                <p>&copy; 2025 Sauron. For authorized security testing only. Users are responsible for compliance with applicable laws.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Smooth scrolling -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

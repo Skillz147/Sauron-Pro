@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Dashboard - Sauron Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-xl font-bold text-purple-600">← Back to Sauron</a>
+                <div class="text-sm text-gray-600">WebSocket Dashboard</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <h1 class="text-4xl font-bold text-gray-800 mb-8">WebSocket Dashboard</h1>
+        
+        <!-- Overview -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Real-time Monitoring</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <p class="text-gray-600 mb-4">
+                    The WebSocket dashboard provides real-time monitoring of your Sauron MITM operations. 
+                    Connect to receive live updates on credential captures, visitor activity, and system status.
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="text-center p-4 bg-purple-50 rounded-lg">
+                        <div class="text-2xl font-bold text-purple-600 mb-2">⚡</div>
+                        <h3 class="font-semibold text-purple-800">Real-time Updates</h3>
+                        <p class="text-sm text-purple-600">Live credential captures and visitor tracking</p>
+                    </div>
+                    
+                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                        <div class="text-2xl font-bold text-blue-600 mb-2">📊</div>
+                        <h3 class="font-semibold text-blue-800">Statistics Dashboard</h3>
+                        <p class="text-sm text-blue-600">Slug statistics and conversion metrics</p>
+                    </div>
+                    
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <div class="text-2xl font-bold text-green-600 mb-2">🔒</div>
+                        <h3 class="font-semibold text-green-800">Secure Access</h3>
+                        <p class="text-sm text-green-600">Admin key authentication required</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Connection Setup -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Connecting to the Dashboard</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">WebSocket Connection</h3>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
+<pre>// Connect to WebSocket endpoint
+const ws = new WebSocket('wss://your-domain.com/ws');
+
+// Send authentication
+ws.onopen = function() {
+    ws.send(JSON.stringify({
+        type: 'auth',
+        admin_key: 'your_admin_key_here'
+    }));
+};
+
+// Handle incoming messages
+ws.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    console.log('Received:', data);
+};</pre>
+                    </div>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-400 p-4">
+                        <p class="text-blue-700 text-sm">
+                            <strong>Endpoint:</strong> <code>wss://your-domain.com/ws</code><br>
+                            <strong>Authentication:</strong> Send admin key immediately after connection
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Authentication Flow</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-sm font-semibold">1</span>
+                            <div>
+                                <h4 class="font-semibold">Connect to WebSocket</h4>
+                                <p class="text-sm text-gray-600">Establish WebSocket connection to <code>/ws</code> endpoint</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-sm font-semibold">2</span>
+                            <div>
+                                <h4 class="font-semibold">Send Authentication</h4>
+                                <p class="text-sm text-gray-600">Send admin key in authentication message</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <span class="flex-shrink-0 w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-sm font-semibold">3</span>
+                            <div>
+                                <h4 class="font-semibold">Receive Confirmation</h4>
+                                <p class="text-sm text-gray-600">Server confirms authentication and begins sending updates</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Message Types -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Message Types</h2>
+            
+            <div class="space-y-6">
+                <!-- Credential Capture -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">Credential Capture</h3>
+                    <p class="text-gray-600 mb-4">Real-time notification when credentials are captured</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>{
+  "type": "credential_capture",
+  "timestamp": "2024-01-15T10:30:45Z",
+  "data": {
+    "slug": "sales-q1",
+    "email": "user@company.com",
+    "password": "captured_password",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)...",
+    "ip": "192.168.1.100",
+    "location": {
+      "country": "United States",
+      "region": "California", 
+      "city": "San Francisco"
+    }
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- 2FA Token Capture -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">2FA Token Capture</h3>
+                    <p class="text-gray-600 mb-4">Notification when two-factor authentication tokens are captured</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>{
+  "type": "2fa_capture",
+  "timestamp": "2024-01-15T10:32:15Z",
+  "data": {
+    "slug": "sales-q1",
+    "token": "123456",
+    "method": "authenticator_app",
+    "hostname": "login.microsoftonline.com",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)..."
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Cookie Dump -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">Cookie Dump</h3>
+                    <p class="text-gray-600 mb-4">Full cookie capture from authenticated sessions</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>{
+  "type": "cookie_dump",
+  "timestamp": "2024-01-15T10:33:30Z",
+  "data": {
+    "slug": "sales-q1",
+    "email": "user@company.com",
+    "cookies": "ESTSAUTH=...; ESTSAUTHPERSISTENT=...",
+    "hostname": "login.microsoftonline.com",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)..."
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Session Events -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">Session Events</h3>
+                    <p class="text-gray-600 mb-4">Track user navigation and behavior</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>{
+  "type": "session_event",
+  "timestamp": "2024-01-15T10:31:00Z",
+  "data": {
+    "slug": "sales-q1",
+    "url": "https://login.microsoftonline.com/common/oauth2/authorize",
+    "pathname": "/common/oauth2/authorize", 
+    "hostname": "login.microsoftonline.com",
+    "title": "Sign in to your account",
+    "referrer": "",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)..."
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- Slug Statistics -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">Slug Statistics</h3>
+                    <p class="text-gray-600 mb-4">Real-time statistics updates for slug performance</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>{
+  "type": "slug_stats",
+  "timestamp": "2024-01-15T10:35:00Z",
+  "data": {
+    "slug": "sales-q1",
+    "stats": {
+      "visits": 157,
+      "logs": 92,
+      "valid": 25,
+      "invalid": 13
+    }
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Features -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Dashboard Features</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Real-time Monitoring</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div class="border border-blue-200 rounded-lg p-4">
+                                <h4 class="font-semibold text-blue-600 mb-2">📈 Live Statistics</h4>
+                                <ul class="text-sm space-y-1">
+                                    <li>• Real-time visitor counts</li>
+                                    <li>• Credential capture rates</li>
+                                    <li>• Success/failure ratios</li>
+                                    <li>• Geographic distribution</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="border border-green-200 rounded-lg p-4">
+                                <h4 class="font-semibold text-green-600 mb-2">🎯 Capture Events</h4>
+                                <ul class="text-sm space-y-1">
+                                    <li>• Instant credential notifications</li>
+                                    <li>• 2FA token captures</li>
+                                    <li>• Session cookie dumps</li>
+                                    <li>• Navigation tracking</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="border border-purple-200 rounded-lg p-4">
+                                <h4 class="font-semibold text-purple-600 mb-2">🔍 Activity Feed</h4>
+                                <ul class="text-sm space-y-1">
+                                    <li>• Chronological event stream</li>
+                                    <li>• User behavior patterns</li>
+                                    <li>• System health monitoring</li>
+                                    <li>• Error reporting</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="border border-orange-200 rounded-lg p-4">
+                                <h4 class="font-semibold text-orange-600 mb-2">⚙️ Management Tools</h4>
+                                <ul class="text-sm space-y-1">
+                                    <li>• Slug creation and management</li>
+                                    <li>• System configuration</li>
+                                    <li>• Data export functions</li>
+                                    <li>• Performance optimization</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Slug Management via WebSocket -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Slug Management</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Creating and Managing Slugs</h3>
+                <p class="text-gray-600 mb-4">
+                    The WebSocket interface allows real-time slug management and monitoring.
+                </p>
+                
+                <div class="space-y-4">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Create New Slug</h4>
+                        <div class="bg-gray-900 text-green-400 p-3 rounded font-mono text-sm">
+<pre>// Send slug creation request
+ws.send(JSON.stringify({
+    type: 'create_slug',
+    data: {
+        slug: 'new-operation-2024',
+        user_id: 'your_user_id'
+    }
+}));</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Request Slug Statistics</h4>
+                        <div class="bg-gray-900 text-green-400 p-3 rounded font-mono text-sm">
+<pre>// Request statistics for specific slug
+ws.send(JSON.stringify({
+    type: 'get_stats',
+    data: {
+        slug: 'sales-q1'
+    }
+}));</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Integration Examples -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Integration Examples</h2>
+            
+            <div class="space-y-6">
+                <!-- JavaScript Integration -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">JavaScript Dashboard</h3>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>class SauronDashboard {
+    constructor(domain, adminKey) {
+        this.ws = new WebSocket(`wss://${domain}/ws`);
+        this.adminKey = adminKey;
+        this.setupEventHandlers();
+    }
+    
+    setupEventHandlers() {
+        this.ws.onopen = () => {
+            console.log('Connected to Sauron dashboard');
+            this.authenticate();
+        };
+        
+        this.ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            this.handleMessage(data);
+        };
+        
+        this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+    }
+    
+    authenticate() {
+        this.ws.send(JSON.stringify({
+            type: 'auth',
+            admin_key: this.adminKey
+        }));
+    }
+    
+    handleMessage(data) {
+        switch(data.type) {
+            case 'credential_capture':
+                this.onCredentialCapture(data.data);
+                break;
+            case 'slug_stats':
+                this.updateSlugStats(data.data);
+                break;
+            case '2fa_capture':
+                this.on2FACapture(data.data);
+                break;
+            case 'cookie_dump':
+                this.onCookieDump(data.data);
+                break;
+        }
+    }
+    
+    onCredentialCapture(data) {
+        console.log('New credential captured:', data);
+        // Update dashboard UI
+        this.showNotification(`New credential: ${data.email}`);
+        this.updateCaptureCounter();
+    }
+    
+    updateSlugStats(data) {
+        console.log('Stats update for slug:', data.slug, data.stats);
+        // Update statistics display
+    }
+}
+
+// Usage
+const dashboard = new SauronDashboard('your-domain.com', 'your_admin_key');</pre>
+                    </div>
+                </div>
+
+                <!-- Python Integration -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Python Integration</h3>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>import asyncio
+import websockets
+import json
+
+class SauronMonitor:
+    def __init__(self, domain, admin_key):
+        self.domain = domain
+        self.admin_key = admin_key
+        self.uri = f"wss://{domain}/ws"
+    
+    async def connect(self):
+        async with websockets.connect(self.uri) as websocket:
+            # Authenticate
+            auth_msg = {
+                "type": "auth",
+                "admin_key": self.admin_key
+            }
+            await websocket.send(json.dumps(auth_msg))
+            
+            # Listen for messages
+            async for message in websocket:
+                data = json.loads(message)
+                await self.handle_message(data)
+    
+    async def handle_message(self, data):
+        msg_type = data.get('type')
+        
+        if msg_type == 'credential_capture':
+            print(f"🎯 Credential captured: {data['data']['email']}")
+            await self.log_credential(data['data'])
+        
+        elif msg_type == 'slug_stats':
+            print(f"📊 Stats update: {data['data']}")
+        
+        elif msg_type == '2fa_capture':
+            print(f"🔐 2FA token captured: {data['data']['token']}")
+    
+    async def log_credential(self, credential_data):
+        # Save to database, send alerts, etc.
+        pass
+
+# Usage
+monitor = SauronMonitor('your-domain.com', 'your_admin_key')
+asyncio.run(monitor.connect())</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security and Best Practices -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Security and Best Practices</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-green-50 border border-green-200 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-green-800 mb-4">✅ Security Features</h3>
+                    <ul class="space-y-2 text-sm text-green-700">
+                        <li>• Admin key authentication required</li>
+                        <li>• WSS (WebSocket Secure) encryption</li>
+                        <li>• Real-time connection monitoring</li>
+                        <li>• Automatic connection cleanup</li>
+                        <li>• Rate limiting protection</li>
+                        <li>• Secure data transmission</li>
+                        <li>• Session management</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-blue-50 border border-blue-200 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-blue-800 mb-4">📋 Best Practices</h3>
+                    <ul class="space-y-2 text-sm text-blue-700">
+                        <li>• Use strong admin keys (32+ characters)</li>
+                        <li>• Monitor connection status regularly</li>
+                        <li>• Implement connection retry logic</li>
+                        <li>• Handle network interruptions gracefully</li>
+                        <li>• Log all dashboard activities</li>
+                        <li>• Use HTTPS for web dashboard interfaces</li>
+                        <li>• Regularly update credentials</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Troubleshooting</h2>
+            
+            <div class="space-y-4">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Common Issues</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-red-400 pl-4">
+                            <h4 class="font-semibold text-red-600">Connection Refused</h4>
+                            <p class="text-sm text-gray-600">Check that Sauron is running and WebSocket endpoint is accessible</p>
+                            <code class="text-xs bg-gray-100 p-1 rounded">sudo systemctl status sauron</code>
+                        </div>
+                        
+                        <div class="border-l-4 border-yellow-400 pl-4">
+                            <h4 class="font-semibold text-yellow-600">Authentication Failed</h4>
+                            <p class="text-sm text-gray-600">Verify admin key is correct and matches server configuration</p>
+                            <code class="text-xs bg-gray-100 p-1 rounded">grep ADMIN_KEY .env</code>
+                        </div>
+                        
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h4 class="font-semibold text-blue-600">No Data Received</h4>
+                            <p class="text-sm text-gray-600">Ensure authentication was successful and slugs are active</p>
+                            <code class="text-xs bg-gray-100 p-1 rounded">Check WebSocket authentication response</code>
+                        </div>
+                        
+                        <div class="border-l-4 border-purple-400 pl-4">
+                            <h4 class="font-semibold text-purple-600">SSL Certificate Issues</h4>
+                            <p class="text-sm text-gray-600">Verify SSL certificate is valid for WebSocket connections</p>
+                            <code class="text-xs bg-gray-100 p-1 rounded">openssl s_client -connect domain:443</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

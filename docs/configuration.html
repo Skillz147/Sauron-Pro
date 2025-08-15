@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration - Sauron Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-xl font-bold text-purple-600">← Back to Sauron</a>
+                <div class="text-sm text-gray-600">Configuration</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <h1 class="text-4xl font-bold text-gray-800 mb-8">Configuration Guide</h1>
+        
+        <!-- Server Configuration -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Server Configuration</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">config/serverConfig.json</h3>
+                <p class="text-gray-600 mb-4">Main server configuration file:</p>
+                
+                <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm overflow-x-auto">
+<pre>{
+  "domain": "your-domain.com",
+  "port": "443",
+  "http_port": "80",
+  "tls_cert": "./tls/cert.pem",
+  "tls_key": "./tls/key.pem",
+  "admin_panel": {
+    "enabled": true,
+    "username": "admin",
+    "password": "changeme"
+  },
+  "logging": {
+    "level": "info",
+    "file": "./logs/system.log",
+    "max_size": "100MB"
+  }
+}</pre>
+                </div>
+                
+                <div class="mt-4 space-y-3">
+                    <div class="border-l-4 border-blue-400 pl-4">
+                        <h4 class="font-semibold text-sm">domain</h4>
+                        <p class="text-sm text-gray-600">Your phishing domain (must match SSL certificate)</p>
+                    </div>
+                    <div class="border-l-4 border-blue-400 pl-4">
+                        <h4 class="font-semibold text-sm">admin_panel</h4>
+                        <p class="text-sm text-gray-600">Web interface credentials (change default password!)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Secure Configuration System -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">🔒 Secure Configuration System</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Runtime Secret Management</h3>
+                <p class="text-gray-600 mb-4">
+                    Sauron uses an advanced secure configuration system that encrypts secrets in memory 
+                    and automatically clears environment variables after startup for enhanced security.
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div class="space-y-3">
+                        <h4 class="font-semibold text-green-600">✅ Security Features</h4>
+                        <ul class="text-sm space-y-1">
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                AES-256-GCM encryption in memory
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                Environment variable auto-clearing
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                Automatic 24-hour key rotation
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                Secure fallback generation
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <h4 class="font-semibold text-blue-600">🔑 Core Requirements</h4>
+                        <ul class="text-sm space-y-1">
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                ADMIN_KEY (authentication)
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                TURNSTILE_SECRET (bot protection)
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                CLOUDFLARE_API_TOKEN (SSL certs)
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                SAURON_DOMAIN (target domain)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                    <p class="text-yellow-700 text-sm">
+                        <strong>⚠️ Security Note:</strong> All environment variables are automatically cleared after 
+                        loading to prevent exposure in process memory or environment dumps.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Environment Variables -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Environment Variables</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Required Environment Variables</h3>
+                
+                <div class="space-y-4">
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold text-purple-600 mb-2">ADMIN_KEY</h4>
+                        <p class="text-sm text-gray-600 mb-2">Master key for admin panel and encryption derivation</p>
+                        <code class="bg-gray-100 px-2 py-1 rounded text-sm">export ADMIN_KEY="your_secure_admin_key_here"</code>
+                    </div>
+                    
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold text-purple-600 mb-2">TURNSTILE_SECRET</h4>
+                        <p class="text-sm text-gray-600 mb-2">Cloudflare Turnstile secret key for bot protection</p>
+                        <code class="bg-gray-100 px-2 py-1 rounded text-sm">export TURNSTILE_SECRET="0x123..."</code>
+                    </div>
+                    
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold text-purple-600 mb-2">LICENSE_TOKEN_SECRET</h4>
+                        <p class="text-sm text-gray-600 mb-2">Secret for license validation and JWT signing</p>
+                        <code class="bg-gray-100 px-2 py-1 rounded text-sm">export LICENSE_TOKEN_SECRET="your_license_secret"</code>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mt-6">
+                    <p class="text-blue-700 text-sm">
+                        <strong>Tip:</strong> Use <code>configure-env.sh</code> script to set these automatically.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Database Configuration -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Database Configuration</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">SQLite Database (config.db)</h3>
+                <p class="text-gray-600 mb-4">Sauron uses SQLite for storing configuration and captured data.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-2">Database Tables</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• <code>credentials</code> - Captured login data</li>
+                            <li>• <code>sessions</code> - Active user sessions</li>
+                            <li>• <code>visits</code> - Page visit tracking</li>
+                            <li>• <code>config</code> - System configuration</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-2">Database Operations</h4>
+                        <div class="bg-gray-100 p-3 rounded text-sm font-mono">
+<pre># View database
+sqlite3 config.db ".tables"
+
+# Backup database
+cp config.db config.db.backup
+
+# Reset database
+rm config.db && ./sauron</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Telegram Configuration -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Telegram Integration</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Setting Up Telegram Bot</h3>
+                
+                <div class="space-y-4">
+                    <div class="border-l-4 border-green-400 pl-4">
+                        <h4 class="font-semibold text-sm mb-1">1. Create Bot</h4>
+                        <p class="text-sm text-gray-600">Message @BotFather on Telegram and use <code>/newbot</code></p>
+                    </div>
+                    
+                    <div class="border-l-4 border-green-400 pl-4">
+                        <h4 class="font-semibold text-sm mb-1">2. Get Bot Token</h4>
+                        <p class="text-sm text-gray-600">Copy the bot token (format: 123456789:ABC-DEF1234567890)</p>
+                    </div>
+                    
+                    <div class="border-l-4 border-green-400 pl-4">
+                        <h4 class="font-semibold text-sm mb-1">3. Get Chat ID</h4>
+                        <p class="text-sm text-gray-600">Message your bot, then visit: <code>https://api.telegram.org/bot&lt;TOKEN&gt;/getUpdates</code></p>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mt-4">
+                    <h4 class="font-semibold mb-2">Environment Variables:</h4>
+                    <div class="space-y-1 text-sm font-mono">
+                        <div>export TELEGRAM_BOT_TOKEN="123456789:ABC-DEF1234567890"</div>
+                        <div>export TELEGRAM_CHAT_ID="-1234567890"</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SSL/TLS Configuration -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">SSL/TLS Configuration</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Automatic Certificate Management</h3>
+                <p class="text-gray-600 mb-4">Sauron automatically obtains and renews SSL certificates using Let's Encrypt and Cloudflare DNS.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-2">Certificate Files</h4>
+                        <ul class="text-sm space-y-1 font-mono">
+                            <li>• <code>tls/cert.pem</code> - Certificate</li>
+                            <li>• <code>tls/key.pem</code> - Private key</li>
+                            <li>• <code>tls/domains.go</code> - Domain config</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <h4 class="font-semibold mb-2">Manual Certificate</h4>
+                        <p class="text-sm text-gray-600 mb-2">To use your own certificate:</p>
+                        <div class="bg-gray-100 p-2 rounded text-xs font-mono">
+<pre># Copy your files
+cp your-cert.pem tls/cert.pem
+cp your-key.pem tls/key.pem</pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                    <p class="text-yellow-700 text-sm">
+                        <strong>Note:</strong> Certificate domain must exactly match your SAURON_DOMAIN value.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Configuration -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Advanced Configuration</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Proxy Settings</h3>
+                    <p class="text-gray-600 mb-4">Configure MITM proxy behavior:</p>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold text-sm mb-2">proxy/mitm.go Configuration:</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• <strong>Target host:</strong> login.microsoftonline.com</li>
+                            <li>• <strong>Intercept paths:</strong> /common/oauth2/*, /common/login/*</li>
+                            <li>• <strong>Pass-through:</strong> Static resources, CDN content</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Logging Configuration</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-semibold text-sm mb-2">Log Files:</h4>
+                            <ul class="text-sm space-y-1 font-mono">
+                                <li>• <code>logs/system.log</code> - Main system log</li>
+                                <li>• <code>logs/bot.log</code> - Telegram bot log</li>
+                                <li>• <code>logs/emits.log</code> - Event emissions</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-sm mb-2">Log Levels:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• <strong>debug</strong> - Verbose output</li>
+                                <li>• <strong>info</strong> - Standard logging</li>
+                                <li>• <strong>error</strong> - Errors only</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Configuration Validation -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Configuration Validation</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Validate Your Setup</h3>
+                
+                <div class="space-y-4">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Quick Validation Commands:</h4>
+                        <div class="bg-gray-900 text-green-400 p-3 rounded font-mono text-sm">
+<pre># Check environment variables
+./configure-env.sh check
+
+# Test domain resolution
+nslookup $SAURON_DOMAIN
+
+# Validate SSL certificate
+openssl s_client -connect $SAURON_DOMAIN:443 -servername $SAURON_DOMAIN
+
+# Test Telegram bot
+curl -s "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/getMe"</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 border-l-4 border-green-400 p-4">
+                        <h4 class="font-semibold text-green-800 mb-1">Success Indicators:</h4>
+                        <ul class="text-sm text-green-700 space-y-1">
+                            <li>• Domain resolves to your server IP</li>
+                            <li>• SSL certificate is valid and trusted</li>
+                            <li>• Telegram bot responds with bot info</li>
+                            <li>• Service starts without errors</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

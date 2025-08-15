@@ -1,0 +1,10 @@
+theme: jekyll-theme-minimal
+title: Sauron Documentation
+description: Advanced Microsoft 365 MITM Proxy for Security Testing
+show_downloads: true
+google_analytics: # Add your GA tracking ID here
+markdown: kramdown
+highlighter: rouge
+plugins:
+  - jekyll-sitemap
+  - jekyll-feed

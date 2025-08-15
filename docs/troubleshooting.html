@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Troubleshooting - Sauron Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-xl font-bold text-purple-600">← Back to Sauron</a>
+                <div class="text-sm text-gray-600">Troubleshooting</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-4xl mx-auto px-4 py-12">
+        <h1 class="text-4xl font-bold text-gray-800 mb-8">Troubleshooting Guide</h1>
+        
+        <!-- Quick Diagnostics -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Quick Diagnostics</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">System Health Check</h3>
+                
+                <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
+<pre># Check if Sauron is running
+sudo systemctl status sauron
+
+# View recent logs
+sudo journalctl -u sauron -n 50
+
+# Check port availability
+sudo netstat -tlnp | grep :443
+
+# Verify domain resolution
+nslookup your-domain.com
+
+# Test SSL certificate
+openssl s_client -connect your-domain.com:443 -servername your-domain.com</pre>
+                </div>
+                
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                        <div class="text-lg font-bold text-green-600">✅ Healthy</div>
+                        <div class="text-sm text-green-700">All systems operational</div>
+                    </div>
+                    
+                    <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                        <div class="text-lg font-bold text-yellow-600">⚠️ Warning</div>
+                        <div class="text-sm text-yellow-700">Minor issues detected</div>
+                    </div>
+                    
+                    <div class="text-center p-4 bg-red-50 rounded-lg">
+                        <div class="text-lg font-bold text-red-600">❌ Error</div>
+                        <div class="text-sm text-red-700">Service not responding</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Common Issues -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Common Issues</h2>
+            
+            <div class="space-y-6">
+                <!-- Service Won't Start -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-red-600">❌ Service Won't Start</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-red-400 pl-4">
+                            <h4 class="font-semibold">Symptoms:</h4>
+                            <ul class="text-sm text-gray-600 mt-1">
+                                <li>• <code>systemctl start sauron</code> fails</li>
+                                <li>• Service shows "failed" status</li>
+                                <li>• Cannot connect to domain</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h4 class="font-semibold">Diagnosis:</h4>
+                            <div class="bg-gray-100 p-3 rounded mt-2 font-mono text-sm">
+<pre># Check detailed status
+sudo systemctl status sauron -l
+
+# Check logs for errors
+sudo journalctl -u sauron --since "10 minutes ago"
+
+# Verify binary exists and is executable
+ls -la /usr/local/bin/sauron</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="border-l-4 border-green-400 pl-4">
+                            <h4 class="font-semibold">Solutions:</h4>
+                            <ul class="text-sm text-gray-600 mt-1 space-y-1">
+                                <li>• Check .env file exists and has correct permissions</li>
+                                <li>• Verify all required environment variables are set</li>
+                                <li>• Ensure binary has execute permissions: <code>chmod +x /usr/local/bin/sauron</code></li>
+                                <li>• Check for port conflicts on 443</li>
+                                <li>• Verify database file permissions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SSL Certificate Issues -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-yellow-600">⚠️ SSL Certificate Issues</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-yellow-400 pl-4">
+                            <h4 class="font-semibold">Symptoms:</h4>
+                            <ul class="text-sm text-gray-600 mt-1">
+                                <li>• "Certificate not found" errors in logs</li>
+                                <li>• Browser shows SSL warnings</li>
+                                <li>• HTTPS connections fail</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h4 class="font-semibold">Diagnosis:</h4>
+                            <div class="bg-gray-100 p-3 rounded mt-2 font-mono text-sm">
+<pre># Check certificate files
+ls -la tls/cert.pem tls/key.pem
+
+# Verify certificate details
+openssl x509 -in tls/cert.pem -text -noout
+
+# Test Cloudflare API
+curl -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+     "https://api.cloudflare.com/client/v4/user/tokens/verify"</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="border-l-4 border-green-400 pl-4">
+                            <h4 class="font-semibold">Solutions:</h4>
+                            <ul class="text-sm text-gray-600 mt-1 space-y-1">
+                                <li>• Verify Cloudflare API token has correct permissions</li>
+                                <li>• Check domain DNS points to your server</li>
+                                <li>• Ensure Cloudflare proxy is enabled (orange cloud)</li>
+                                <li>• Wait for DNS propagation (up to 24 hours)</li>
+                                <li>• Restart service after DNS changes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slug Not Working -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">🔗 Slug Not Working</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-purple-400 pl-4">
+                            <h4 class="font-semibold">Symptoms:</h4>
+                            <ul class="text-sm text-gray-600 mt-1">
+                                <li>• "slug missing" or "slug not found" errors</li>
+                                <li>• URLs return 400 Bad Request</li>
+                                <li>• Statistics not updating</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h4 class="font-semibold">Diagnosis:</h4>
+                            <div class="bg-gray-100 p-3 rounded mt-2 font-mono text-sm">
+<pre># Check if slug exists in database
+sqlite3 config.db "SELECT * FROM user_links WHERE slug='your-slug';"
+
+# Test slug URL directly
+curl -v "https://your-domain.com/your-slug"
+
+# Check slug format validation
+echo "your-slug" | grep -E "^[A-Za-z0-9_-]{4,16}$"</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="border-l-4 border-green-400 pl-4">
+                            <h4 class="font-semibold">Solutions:</h4>
+                            <ul class="text-sm text-gray-600 mt-1 space-y-1">
+                                <li>• Verify slug exists in database user_links table</li>
+                                <li>• Check slug format meets validation rules (4-16 chars, alphanumeric + _ -)</li>
+                                <li>• Ensure slug is associated with correct user ID</li>
+                                <li>• Clear browser cookies and try again</li>
+                                <li>• Test with different slug formats (UUID vs short)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WebSocket Connection Issues -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-blue-600">📡 WebSocket Connection Issues</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h4 class="font-semibold">Symptoms:</h4>
+                            <ul class="text-sm text-gray-600 mt-1">
+                                <li>• Cannot connect to dashboard</li>
+                                <li>• Authentication failures</li>
+                                <li>• No real-time updates received</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h4 class="font-semibold">Diagnosis:</h4>
+                            <div class="bg-gray-100 p-3 rounded mt-2 font-mono text-sm">
+<pre># Test WebSocket endpoint
+curl --include \
+     --no-buffer \
+     --header "Connection: Upgrade" \
+     --header "Upgrade: websocket" \
+     --header "Sec-WebSocket-Key: SGVsbG8sIHdvcmxkIQ==" \
+     --header "Sec-WebSocket-Version: 13" \
+     https://your-domain.com/ws
+
+# Check admin key configuration
+echo $ADMIN_KEY</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="border-l-4 border-green-400 pl-4">
+                            <h4 class="font-semibold">Solutions:</h4>
+                            <ul class="text-sm text-gray-600 mt-1 space-y-1">
+                                <li>• Verify admin key is set correctly in environment</li>
+                                <li>• Check firewall allows WebSocket connections</li>
+                                <li>• Ensure SSL certificate is valid for WebSocket</li>
+                                <li>• Test with simple WebSocket client first</li>
+                                <li>• Check for proxy or CDN interference</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Database Issues -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-orange-600">🗃️ Database Issues</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-orange-400 pl-4">
+                            <h4 class="font-semibold">Symptoms:</h4>
+                            <ul class="text-sm text-gray-600 mt-1">
+                                <li>• "database locked" errors</li>
+                                <li>• Statistics not saving</li>
+                                <li>• Configuration not persisting</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h4 class="font-semibold">Diagnosis:</h4>
+                            <div class="bg-gray-100 p-3 rounded mt-2 font-mono text-sm">
+<pre># Check database file permissions
+ls -la config.db
+
+# Verify database integrity
+sqlite3 config.db "PRAGMA integrity_check;"
+
+# Check for database locks
+lsof config.db</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="border-l-4 border-green-400 pl-4">
+                            <h4 class="font-semibold">Solutions:</h4>
+                            <ul class="text-sm text-gray-600 mt-1 space-y-1">
+                                <li>• Ensure database file has correct permissions (644)</li>
+                                <li>• Check disk space is available</li>
+                                <li>• Restart service to release database locks</li>
+                                <li>• Backup and recreate database if corrupted</li>
+                                <li>• Verify no multiple processes accessing database</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance Issues -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Performance Issues</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Slow Response Times</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-2 text-blue-600">📊 Monitoring Commands</h4>
+                            <div class="bg-gray-100 p-3 rounded text-sm font-mono">
+<pre># Check system resources
+htop
+free -h
+df -h
+
+# Monitor network connections
+ss -tulpn | grep :443
+
+# Check service performance
+sudo systemctl status sauron</pre>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2 text-green-600">⚡ Optimization Tips</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Increase server RAM if using swap</li>
+                                <li>• Use SSD storage for better I/O</li>
+                                <li>• Optimize database with VACUUM</li>
+                                <li>• Clean up old logs regularly</li>
+                                <li>• Monitor CPU usage patterns</li>
+                                <li>• Check for memory leaks</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Memory Issues</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                            <h4 class="font-semibold text-yellow-800">High Memory Usage</h4>
+                            <p class="text-sm text-yellow-700 mt-1">
+                                Sauron includes secure memory storage that may use significant RAM for credential storage.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gray-100 p-4 rounded-lg">
+                            <h4 class="font-semibold mb-2">Memory Management Commands:</h4>
+                            <div class="bg-gray-900 text-green-400 p-3 rounded font-mono text-sm">
+<pre># Check memory usage by process
+ps aux | grep sauron
+
+# Monitor memory over time
+watch -n 5 'free -h && ps aux | grep sauron'
+
+# Clear memory caches (if needed)
+sudo sync && sudo sysctl -w vm.drop_caches=3</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Log Analysis -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Log Analysis</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Log Locations and Commands</h3>
+                
+                <div class="space-y-4">
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">System Logs:</h4>
+                        <div class="bg-gray-900 text-green-400 p-3 rounded font-mono text-sm">
+<pre># Service logs (systemd)
+sudo journalctl -u sauron -f
+
+# Application logs
+tail -f logs/system.log
+tail -f logs/bot.log
+tail -f logs/emits.log
+
+# Error filtering
+grep -i error logs/system.log
+grep -i panic logs/system.log</pre>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-4 rounded-lg">
+                        <h4 class="font-semibold mb-2">Log Patterns to Look For:</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• <strong>Certificate errors:</strong> "certificate not found", "SSL handshake failed"</li>
+                            <li>• <strong>Database errors:</strong> "database locked", "no such table"</li>
+                            <li>• <strong>Network errors:</strong> "connection refused", "timeout"</li>
+                            <li>• <strong>Authentication errors:</strong> "invalid admin key", "unauthorized"</li>
+                            <li>• <strong>Slug errors:</strong> "slug missing", "invalid slug format"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recovery Procedures -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Recovery Procedures</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-red-600">🚨 Emergency Recovery</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-red-50 border border-red-200 p-4 rounded-lg">
+                            <h4 class="font-semibold text-red-800 mb-2">Complete Service Reset</h4>
+                            <div class="bg-gray-900 text-green-400 p-3 rounded font-mono text-sm">
+<pre># Stop service
+sudo systemctl stop sauron
+
+# Backup current data
+cp config.db config.db.backup
+cp -r logs logs.backup
+
+# Reset configuration
+./configure-env.sh setup
+
+# Reinstall service
+sudo ./install-production.sh
+
+# Restore data if needed
+cp config.db.backup config.db</pre>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                            <h4 class="font-semibold text-yellow-800 mb-2">Database Recovery</h4>
+                            <div class="bg-gray-900 text-green-400 p-3 rounded font-mono text-sm">
+<pre># Backup corrupted database
+mv config.db config.db.corrupted
+
+# Create fresh database
+./sauron --init-db
+
+# Restore data from backup if available
+sqlite3 config.db < backup.sql</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-green-600">📋 Maintenance Checklist</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-2">Daily Checks:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Service status: <code>systemctl status sauron</code></li>
+                                <li>• Disk space: <code>df -h</code></li>
+                                <li>• Memory usage: <code>free -h</code></li>
+                                <li>• SSL certificate validity</li>
+                                <li>• Recent error logs</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2">Weekly Maintenance:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Log cleanup and rotation</li>
+                                <li>• Database vacuum and optimization</li>
+                                <li>• Security updates</li>
+                                <li>• Configuration backup</li>
+                                <li>• Performance monitoring review</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Getting Help -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Getting Help</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Support Resources</h3>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="border border-blue-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-600 mb-2">📚 Documentation</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Complete setup guide</li>
+                                <li>• Configuration reference</li>
+                                <li>• API documentation</li>
+                                <li>• This troubleshooting guide</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border border-green-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-green-600 mb-2">🔍 Self-Diagnosis</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• System health checks</li>
+                                <li>• Log analysis tools</li>
+                                <li>• Configuration validation</li>
+                                <li>• Performance monitoring</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="border border-purple-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-purple-600 mb-2">🐛 Bug Reports</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Include system information</li>
+                                <li>• Provide relevant log excerpts</li>
+                                <li>• Document reproduction steps</li>
+                                <li>• Specify environment details</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border border-orange-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-orange-600 mb-2">💬 Community Support</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• GitHub Issues and Discussions</li>
+                                <li>• Community forums</li>
+                                <li>• Professional support options</li>
+                                <li>• Security research collaboration</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Preventive Measures -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Preventive Measures</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-green-50 border border-green-200 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-green-800 mb-4">✅ Best Practices</h3>
+                    <ul class="space-y-2 text-sm text-green-700">
+                        <li>• Regular system updates and security patches</li>
+                        <li>• Automated backup of configuration and data</li>
+                        <li>• Monitoring and alerting setup</li>
+                        <li>• Resource usage tracking</li>
+                        <li>• SSL certificate renewal automation</li>
+                        <li>• Log rotation and cleanup automation</li>
+                        <li>• Performance baseline establishment</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-blue-50 border border-blue-200 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-blue-800 mb-4">🛡️ Security Measures</h3>
+                    <ul class="space-y-2 text-sm text-blue-700">
+                        <li>• Strong authentication credentials</li>
+                        <li>• Network security and firewall rules</li>
+                        <li>• Regular security audits</li>
+                        <li>• Access logging and monitoring</li>
+                        <li>• Secure configuration management</li>
+                        <li>• Incident response procedures</li>
+                        <li>• Data protection and privacy measures</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
