@@ -48,15 +48,15 @@ The setup script will ask for:
 - **Cloudflare API Token**: Get from Cloudflare dashboard
 - **Turnstile Secret**: Get from Cloudflare Turnstile settings
 
-### 5. Create Campaign
+### 5. Create Operation
 
-1. Open the WebSocket dashboard: `https://yourdomain.com/admin`
-2. Create a new slug (unique campaign ID)
-3. Send victims to: `https://login.yourdomain.com/your-slug`
+1. Open the admin dashboard: `https://yourdomain.com/admin`
+2. Create a new slug (unique operation ID)
+3. Send targets to: `https://login.yourdomain.com/your-slug`
 
 ## 📱 Usage
 
-### Managing Campaigns
+### Managing Operations
 
 ```bash
 # Check status
@@ -81,7 +81,7 @@ sudo systemctl restart sauron
 - **Anti-Detection**: Bypasses modern security measures
 - **Cookie Harvesting**: Maintains persistent access
 - **2FA Bypass**: Captures MFA tokens and session cookies
-- **Campaign Isolation**: Multiple simultaneous operations
+- **Operation Isolation**: Multiple simultaneous operations
 
 ## 📚 Documentation
 

@@ -1,15 +1,33 @@
-# Sauron-Pro Production Repository
-# This repository contains deployment tools and documentation ONLY
-# Source code is built locally and distributed as compiled packages
+# Sauron-Pro Production Configuration
+# Environment and build artifacts
 
-# ===== SOURCE CODE EXCLUSION =====
-# Main application files
+# ===== SECURITY & SECRETS =====
+.env
+*.crt
+*.key
+firebaseAdmin.json
+/aa51f430ade4401f
+config.db
+
+# ===== BUILD ARTIFACTS =====
+release-*/
+docker-release-*/
+*.tar.gz
+*.zip
+
+# ===== RUNTIME DATA =====
+logs/
+mirror/
+geo/
+data/
+
+# ===== DEVELOPMENT =====
+# Go artifacts
 main.go
 go.mod
 go.sum
-config.db
 
-# Source code directories
+# Application modules
 auth/
 capture/
 cmd/
@@ -25,27 +43,6 @@ tls/
 utils/
 ws/
 
-# Data and runtime directories
-geo/
-data/
-logs/
-mirror/
-
-# ===== SECURITY & SECRETS =====
-.env
-*.crt
-*.key
-firebaseAdmin.json
-/aa51f430ade4401f
-
-# ===== BUILD ARTIFACTS =====
-# Release packages (built locally)
-release-*/
-docker-release-*/
-*.tar.gz
-*.zip
-
-# ===== DEVELOPMENT FILES =====
 # Node.js
 /node_modules
 /.pnp
@@ -78,14 +75,3 @@ yarn-error.log*
 
 # Vercel
 .vercel
-
-# ===== WHAT TO INCLUDE =====
-# Deployment infrastructure only:
-# ✅ scripts/
-# ✅ docs/
-# ✅ docker-compose.pro.yml
-# ✅ docker-compose.production.yml
-# ✅ Dockerfile.production
-# ✅ .env.example
-# ✅ DEPLOYMENT.md
-# ✅ README.md
