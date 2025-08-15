@@ -107,12 +107,11 @@ sudo systemctl restart sauron
 
 ### Project Structure
 
-- `main.go` - Main application entry point
-- `capture/` - Credential and session capture logic
-- `inject/` - JavaScript injection and obfuscation
-- `proxy/` - MITM proxy and TLS interception
-- `ws/` - WebSocket management interface
-- `install/` - Installation and setup scripts
+- `scripts/` - Build and deployment automation scripts
+- `docs/` - Documentation and API reference
+- `.env.example` - Configuration template
+- `LICENSE` - MIT license with security tool disclaimers
+- **Note**: Source code is not included in this repository for security purposes
 
 ## 📚 Documentation
 
@@ -124,9 +123,46 @@ Includes:
 - Troubleshooting guides
 - Security best practices
 
-## ⚠️ Legal Notice
+## ⚠️ Legal Notice & Disclaimer
 
-This tool is for authorized security testing and educational purposes only. Users are responsible for compliance with applicable laws and regulations.
+**IMPORTANT: READ BEFORE USE**
+
+This software is provided for **educational and authorized security testing purposes only**. By downloading, installing, or using this software, you acknowledge and agree to the following:
+
+### 🔒 Authorized Use Only
+- This tool is intended **ONLY** for authorized penetration testing, security research, and educational purposes
+- You must have **explicit written permission** from the target system owner before use
+- Unauthorized access to computer systems is **illegal** and may violate local, state, federal, and international laws
+
+### 🚫 Prohibited Activities
+- **DO NOT** use this software for unauthorized access to any system
+- **DO NOT** use this software for malicious purposes, fraud, or illegal activities
+- **DO NOT** use this software to violate any applicable laws or regulations
+
+### 🛡️ Disclaimer of Liability
+- The authors and contributors provide this software **"AS IS"** without any warranties
+- **NO LIABILITY** is accepted for any damages, losses, or legal consequences resulting from use
+- Users assume **FULL RESPONSIBILITY** for compliance with applicable laws
+- The authors **DISCLAIM ALL LIABILITY** for misuse of this software
+
+### 📋 User Responsibilities
+- Verify legal compliance in your jurisdiction before use
+- Obtain proper authorization before conducting any security tests
+- Use responsibly and ethically in accordance with applicable laws
+- Report vulnerabilities through proper disclosure channels
+
+### 🏛️ Jurisdiction & Compliance
+- Users are responsible for compliance with all applicable laws including but not limited to:
+  - Computer Fraud and Abuse Act (CFAA)
+  - Digital Millennium Copyright Act (DMCA)
+  - General Data Protection Regulation (GDPR)
+  - Local privacy and cybersecurity regulations
+
+**By using this software, you acknowledge that you have read, understood, and agree to be bound by these terms.**
+
+## 📄 License
+
+This project is licensed under the MIT License with additional security tool disclaimers - see the [LICENSE](LICENSE) file for details.
 
 ---
 
