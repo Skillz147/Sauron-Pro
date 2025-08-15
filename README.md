@@ -28,10 +28,15 @@ A powerful phishing tool that intercepts Microsoft 365 login flows to capture cr
 ### 3. Install
 
 ```bash
-# Download latest release
-wget https://github.com/Skillz147/Sauron-Pro/releases/latest/download/sauron-linux-amd64.tar.gz
-tar -xzf sauron-linux-amd64.tar.gz
-cd sauron
+# Clone the repository
+git clone https://github.com/Skillz147/Sauron-Pro.git
+cd Sauron-Pro
+
+# Build release package
+./scripts/build-release.sh v1.0.0
+
+# Go to the built release
+cd release-v1.0.0/sauron
 
 # Run interactive setup
 ./configure-env.sh setup
@@ -92,14 +97,19 @@ For detailed setup guides, troubleshooting, and advanced features:
 
 This tool is for authorized security testing only. Users are responsible for compliance with applicable laws and regulations.
 
-## 🔧 Development
+## 🔧 Build from Source
 
 ```bash
-# Clone and build from source
+# Clone repository
 git clone https://github.com/Skillz147/Sauron-Pro.git
-cd sauron
-./scripts/configure-env.sh setup
-sudo bash install/setup.sh
+cd Sauron-Pro
+
+# Build release package
+./scripts/build-release.sh v1.0.0
+
+# Deploy to server
+scp release-v1.0.0/sauron-v1.0.0-linux-amd64.tar.gz root@your-server:/tmp/
+ssh root@your-server "cd /tmp && tar -xzf sauron-v1.0.0-linux-amd64.tar.gz && cd sauron && ./install-production.sh"
 ```
 
 ## 📞 Support
