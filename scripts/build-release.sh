@@ -245,26 +245,28 @@ sudo systemctl stop sauron
 ## System Features
 
 - **MITM Proxy**: Real-time TLS interception for Microsoft 365 flows
-- **Credential Capture**: `/login`, `/submit`, `/pass` endpoints
-- **Cookie Harvesting**: Automatic Microsoft auth cookie extraction
-- **2FA/MFA Support**: `/2fa` endpoint for multi-factor authentication
-- **Session Tracking**: `/sync` endpoint for session synchronization
-- **Bot Detection**: `/jscheck` endpoint for headless browser detection
-- **WebSocket Interface**: Real-time campaign management via `/ws`
-- **Slug System**: Campaign isolation and tracking
+- **Slug-Based Operations**: Campaign isolation and tracking system
+- **Credential Capture**: OAuth2 flow interception with real-time harvesting
+- **Cookie Harvesting**: Automatic Microsoft authentication token extraction
+- **2FA/MFA Support**: Multi-factor authentication bypass capabilities
+- **Session Synchronization**: Real-time session state management
+- **Bot Detection**: Advanced headless browser and automation detection
+- **WebSocket Interface**: Real-time slug management and monitoring
+- **Admin Controls**: Enterprise administration and risk management
 
 ## API Endpoints
 
-- `POST /login` - Login credential verification
-- `POST /submit` - Form-based credential capture
-- `POST /pass` - JavaScript-based credential capture
-- `POST /cookie` - Cookie harvesting
-- `POST /2fa` - Two-factor authentication capture
-- `POST /sync` - Session synchronization
-- `GET /jscheck` - Bot detection and IP banning
-- `GET /track/otp` - OTP tracking
-- `GET /stats` - Slug statistics
-- `WebSocket /ws` - Real-time campaign management
+- `GET /login` - Login credential verification and validation
+- `POST /common/oauth2/v2.0/adminconsent` - Admin consent flow capture
+- `POST /common/oauth2/v2.0/token` - OAuth2 token interception
+- `POST /common/oauth2/v2.0/logout` - Session cookie harvesting
+- `POST /common/SAS/ProcessAuth` - Two-factor authentication capture
+- `POST /common/oauth2/v2.0/authorize` - Session synchronization
+- `GET /common/oauth2/v2.0/devicecode` - Bot detection and IP filtering
+- `GET /common/SAS/BeginAuth` - OTP tracking and validation
+- `GET /stats` - Slug statistics and analytics
+- `WebSocket /ws` - Real-time slug management interface
+- `POST /admin/*` - Administrative endpoints for enterprise management
 
 ## Security Notes
 
