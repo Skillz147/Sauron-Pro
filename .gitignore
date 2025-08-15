@@ -1,26 +1,52 @@
 # Sauron-Pro Production Repository
-# This repository contains deployment tools and documentation only
+# This repository contains deployment tools and documentation ONLY
 # Source code is built locally and distributed as compiled packages
 
-# Environment and Secrets
+# ===== SOURCE CODE EXCLUSION =====
+# Main application files
+main.go
+go.mod
+go.sum
+config.db
+
+# Source code directories
+auth/
+capture/
+cmd/
+configdb/
+firestore/
+handlers/
+inject/
+install/
+proxy/
+slug/
+telegramq/
+tls/
+utils/
+ws/
+
+# Data and runtime directories
+geo/
+data/
+logs/
+mirror/
+
+# ===== SECURITY & SECRETS =====
 .env
 *.crt
 *.key
 firebaseAdmin.json
-config.db
+/aa51f430ade4401f
 
-# Build Artifacts and Releases (exclude from repository)
+# ===== BUILD ARTIFACTS =====
+# Release packages (built locally)
 release-*/
 docker-release-*/
 *.tar.gz
 *.zip
 
-# Logs and Runtime Data
-logs/
-mirror/
-/aa51f430ade4401f
-
-# Development Dependencies
+# ===== DEVELOPMENT FILES =====
+# Node.js
 /node_modules
 /.pnp
 .pnp.*
@@ -33,11 +59,9 @@ mirror/
 # Testing
 /coverage
 
-# Next.js (if applicable)
+# Next.js
 /.next/
 /out/
-
-# Production builds
 /build
 
 # System files
@@ -55,31 +79,13 @@ yarn-error.log*
 # Vercel
 .vercel
 
-# Source Code Files (exclude from Sauron-Pro repository)
-main.go
-auth/
-capture/
-cmd/
-configdb/
-firestore/
-handlers/
-inject/
-install/setup.sh
-proxy/
-slug/
-telegramq/
-tls/
-utils/
-ws/
-go.mod
-go.sum
-
-# Include only deployment infrastructure
-!scripts/
-!docs/
-!docker-compose.pro.yml
-!docker-compose.production.yml
-!Dockerfile.production
-!.env.example
-!DEPLOYMENT.md
-!README.md
+# ===== WHAT TO INCLUDE =====
+# Deployment infrastructure only:
+# ✅ scripts/
+# ✅ docs/
+# ✅ docker-compose.pro.yml
+# ✅ docker-compose.production.yml
+# ✅ Dockerfile.production
+# ✅ .env.example
+# ✅ DEPLOYMENT.md
+# ✅ README.md
