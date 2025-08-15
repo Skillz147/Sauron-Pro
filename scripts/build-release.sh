@@ -1,7 +1,20 @@
 #!/bin/bash
 set -e
 
-VERSION=${1:-"v1.0.0"}
+# Auto-detect version from git tags or use default
+if [ -z "$1" ]; then
+    # Try to get latest git tag, fallback to date-based version
+    if git describe --tags --exact-match HEAD 2>/dev/null; then
+        VERSION=$(git describe --tags --exact-match HEAD)
+    else
+        VERSION="v$(date +%Y.%m.%d)-$(git rev-parse --short HEAD)"
+    fi
+    echo "🏷️  Auto-detected version: $VERSION"
+else
+    VERSION="$1"
+    echo "🏷️  Using provided version: $VERSION"
+fi
+
 RELEASE_DIR="release-$VERSION"
 BUILD_DIR="$RELEASE_DIR/sauron"
 
@@ -395,23 +408,104 @@ chmod +x "$BUILD_DIR/update-sauron.sh"
 # ───────────── Create Archive ─────────────
 echo "📦 Creating release archive..."
 cd "$RELEASE_DIR"
+
+# Create both versioned and latest archives
 tar -czf "sauron-$VERSION-linux-amd64.tar.gz" sauron/
+tar -czf "sauron-linux-amd64.tar.gz" sauron/
+
 cd ..
 
 # Show release info
 echo ""
 echo "🎉 Release package created successfully!"
 echo "📁 Location: $RELEASE_DIR/"
-echo "📦 Archive: $RELEASE_DIR/sauron-$VERSION-linux-amd64.tar.gz"
-echo "💾 Archive size: $(du -h "$RELEASE_DIR/sauron-$VERSION-linux-amd64.tar.gz" | cut -f1)"
+echo "📦 Versioned: $RELEASE_DIR/sauron-$VERSION-linux-amd64.tar.gz"
+echo "📦 Latest: $RELEASE_DIR/sauron-linux-amd64.tar.gz"
+echo "💾 Archive size: $(du -h "$RELEASE_DIR/sauron-linux-amd64.tar.gz" | cut -f1)"
 echo ""
 echo "🚀 CUSTOMER DEPLOYMENT (Ultra-Simple):"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "1️⃣  Upload: sauron-$VERSION-linux-amd64.tar.gz to VPS"
-echo "2️⃣  Extract: tar -xzf sauron-$VERSION-linux-amd64.tar.gz"
+echo "1️⃣  Upload: sauron-linux-amd64.tar.gz to VPS"
+echo "2️⃣  Extract: tar -xzf sauron-linux-amd64.tar.gz"
 echo "3️⃣  Enter: cd sauron"
 echo "4️⃣  Install: sudo ./install-production.sh"
 echo ""
 echo "✨ That's it! The installer handles everything automatically."
 echo "🎯 3-minute professional deployment guaranteed."
+echo ""
+
+# ───────────── Interactive GitHub Release ─────────────
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "📤 GITHUB RELEASE"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo ""
+read -p "🤔 Do you want to push this release to GitHub now? [y/N]: " -n 1 -r
+echo ""
+
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo ""
+    echo "🚀 Pushing release to GitHub..."
+    
+    # Create git tag if it doesn't exist
+    if ! git tag -l | grep -q "^$VERSION$"; then
+        echo "🏷️  Creating git tag: $VERSION"
+        git tag "$VERSION" -m "Sauron release $VERSION"
+    fi
+    
+    # Push tag to GitHub
+    echo "📤 Pushing tag to GitHub..."
+    git push sauron-pro "$VERSION"
+    
+    # Check if GitHub CLI is available
+    if command -v gh >/dev/null 2>&1; then
+        echo "📦 Creating GitHub release with files..."
+        
+        # Create release with both files
+        gh release create "$VERSION" \
+            --repo "Skillz147/Sauron-Pro" \
+            --title "Sauron Release $VERSION" \
+            --notes "Automated release build $VERSION
+
+## 🚀 Installation
+\`\`\`bash
+wget https://github.com/Skillz147/Sauron-Pro/releases/latest/download/sauron-linux-amd64.tar.gz
+tar -xzf sauron-linux-amd64.tar.gz
+cd sauron
+sudo ./install-production.sh
+\`\`\`
+
+## 📦 Package Contents
+- Compiled binary (no source code)
+- Automated installer with Docker support
+- Interactive Cloudflare setup wizard
+- Professional deployment documentation
+
+**3-minute deployment guaranteed!**" \
+            "$RELEASE_DIR/sauron-$VERSION-linux-amd64.tar.gz" \
+            "$RELEASE_DIR/sauron-linux-amd64.tar.gz"
+        
+        echo ""
+        echo "✅ GitHub release created successfully!"
+        echo "🌐 View at: https://github.com/Skillz147/Sauron-Pro/releases/tag/$VERSION"
+        
+    else
+        echo ""
+        echo "⚠️  GitHub CLI (gh) not found."
+        echo "📋 Manual steps:"
+        echo "   1. Go to: https://github.com/Skillz147/Sauron-Pro/releases/new"
+        echo "   2. Select tag: $VERSION"
+        echo "   3. Upload both files:"
+        echo "      - $RELEASE_DIR/sauron-$VERSION-linux-amd64.tar.gz"
+        echo "      - $RELEASE_DIR/sauron-linux-amd64.tar.gz"
+    fi
+    
+else
+    echo ""
+    echo "⏭️  Skipping GitHub push."
+    echo "📋 To push later:"
+    echo "   git tag $VERSION -m 'Sauron release $VERSION'"
+    echo "   git push sauron-pro $VERSION"
+    echo "   # Then create release at: https://github.com/Skillz147/Sauron-Pro/releases/new"
+fi
+
 echo ""

