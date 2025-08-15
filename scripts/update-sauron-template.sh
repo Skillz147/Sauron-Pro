@@ -100,7 +100,7 @@ echo "📊 Current version: $current_version"
 echo "📊 Latest version:  $latest_version"
 
 # Check if we're running from within the extracted directory (manual update)
-if [ -f "./sauron" ]; then
+if [ -f "./sauron" ] && [ "$FORCE_UPDATE" = false ]; then
     echo "📱 Using binary from current directory..."
     binary_source="./sauron"
     
@@ -111,7 +111,12 @@ if [ -f "./sauron" ]; then
     # Skip version comparison for local updates
     echo "ℹ️  Performing manual update with local binary..."
 else
-    # Check if update is needed
+    # Force mode or no local binary - always download latest
+    if [ "$FORCE_UPDATE" = true ]; then
+        echo "🔄 Force mode: Downloading latest version regardless of local binary"
+    fi
+    
+    # Check if update is needed (only when not forcing)
     if [ "$current_version" = "$latest_version" ] && [ "$latest_version" != "unknown" ] && [ "$FORCE_UPDATE" = false ]; then
         echo "✅ Already running the latest version ($current_version)"
         echo "🔍 Check status: systemctl status sauron"
