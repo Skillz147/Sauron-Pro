@@ -27,22 +27,27 @@ A powerful phishing tool that intercepts Microsoft 365 login flows to capture cr
 
 ### 3. Install
 
+**📋 For detailed instructions: [SIMPLE_DEPLOYMENT.md](SIMPLE_DEPLOYMENT.md)**
+
+#### Quick Source Build (Recommended)
 ```bash
-# Clone the repository
+# Clone repository
 git clone https://github.com/Skillz147/Sauron-Pro.git
 cd Sauron-Pro
 
-# Build release package
-./scripts/build-release.sh v1.0.0
+# Configure environment
+cp .env.example .env
+nano .env  # Fill in your configuration
 
-# Go to the built release
-cd release-v1.0.0/sauron
+# Install and start (this does everything)
+sudo bash install/setup.sh
+```
 
-# Run interactive setup
-./configure-env.sh setup
-
-# Install and start
-sudo ./install-production.sh
+#### Alternative: Docker
+```bash
+# Same clone and configure steps, then:
+./scripts/build-docker-release.sh v2.0.0-pro
+docker-compose -f docker-compose.pro.yml up -d
 ```
 
 ### 4. Configure
