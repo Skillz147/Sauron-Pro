@@ -31,17 +31,24 @@ go.sum
 auth/
 capture/
 cmd/
+cleanup/
 configdb/
+decoy/
 firestore/
 handlers/
 inject/
 install/
+monitoring/
 proxy/
 slug/
 telegramq/
 tls/
 utils/
 ws/
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
 
 # Node.js
 /node_modules
