@@ -169,6 +169,43 @@ echo "📦 Installing new binary..."
 cp "$binary_source" /usr/local/bin/sauron
 chmod +x /usr/local/bin/sauron
 
+# Update supporting scripts if they exist in the release
+echo "🔧 Updating supporting scripts..."
+script_update_count=0
+
+# List of scripts to update
+scripts_to_update=(
+    "test-firebase.sh"
+    "verify-installation.sh" 
+    "configure-env.sh"
+    "help.sh"
+)
+
+for script in "${scripts_to_update[@]}"; do
+    source_script=""
+    if [ "$binary_source" = "./sauron" ]; then
+        # Local update - look in current directory
+        source_script="./$script"
+    else
+        # Downloaded update - look in download directory  
+        download_base=$(dirname "$binary_source")
+        source_script="$download_base/$script"
+    fi
+    
+    if [ -f "$source_script" ]; then
+        cp "$source_script" "/home/sauron/$script" 2>/dev/null || cp "$source_script" "./$script" 2>/dev/null || true
+        chmod +x "/home/sauron/$script" 2>/dev/null || chmod +x "./$script" 2>/dev/null || true
+        echo "  ✅ Updated $script"
+        ((script_update_count++))
+    fi
+done
+
+if [ $script_update_count -eq 0 ]; then
+    echo "  ℹ️  No supporting scripts found in release"
+else
+    echo "  📜 Updated $script_update_count supporting scripts"
+fi
+
 # Verify installation
 new_version=$(/usr/local/bin/sauron --version 2>/dev/null | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+.*' || echo "unknown")
 echo "✅ Installed version: $new_version"

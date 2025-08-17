@@ -10,19 +10,33 @@ if [ ! -f "firebaseAdmin.json" ]; then
     exit 1
 fi
 
-# Create the Go test file
+# Create temporary directory for Firebase testing
+TEMP_DIR=$(mktemp -d)
+echo "📦 Creating temporary workspace: $TEMP_DIR"
+
+# Copy required files to temp directory
+cp firebaseAdmin.json "$TEMP_DIR/"
+cd "$TEMP_DIR"
+
+# Create the Go test file in temp directory
 cat > test_firebase_connection.go << 'EOF'
 package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"time"
 
 	firebase "firebase.google.com/go/v4"
 	"google.golang.org/api/option"
 )
+
+type Credentials struct {
+	ProjectID string `json:"project_id"`
+}
 
 func main() {
 	fmt.Println("🔥 Testing Firebase connection...")
@@ -33,12 +47,33 @@ func main() {
 		os.Exit(1)
 	}
 	
+	// Read and parse credentials file to get project ID
+	credData, err := ioutil.ReadFile("firebaseAdmin.json")
+	if err != nil {
+		fmt.Printf("❌ Failed to read credentials file: %v\n", err)
+		os.Exit(1)
+	}
+
+	var creds Credentials
+	if err := json.Unmarshal(credData, &creds); err != nil {
+		fmt.Printf("❌ Failed to parse credentials file: %v\n", err)
+		os.Exit(1)
+	}
+
+	if creds.ProjectID == "" {
+		fmt.Println("❌ No project_id found in credentials file")
+		os.Exit(1)
+	}
+
+	fmt.Printf("📋 Project ID: %s\n", creds.ProjectID)
+	
 	ctx := context.Background()
 	opt := option.WithCredentialsFile("firebaseAdmin.json")
 	
-	// Initialize Firebase app
+	// Initialize Firebase app with project ID
 	fmt.Println("📡 Initializing Firebase app...")
-	app, err := firebase.NewApp(ctx, nil, opt)
+	config := &firebase.Config{ProjectID: creds.ProjectID}
+	app, err := firebase.NewApp(ctx, config, opt)
 	if err != nil {
 		fmt.Printf("❌ Firebase app initialization failed: %v\n", err)
 		os.Exit(1)
@@ -88,32 +123,27 @@ func main() {
 }
 EOF
 
-# Check if go.mod exists (for source directory) or use temporary module
-if [ -f "go.mod" ]; then
-    echo "📦 Using existing go.mod..."
-    go run test_firebase_connection.go
-else
-    echo "📦 Creating temporary module..."
-    # Create temporary module for standalone testing
-    cat > go.mod << 'EOF'
+# Create temporary module for standalone testing
+echo "⬇️  Creating temporary Go module..."
+cat > go.mod << 'EOF'
 module firebase-test
 
 go 1.22
-
-require (
-	cloud.google.com/go/firestore v1.14.0
-	firebase.google.com/go/v4 v4.12.0
-	google.golang.org/api v0.149.0
-)
 EOF
-    
-    echo "⬇️  Downloading dependencies..."
-    go mod download
-    go run test_firebase_connection.go
-    
-    # Cleanup temporary files
-    rm -f go.mod go.sum
-fi
+
+echo "⬇️  Downloading Firebase dependencies..."
+go mod init firebase-test 2>/dev/null || true
+go get firebase.google.com/go/v4@latest
+go get google.golang.org/api@latest
+go mod tidy
+
+echo "🚀 Running Firebase connection test..."
+go run test_firebase_connection.go
+
+# Return to original directory and cleanup
+cd - > /dev/null
+echo "🧹 Cleaning up temporary files..."
+rm -rf "$TEMP_DIR"
 
 # Cleanup test file
 rm -f test_firebase_connection.go
