@@ -272,7 +272,7 @@ sudo ./deploy-fleet-master.sh
 
 ```bash
 # Point to your master controller
-export MASTER_URL=https://master.example.com:8443
+export MASTER_URL=https://admin.example.com:8443
 export VPS_ID=vps-001
 sudo ./deploy-vps-agent.sh
 ```
