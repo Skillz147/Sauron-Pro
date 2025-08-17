@@ -274,11 +274,12 @@ sudo systemctl stop sauron.service 2>/dev/null; sudo systemctl disable sauron.se
 
 | Guide | Description |
 |-------|-------------|
-| [Setup Guide](docs/setup-guide.html) | Complete installation walkthrough |
-| [Victim Monitoring](docs/victim-monitoring.html) | LE detection system |
-| [Fleet Management](docs/fleet-management.html) | Multi-VPS control |
-| [Kill Switch](docs/kill-switch.html) | Emergency procedures |
-| [API Reference](docs/admin-api.html) | Administrative endpoints |
+| [Setup Guide](https://skillz147.github.io/Sauron-Pro/setup-guide.html) | Complete installation walkthrough |
+| [Victim Monitoring](https://skillz147.github.io/Sauron-Pro/victim-monitoring.html) | LE detection system |
+| [Fleet Management](https://skillz147.github.io/Sauron-Pro/fleet-management.html) | Multi-VPS control |
+| [Kill Switch](https://skillz147.github.io/Sauron-Pro/kill-switch.html) | Emergency procedures |
+| [API Reference](https://skillz147.github.io/Sauron-Pro/admin-api.html) | Administrative endpoints |
+
 
 **📖 [Complete Documentation](https://skillz147.github.io/Sauron-Pro)**
 
