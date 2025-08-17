@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sauron-Pro Fleet Management System</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+        }
+        .architecture-box {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-line;
+            margin: 20px 0;
+        }
+        .code-block {
+            background: #34495e;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .api-endpoint {
+            background: #27ae60;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+        .warning-box {
+            background: #f39c12;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .info-box {
+            background: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        .success-box {
+            background: #27ae60;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin: 5px 0;
+        }
+        .component-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .component-card {
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            padding: 20px;
+            background: #ecf0f1;
+        }
+        .deployment-flow {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .step {
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+        }
+        .nav-menu {
+            background: #34495e;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .nav-menu a {
+            color: #ecf0f1;
+            text-decoration: none;
+            margin-right: 20px;
+            padding: 5px 10px;
+            border-radius: 3px;
+        }
+        .nav-menu a:hover {
+            background: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-menu">
+            <a href="#overview">Overview</a>
+            <a href="#architecture">Architecture</a>
+            <a href="#installation">Installation</a>
+            <a href="#usage">Usage</a>
+            <a href="#api">API Reference</a>
+            <a href="#config">Configuration</a>
+            <a href="#monitoring">Monitoring</a>
+            <a href="#examples">Examples</a>
+        </div>
+
+        <h1>🚀 Sauron-Pro Fleet Management System</h1>
+
+        <section id="overview">
+            <h2>📋 Overview</h2>
+            <p>The Fleet Management System allows you to deploy and control multiple Sauron-Pro instances across different VPS servers from a centralized master controller. This creates a distributed MITM network that can be managed from a single admin interface.</p>
+            
+            <div class="info-box">
+                <strong>Key Benefits:</strong>
+                <ul>
+                    <li>Centralized control of multiple VPS instances</li>
+                    <li>Automated registration and heartbeat monitoring</li>
+                    <li>Remote command execution across the fleet</li>
+                    <li>Real-time status monitoring and alerts</li>
+                    <li>Scalable architecture (100+ VPS support)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="architecture">
+            <h2>🏗️ Architecture</h2>
+            
+            <div class="architecture-box">Master Controller (master.example.com:8443)
+├── Fleet Management API
+├── VPS Registration & Heartbeat
+├── Command Dispatch System
+└── Centralized Monitoring
+
+Connected VPS Instances
+├── VPS-001 (vps1.example.com)
+├── VPS-002 (vps2.example.com)
+├── VPS-003 (vps3.example.com)
+└── ... (up to 100+ VPS instances)</div>
+
+            <div class="component-grid">
+                <div class="component-card">
+                    <h3>🏛️ Master Controller</h3>
+                    <ul>
+                        <li><strong>Location:</strong> Single server (e.g., master.example.com)</li>
+                        <li><strong>Purpose:</strong> Central command and control</li>
+                        <li><strong>Features:</strong>
+                            <ul>
+                                <li>VPS registration & heartbeat monitoring</li>
+                                <li>Command dispatch to VPS instances</li>
+                                <li>Fleet-wide statistics</li>
+                                <li>Script execution management</li>
+                                <li>Real-time status dashboard</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="component-card">
+                    <h3>🖥️ VPS Agents</h3>
+                    <ul>
+                        <li><strong>Location:</strong> Each individual VPS server</li>
+                        <li><strong>Purpose:</strong> Local MITM operations + master communication</li>
+                        <li><strong>Features:</strong>
+                            <ul>
+                                <li>Automatic registration with master</li>
+                                <li>Periodic heartbeat (every 5 minutes)</li>
+                                <li>Command receiver for remote operations</li>
+                                <li>Local credential capture</li>
+                                <li>Script execution via master commands</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="installation">
+            <h2>⚙️ Installation</h2>
+            
+            <div class="deployment-flow">
+                <h3>🎯 Deployment Workflow</h3>
+                
+                <div class="step">
+                    <strong>Step 1: Deploy Master Controller</strong>
+                    <div class="code-block">export DOMAIN=master.example.com
+sudo ./scripts/deploy-fleet-master.sh</div>
+                </div>
+                
+                <div class="step">
+                    <strong>Step 2: Deploy VPS Agents (on each VPS)</strong>
+                    <div class="code-block">export MASTER_URL=https://master.example.com:8443
+export VPS_ID=vps-001
+export VPS_DOMAIN=vps1.example.com
+sudo ./scripts/deploy-vps-agent.sh</div>
+                </div>
+                
+                <div class="step">
+                    <strong>Step 3: Verify Fleet</strong>
+                    <div class="code-block">/opt/sauron-pro/bin/fleet-status
+/opt/sauron-pro/bin/fleet-command vps-001 status</div>
+                </div>
+            </div>
+
+            <h3>📋 Prerequisites</h3>
+            <div class="warning-box">
+                <strong>Master Controller Requirements:</strong>
+                <ul>
+                    <li>Linux server with root access</li>
+                    <li>Go 1.19+ installed</li>
+                    <li>Domain pointing to server</li>
+                    <li>SSL certificate configured</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <strong>VPS Agent Requirements:</strong>
+                <ul>
+                    <li>Linux VPS with root access</li>
+                    <li>Go 1.19+ installed</li>
+                    <li>Network connectivity to master controller</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="usage">
+            <h2>🎮 Usage</h2>
+            
+            <h3>Fleet Management Commands</h3>
+            
+            <div class="code-block"># View all VPS instances
+/opt/sauron-pro/bin/fleet-status
+
+# Send command to specific VPS
+/opt/sauron-pro/bin/fleet-command &lt;vps-id&gt; &lt;command&gt; [payload]</div>
+
+            <h3>Available Commands</h3>
+            <table>
+                <tr><th>Command</th><th>Description</th><th>Example</th></tr>
+                <tr><td>status</td><td>Get VPS status and statistics</td><td>fleet-command vps-001 status</td></tr>
+                <tr><td>restart</td><td>Restart VPS service</td><td>fleet-command vps-001 restart</td></tr>
+                <tr><td>script</td><td>Execute script on VPS</td><td>fleet-command vps-001 script '{"script": "update.sh"}'</td></tr>
+                <tr><td>config</td><td>Update VPS configuration</td><td>fleet-command vps-001 config</td></tr>
+                <tr><td>update</td><td>Update VPS software</td><td>fleet-command vps-001 update</td></tr>
+            </table>
+        </section>
+
+        <section id="api">
+            <h2>🔌 API Reference</h2>
+            
+            <h3>Master Controller APIs</h3>
+            
+            <div class="api-endpoint">POST /fleet/register
+Content-Type: application/json
+X-VPS-ID: vps-001
+
+{
+  "ip": "192.168.1.100",
+  "domain": "vps-001.example.com",
+  "admin_domain": "admin.vps-001.example.com",
+  "version": "v2.0.1",
+  "location": "US-East"
+}</div>
+
+            <div class="api-endpoint">GET /fleet/instances
+
+Response:
+{
+  "success": true,
+  "instances": [
+    {
+      "id": "vps-001",
+      "ip": "192.168.1.100",
+      "domain": "vps-001.example.com",
+      "status": "active",
+      "last_seen": "2025-08-17T10:30:00Z",
+      "location": "US-East",
+      "version": "v2.0.1"
+    }
+  ],
+  "fleet_stats": {
+    "total_vps": 5,
+    "active_vps": 4
+  }
+}</div>
+
+            <div class="api-endpoint">POST /fleet/command
+Content-Type: application/json
+
+{
+  "vps_id": "vps-001",
+  "command": "status",
+  "payload": {}
+}</div>
+        </section>
+
+        <section id="config">
+            <h2>⚙️ Configuration</h2>
+            
+            <h3>Master Controller Configuration</h3>
+            <p><strong>Location:</strong> <code>/etc/sauron-pro/fleet-config.json</code></p>
+            
+            <div class="code-block">{
+  "fleet_master": {
+    "domain": "master.example.com",
+    "port": 8443,
+    "max_vps_instances": 100,
+    "heartbeat_timeout": 600,
+    "command_timeout": 30,
+    "database": {
+      "path": "/opt/sauron-pro/data/fleet.db",
+      "backup_interval": 3600
+    },
+    "security": {
+      "require_vps_auth": true,
+      "max_command_rate": 10,
+      "allowed_commands": ["status", "restart", "script", "config", "update"]
+    }
+  }
+}</div>
+
+            <h3>VPS Agent Configuration</h3>
+            <p><strong>Location:</strong> <code>/etc/sauron-pro/vps-config.json</code></p>
+            
+            <div class="code-block">{
+  "vps_agent": {
+    "id": "vps-001",
+    "domain": "vps-001.example.com",
+    "location": "US-East",
+    "master_url": "https://master.example.com:8443",
+    "heartbeat_interval": 300,
+    "command_port": 8444,
+    "security": {
+      "enable_auth": true,
+      "max_command_rate": 5
+    }
+  }
+}</div>
+        </section>
+
+        <section id="monitoring">
+            <h2>📊 Monitoring & Maintenance</h2>
+            
+            <h3>Log Locations</h3>
+            <table>
+                <tr><th>Component</th><th>Service Logs</th><th>Error Logs</th><th>System Logs</th></tr>
+                <tr>
+                    <td>Master Controller</td>
+                    <td>/var/log/sauron-pro/fleet-master.log</td>
+                    <td>/var/log/sauron-pro/fleet-master-error.log</td>
+                    <td>journalctl -u sauron-fleet-master</td>
+                </tr>
+                <tr>
+                    <td>VPS Agent</td>
+                    <td>/var/log/sauron-pro/vps-agent.log</td>
+                    <td>/var/log/sauron-pro/vps-agent-error.log</td>
+                    <td>journalctl -u sauron-vps-agent</td>
+                </tr>
+            </table>
+
+            <h3>Health Monitoring</h3>
+            <div class="code-block"># View all VPS instances and their status
+curl -s https://master.example.com:8443/fleet/instances | jq '.'
+
+# Check specific VPS
+curl -s https://master.example.com:8443/fleet/instances | jq '.instances[] | select(.id=="vps-001")'</div>
+
+            <div class="info-box">
+                <strong>Heartbeat System:</strong>
+                <ul>
+                    <li>VPS instances send heartbeat every 5 minutes</li>
+                    <li>Master marks VPS as inactive after 10 minutes without heartbeat</li>
+                    <li>Automatic alerts when VPS goes offline</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="examples">
+            <h2>💡 Examples</h2>
+            
+            <h3>Execute Script on Specific VPS</h3>
+            <div class="code-block">/opt/sauron-pro/bin/fleet-command vps-001 script '{"script": "update-sauron-template.sh"}'</div>
+
+            <h3>Execute Script on All Active VPS</h3>
+            <div class="code-block"># Get all active VPS IDs
+VPS_LIST=$(curl -s https://master.example.com:8443/fleet/instances | jq -r '.instances[] | select(.status=="active") | .id')
+
+# Execute script on each
+for vps in $VPS_LIST; do
+  /opt/sauron-pro/bin/fleet-command $vps script '{"script": "cleanup-logs.sh"}'
+done</div>
+
+            <h3>Best Practices</h3>
+            <div class="success-box">
+                <ol>
+                    <li><strong>VPS Naming Convention:</strong> Use descriptive IDs (us-east-001, eu-west-002)</li>
+                    <li><strong>Regular Monitoring:</strong> Check fleet status daily</li>
+                    <li><strong>Staged Deployments:</strong> Test commands on single VPS before fleet-wide</li>
+                    <li><strong>Backup Strategy:</strong> Regular database backups on master controller</li>
+                    <li><strong>Security Updates:</strong> Keep all instances updated</li>
+                    <li><strong>Geographic Distribution:</strong> Spread VPS across different regions</li>
+                    <li><strong>Capacity Planning:</strong> Monitor resource usage and scale appropriately</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="troubleshooting">
+            <h2>🔧 Troubleshooting</h2>
+            
+            <h3>VPS Not Registering</h3>
+            <ol>
+                <li>Check network connectivity to master controller</li>
+                <li>Verify MASTER_URL configuration</li>
+                <li>Check firewall rules (port 8443)</li>
+                <li>Review VPS agent logs</li>
+            </ol>
+
+            <h3>Commands Not Executing</h3>
+            <ol>
+                <li>Verify VPS is active and responsive</li>
+                <li>Check command syntax and payload</li>
+                <li>Review VPS agent command receiver logs</li>
+                <li>Ensure command is in allowed commands list</li>
+            </ol>
+
+            <h3>Performance Issues</h3>
+            <ol>
+                <li>Monitor heartbeat intervals</li>
+                <li>Check database performance on master</li>
+                <li>Review resource usage on VPS instances</li>
+                <li>Consider scaling master controller</li>
+            </ol>
+        </section>
+
+        <footer style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #ecf0f1; text-align: center; color: #7f8c8d;">
+            <p>Sauron-Pro Fleet Management System Documentation</p>
+            <p>For support and updates, review the troubleshooting section and log files.</p>
+        </footer>
+    </div>
+</body>
+</html>

