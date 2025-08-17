@@ -265,7 +265,7 @@ test_network_simulation() {
         --argjson level "1" \
         --argjson delay "0" \
         --arg reason "Integration test" \
-        --arg confirmation_code "OMEGA-DESTROY" \
+        --arg confirmation_code "Lord Sauron" \
         '{
             admin_key: $admin_key,
             vps_id: $vps_id,
@@ -315,8 +315,8 @@ test_security() {
     fi
     
     # Test confirmation code validation
-    local confirmation_code="OMEGA-DESTROY"
-    if [[ "$confirmation_code" == "OMEGA-DESTROY" ]]; then
+    local confirmation_code="Lord Sauron"
+    if [[ "$confirmation_code" == "Lord Sauron" ]]; then
         log "✓ Confirmation code validation works"
     else
         test_fail "Confirmation code validation failed"

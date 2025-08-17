@@ -116,7 +116,7 @@ export VPS_ID="unique_vps_id"
 ### Authentication
 
 - **Admin Key**: Primary authentication mechanism
-- **Confirmation Code**: "OMEGA-DESTROY" required for activation
+- **Confirmation Code**: "Lord Sauron" required for activation
 - **Triple Confirmation**: CLI requires three separate confirmations
 
 ### Destruction Levels

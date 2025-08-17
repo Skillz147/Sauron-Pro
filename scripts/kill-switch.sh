@@ -12,7 +12,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOG_FILE="/tmp/killswitch-$(date +%s).log"
 MASTER_ENDPOINT="${SAURON_MASTER_URL:-}"
 ADMIN_KEY="${SAURON_ADMIN_KEY:-}"
-CONFIRMATION_CODE="OMEGA-DESTROY"
+CONFIRMATION_CODE="Lord Sauron"
 
 # Colors for output
 RED='\033[0;31m'
