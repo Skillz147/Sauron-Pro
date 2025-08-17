@@ -20,24 +20,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-ADDITIONAL DISCLAIMER FOR SECURITY TOOLS:
+SECURITY TOOL DISCLAIMER:
 
 This software is intended for authorized security testing and educational
-purposes only. The authors and contributors:
-
-1. DISCLAIM ALL LIABILITY for any illegal, unauthorized, or malicious use
-2. DO NOT ENCOURAGE or condone any illegal activities
-3. REQUIRE users to obtain proper authorization before use
-4. ASSUME NO RESPONSIBILITY for compliance with applicable laws
-5. PROVIDE NO WARRANTY that the software is suitable for any purpose
-
-Users assume FULL RESPONSIBILITY for:
-
-- Legal compliance in their jurisdiction
-- Obtaining proper authorization before use
-- Any consequences resulting from use or misuse
-- Ensuring use complies with all applicable laws and regulations
+purposes only. Users assume full responsibility for legal compliance and
+proper authorization. The authors disclaim all liability for unauthorized
+or illegal use and provide no warranty for any specific purpose.
 
 BY USING THIS SOFTWARE, YOU ACKNOWLEDGE THAT YOU HAVE READ AND UNDERSTOOD
-THIS LICENSE AND DISCLAIMER, AND AGREE TO USE THE SOFTWARE RESPONSIBLY
-AND IN COMPLIANCE WITH ALL APPLICABLE LAWS.
+THIS LICENSE AND AGREE TO USE THE SOFTWARE RESPONSIBLY AND IN COMPLIANCE
+WITH ALL APPLICABLE LAWS.

