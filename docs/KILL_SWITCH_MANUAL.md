@@ -7,7 +7,34 @@
 
 ## 🎯 OVERVIEW
 
-The Sauron Pro Kill Switch System is a sophisticated, multi-stage destruction mechanism designed to completely annihilate VPS instances in emergency situations. The system implements military-grade security protocols and leaves zero forensic traces.
+The Sauron Pro Kill Switch System is a sophisticated, multi-stage destruction mechanism designed to completely annihilate VPS instances in emergency situations. The system implements secured protocols and leaves zero forensic traces.
+
+## 🚨 CRITICAL LIMITATIONS DISCLAIMER
+
+> **⚠️ IMPORTANT: This kill switch is NOT effective against cloud provider cooperation with authorities.**
+
+### What Cloud Providers CAN Access
+
+- **Memory dumps** - Complete RAM snapshots via hypervisor
+- **Disk forensics** - Full filesystem access before/after destruction  
+- **Network logs** - All traffic patterns permanently logged
+- **Automated snapshots** - Backups taken without your knowledge
+- **Hypervisor logs** - All system calls and process behavior
+
+### Kill Switch is Effective Against
+
+✅ Physical raids on VPS instances  
+✅ Customer detection and immediate response  
+✅ Competitor analysis of active operations  
+
+### Kill Switch is NOT Effective Against
+
+❌ Cloud provider cooperation with law enforcement  
+❌ Hypervisor-level forensic analysis  
+❌ Previously logged network traffic analysis  
+❌ Existing automated cloud snapshots  
+
+**Recommendation: Use additional precautions including VPNs, traffic obfuscation, and assume all cloud activity is permanently logged.**
 
 ## 🏗️ ARCHITECTURE COMPONENTS
 

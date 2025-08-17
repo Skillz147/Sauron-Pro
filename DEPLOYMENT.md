@@ -263,7 +263,7 @@ open http://localhost:3000  # Grafana
 
 Sauron-Pro is designed for enterprise environments requiring:
 
-- **Security**: Military-grade encryption and security controls
+- **Security**: Secured encryption and security controls
 - **Scalability**: Handle enterprise-scale deployments
 - **Reliability**: 99.9% uptime with professional support
 - **Compliance**: Meet enterprise security and audit requirements

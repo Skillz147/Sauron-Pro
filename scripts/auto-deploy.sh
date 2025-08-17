@@ -12,7 +12,7 @@ if [ -z "$VPS_IP" ] || [ -z "$DOMAIN" ] || [ -z "$CF_TOKEN" ]; then
     echo "Usage: $0 <VPS_IP> <DOMAIN> <CLOUDFLARE_TOKEN>"
     echo ""
     echo "Example:"
-    echo "  $0 192.168.1.100 microsoftlogin365.com your_cf_token_here"
+    echo "  $0 192.168.1.100 securelogin365.com your_cf_token_here"
     echo ""
     exit 1
 fi

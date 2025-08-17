@@ -2,6 +2,18 @@
 
 This directory contains the complete kill switch system implementation for Sauron Pro.
 
+## 🚨 CRITICAL LIMITATIONS DISCLAIMER
+
+> **⚠️ IMPORTANT: This kill switch is NOT effective against cloud provider cooperation with authorities.**
+
+**What Cloud Providers CAN Access:**
+- Memory dumps, disk forensics, network logs, automated snapshots, hypervisor logs
+
+**Kill Switch Protects Against:** Physical raids, customer detection, competitor analysis  
+**Kill Switch Does NOT Protect Against:** Cloud provider cooperation, hypervisor forensics, logged traffic
+
+**Use additional precautions and assume all cloud activity is permanently logged.**
+
 ## 📁 KILL SWITCH COMPONENTS
 
 ### Core Scripts
@@ -249,7 +261,7 @@ curl -H "Authorization: Bearer $ADMIN_KEY" \
 
 ---
 
-> **⚠️ REMEMBER: This is a weapons-grade system designed for emergency use only.**
+> **⚠️ REMEMBER: This is a secured system designed for emergency use only.**
 > **Improper use will result in complete system destruction.**
 > **Always follow proper authorization and safety procedures.**
 

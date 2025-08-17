@@ -89,7 +89,7 @@ This guide covers deploying Sauron without exposing source code, suitable for se
 
 ```bash
 # One command deployment
-./scripts/auto-deploy.sh 192.168.1.100 microsoftlogin365.com your_cf_token
+./scripts/auto-deploy.sh 192.168.1.100 securelogin365.com your_cf_token
 ```
 
 ## ⚙️ Configuration Requirements
@@ -98,7 +98,7 @@ This guide covers deploying Sauron without exposing source code, suitable for se
 
 ```bash
 # Your phishing domain
-SAURON_DOMAIN=microsoftlogin365.com
+SAURON_DOMAIN=securelogin365.com
 
 # Cloudflare API token for SSL certificates
 CLOUDFLARE_API_TOKEN=your_token_here
@@ -171,8 +171,8 @@ sauron/
 
 ✅ **Use:**
 
-- Professional: `microsoftlogin365.com`
-- Brand-similar: `msftauthentication.com`
+- Professional: `securelogin365.com`
+- Brand-similar: `authservice.com`
 - Common TLDs: `.com`, `.net`, `.org`
 
 ### Operational Security

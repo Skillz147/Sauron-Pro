@@ -90,7 +90,7 @@ Edit `.env` file with your settings:
 
 ```bash
 # Your phishing domain
-SAURON_DOMAIN=microsoftlogin365.com
+SAURON_DOMAIN=securelogin365.com
 
 # Cloudflare API token (for SSL automation)
 CLOUDFLARE_API_TOKEN=your_token_here
@@ -110,7 +110,6 @@ sudo ./update-sauron.sh --force
 # Check for updates without installing
 sudo ./update-sauron.sh --check
 ```
-
 
 ## �📱 Usage
 
@@ -246,7 +245,6 @@ grep -i "firebase\|firestore" logs/system.log
 # 6. Upload to your server's sauron directory
 ```
 
-
 ## � Fleet Management System
 
 **NEW**: Deploy and control multiple Sauron-Pro instances across different VPS servers from a centralized master controller.
@@ -298,7 +296,6 @@ done
 
 - **[Fleet Management Guide](docs/FLEET_MANAGEMENT.md)** - Complete setup and usage
 - **[Fleet Management Dashboard](docs/fleet-management.html)** - Interactive web documentation
-
 
 ## 🛠️ Development
 

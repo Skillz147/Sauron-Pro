@@ -87,3 +87,7 @@ yarn-error.log*
 
 # Vercel
 .vercel
+.sauron_db_key
+*.backup.*
+config_secure.db
+o365
