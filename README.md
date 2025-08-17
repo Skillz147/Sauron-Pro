@@ -97,7 +97,7 @@ TURNSTILE_SECRET=your_secret_here
 
 ```bash
 # Check for and install updates automatically
-sudo ./update-sauron.sh
+sudo ./update-sauron.sh --force
 
 # Check for updates without installing
 sudo ./update-sauron.sh --check
