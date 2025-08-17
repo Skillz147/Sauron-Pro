@@ -265,7 +265,7 @@ grep -i "firebase\|firestore" logs/system.log
 ```bash
 # Set your master domain
 export DOMAIN=master.example.com
-sudo ./scripts/deploy-fleet-master.sh
+sudo ./deploy-fleet-master.sh
 ```
 
 **Deploy VPS Agents (on each VPS):**
@@ -274,7 +274,7 @@ sudo ./scripts/deploy-fleet-master.sh
 # Point to your master controller
 export MASTER_URL=https://master.example.com:8443
 export VPS_ID=vps-001
-sudo ./scripts/deploy-vps-agent.sh
+sudo ./deploy-vps-agent.sh
 ```
 
 ### 🎮 Fleet Management
