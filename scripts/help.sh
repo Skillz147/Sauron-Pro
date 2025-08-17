@@ -65,7 +65,7 @@ echo
 # Updates
 echo -e "${CYAN}🔄 UPDATES${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${GREEN}sudo ./update-sauron.sh${NC}              Auto-update to latest version"
+echo -e "${GREEN}sudo ./update-sauron.sh --force${NC}              Auto-update to latest version"
 echo -e "${GREEN}sudo ./update-sauron.sh --check${NC}      Check for updates (no install)"
 echo -e "${GREEN}/usr/local/bin/sauron --version${NC}      Show current version"
 echo

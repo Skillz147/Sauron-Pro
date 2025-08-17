@@ -61,6 +61,10 @@ cp -r install/ "$BUILD_DIR/"
 cp scripts/configure-env.sh "$BUILD_DIR/"
 chmod +x "$BUILD_DIR/configure-env.sh"
 
+# Firebase testing script
+cp scripts/test-firebase.sh "$BUILD_DIR/"
+chmod +x "$BUILD_DIR/test-firebase.sh"
+
 # Configuration files (if they exist)
 if [ -d "config/" ]; then
     cp -r config/ "$BUILD_DIR/"
