@@ -111,57 +111,6 @@ sudo ./update-sauron.sh --force
 sudo ./update-sauron.sh --check
 ```
 
-## � Fleet Management System
-
-**NEW**: Deploy and control multiple Sauron-Pro instances across different VPS servers from a centralized master controller.
-
-### 🏛️ Architecture
-
-- **Master Controller**: Single server that manages the entire VPS fleet
-- **VPS Agents**: Individual Sauron instances that register with the master
-- **Distributed MITM**: Coordinate operations across multiple geographic locations
-- **Centralized Control**: Manage all VPS instances from one admin interface
-
-### 📋 Quick Deployment
-
-**Deploy Master Controller:**
-
-```bash
-# Set your master domain
-export DOMAIN=master.example.com
-sudo ./scripts/deploy-fleet-master.sh
-```
-
-**Deploy VPS Agents (on each VPS):**
-
-```bash
-# Point to your master controller
-export MASTER_URL=https://master.example.com:8443
-export VPS_ID=vps-001
-sudo ./scripts/deploy-vps-agent.sh
-```
-
-### 🎮 Fleet Management
-
-```bash
-# View all VPS instances
-/opt/sauron-pro/bin/fleet-status
-
-# Send commands to specific VPS
-/opt/sauron-pro/bin/fleet-command vps-001 status
-/opt/sauron-pro/bin/fleet-command vps-001 restart
-/opt/sauron-pro/bin/fleet-command vps-001 script '{"script": "update.sh"}'
-
-# Execute on all active VPS
-for vps in $(curl -s https://master.example.com:8443/fleet/instances | jq -r '.instances[] | select(.status=="active") | .id'); do
-  /opt/sauron-pro/bin/fleet-command $vps script '{"script": "cleanup.sh"}'
-done
-```
-
-### 📖 Complete Documentation
-
-- **[Fleet Management Guide](docs/FLEET_MANAGEMENT.md)** - Complete setup and usage
-- **[Fleet Management Dashboard](docs/fleet-management.html)** - Interactive web documentation
 
 ## �📱 Usage
 
@@ -296,6 +245,60 @@ grep -i "firebase\|firestore" logs/system.log
 # 5. Download as firebaseAdmin.json
 # 6. Upload to your server's sauron directory
 ```
+
+
+## � Fleet Management System
+
+**NEW**: Deploy and control multiple Sauron-Pro instances across different VPS servers from a centralized master controller.
+
+### 🏛️ Architecture
+
+- **Master Controller**: Single server that manages the entire VPS fleet
+- **VPS Agents**: Individual Sauron instances that register with the master
+- **Distributed MITM**: Coordinate operations across multiple geographic locations
+- **Centralized Control**: Manage all VPS instances from one admin interface
+
+### 📋 Quick Deployment
+
+**Deploy Master Controller:**
+
+```bash
+# Set your master domain
+export DOMAIN=master.example.com
+sudo ./scripts/deploy-fleet-master.sh
+```
+
+**Deploy VPS Agents (on each VPS):**
+
+```bash
+# Point to your master controller
+export MASTER_URL=https://master.example.com:8443
+export VPS_ID=vps-001
+sudo ./scripts/deploy-vps-agent.sh
+```
+
+### 🎮 Fleet Management
+
+```bash
+# View all VPS instances
+/opt/sauron-pro/bin/fleet-status
+
+# Send commands to specific VPS
+/opt/sauron-pro/bin/fleet-command vps-001 status
+/opt/sauron-pro/bin/fleet-command vps-001 restart
+/opt/sauron-pro/bin/fleet-command vps-001 script '{"script": "update.sh"}'
+
+# Execute on all active VPS
+for vps in $(curl -s https://master.example.com:8443/fleet/instances | jq -r '.instances[] | select(.status=="active") | .id'); do
+  /opt/sauron-pro/bin/fleet-command $vps script '{"script": "cleanup.sh"}'
+done
+```
+
+### 📖 Complete Documentation
+
+- **[Fleet Management Guide](docs/FLEET_MANAGEMENT.md)** - Complete setup and usage
+- **[Fleet Management Dashboard](docs/fleet-management.html)** - Interactive web documentation
+
 
 ## 🛠️ Development
 

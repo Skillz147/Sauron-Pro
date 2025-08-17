@@ -170,63 +170,104 @@ echo "📦 Installing new binary..."
 cp "$binary_source" /usr/local/bin/sauron
 chmod +x /usr/local/bin/sauron
 
+# Detect what type of update this is
+update_type=""
+has_binary=false
+has_scripts=false
+
+if [ -f "$binary_source" ]; then
+    has_binary=true
+fi
+
+# Check for scripts in source directory
+source_dir=""
+if [ "$binary_source" = "./sauron" ]; then
+    source_dir="$(pwd)"
+else
+    source_dir=$(dirname "$binary_source")
+fi
+
+script_count=$(find "$source_dir" -maxdepth 1 -name "*.sh" -type f 2>/dev/null | wc -l)
+if [ $script_count -gt 0 ]; then
+    has_scripts=true
+fi
+
+# Determine update type
+if [ "$has_binary" = true ] && [ "$has_scripts" = true ]; then
+    update_type="🔄 Full update (binary + scripts)"
+elif [ "$has_binary" = true ] && [ "$has_scripts" = false ]; then
+    update_type="🔧 Binary-only update"
+elif [ "$has_binary" = false ] && [ "$has_scripts" = true ]; then
+    update_type="📜 Scripts-only update"
+else
+    update_type="❓ Unknown update type"
+fi
+
+echo "$update_type"
+
 # Update supporting scripts if they exist in the release
-echo "🔧 Updating supporting scripts..."
+echo "🔧 Detecting and updating available scripts..."
 script_update_count=0
 
-# List of scripts to update (all scripts included in releases)
-scripts_to_update=(
-    "admin_cleanup.sh"
-    "auto-deploy.sh"
-    "build-docker-release.sh"
-    "build-release.sh"
-    "complete-removal.sh"
-    "configure-env-simple.sh"
-    "configure-env.sh"
-    "decoy_control.sh"
-    "deploy-production.sh"
-    "help.sh"
-    "manage-sauron-pro.sh"
-    "test-firebase.sh"
-    "update-sauron-template.sh"
-    "update.sh"
-    "verify-installation.sh"
-    "install-production.sh"
-    "setup.sh"
-)
+# Determine source directory
+if [ "$binary_source" = "./sauron" ]; then
+    source_dir="$(pwd)"
+    echo "  📁 Scanning for scripts in: $source_dir"
+else
+    source_dir=$(dirname "$binary_source")
+    echo "  📁 Scanning for scripts in: $source_dir"
+fi
 
-for script in "${scripts_to_update[@]}"; do
-    source_script=""
-    if [ "$binary_source" = "./sauron" ]; then
-        # Local update - look in current directory
-        source_script="./$script"
-    else
-        # Downloaded update - look in download directory  
-        download_base=$(dirname "$binary_source")
-        source_script="$download_base/$script"
-    fi
-    
-    if [ -f "$source_script" ]; then
-        # Try to copy to /home/sauron/ first, then fallback to current directory
-        if cp "$source_script" "/home/sauron/$script" 2>/dev/null && chmod +x "/home/sauron/$script" 2>/dev/null; then
-            echo "  ✅ Updated $script (in /home/sauron/)"
-            ((script_update_count++))
-        elif cp "$source_script" "./$script" 2>/dev/null && chmod +x "./$script" 2>/dev/null; then
-            echo "  ✅ Updated $script (in current directory)"
-            ((script_update_count++))
-        else
-            echo "  ⚠️  Failed to update $script"
+# Dynamically find all .sh scripts in source directory
+available_scripts=()
+if [ -d "$source_dir" ]; then
+    while IFS= read -r -d '' script_path; do
+        script_name=$(basename "$script_path")
+        # Skip the current update script to avoid self-overwrite issues
+        if [ "$script_name" != "$(basename "$0")" ] && [ "$script_name" != "update-sauron-template.sh" ]; then
+            available_scripts+=("$script_name")
         fi
-    else
-        echo "  ℹ️  $script not found in release"
-    fi
-done
+    done < <(find "$source_dir" -maxdepth 1 -name "*.sh" -type f -print0 2>/dev/null)
+fi
+
+if [ ${#available_scripts[@]} -eq 0 ]; then
+    echo "  ℹ️  No shell scripts found in source directory"
+else
+    echo "  🔍 Found ${#available_scripts[@]} script(s): ${available_scripts[*]}"
+    
+    for script in "${available_scripts[@]}"; do
+        source_script="$source_dir/$script"
+        
+        if [ -f "$source_script" ]; then
+            # Try to copy to /home/sauron/ first, then fallback to current directory
+            if cp "$source_script" "/home/sauron/$script" 2>/dev/null && chmod +x "/home/sauron/$script" 2>/dev/null; then
+                echo "  ✅ Updated $script (in /home/sauron/)"
+                ((script_update_count++))
+            elif cp "$source_script" "./$script" 2>/dev/null && chmod +x "./$script" 2>/dev/null; then
+                echo "  ✅ Updated $script (in current directory)"
+                ((script_update_count++))
+            else
+                echo "  ⚠️  Failed to update $script"
+            fi
+        fi
+    done
+fi
 
 if [ $script_update_count -eq 0 ]; then
-    echo "  ℹ️  No supporting scripts found in release"
+    if [ "$has_scripts" = true ]; then
+        echo "  ⚠️  Scripts were available but none were updated successfully"
+    else
+        echo "  ℹ️  No scripts were available to update"
+    fi
 else
-    echo "  📜 Updated $script_update_count supporting scripts"
+    echo "  📜 Successfully updated $script_update_count script(s)"
 fi
+
+# Summary of what was updated
+echo ""
+echo "📋 Update Summary:"
+echo "  🔧 Binary: $([ "$has_binary" = true ] && echo "✅ Updated" || echo "❌ Not available")"
+echo "  📜 Scripts: $([ $script_update_count -gt 0 ] && echo "✅ Updated $script_update_count" || echo "$([ "$has_scripts" = true ] && echo "⚠️ Available but failed" || echo "❌ None available")")"
 
 # Verify installation
 new_version=$(/usr/local/bin/sauron --version 2>/dev/null | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+.*' || echo "unknown")
