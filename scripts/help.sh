@@ -143,7 +143,7 @@ echo
 echo -e "${CYAN}⚡ QUICK ACTIONS${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "${GREEN}./help.sh${NC}                           Show this help (you are here)"
-echo -e "${GREEN}sudo ./update-sauron.sh && sudo systemctl status sauron${NC}"
+echo -e "${GREEN}sudo ./update-sauron.sh --force && sudo systemctl status sauron${NC}"
 echo -e "                                      Update and check status"
 echo -e "${GREEN}sudo systemctl restart sauron && sudo journalctl -u sauron -f${NC}"
 echo -e "                                      Restart and follow logs"
@@ -187,6 +187,6 @@ fi
 
 echo
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${WHITE}💡 TIP: Use 'sudo ./update-sauron.sh' to get the latest features and fixes${NC}"
+echo -e "${WHITE}💡 TIP: Use 'sudo ./update-sauron.sh --force' to get the latest features and fixes${NC}"
 echo -e "${WHITE}📖 Full documentation: https://github.com/Skillz147/Sauron-Pro${NC}"
 echo -e "${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"

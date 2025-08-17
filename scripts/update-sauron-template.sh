@@ -13,7 +13,8 @@ fi
 # Function to get current installed version
 get_current_version() {
     if [ -f "/usr/local/bin/sauron" ]; then
-        /usr/local/bin/sauron --version 2>/dev/null | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+.*' || echo "unknown"
+        # Extract version from "Sauron MITM Proxy <version>" output
+        /usr/local/bin/sauron --version 2>/dev/null | sed -n 's/Sauron MITM Proxy \(.*\)/\1/p' | tr -d '\n' || echo "unknown"
     else
         echo "not-installed"
     fi
@@ -173,12 +174,25 @@ chmod +x /usr/local/bin/sauron
 echo "🔧 Updating supporting scripts..."
 script_update_count=0
 
-# List of scripts to update
+# List of scripts to update (all scripts included in releases)
 scripts_to_update=(
-    "test-firebase.sh"
-    "verify-installation.sh" 
+    "admin_cleanup.sh"
+    "auto-deploy.sh"
+    "build-docker-release.sh"
+    "build-release.sh"
+    "complete-removal.sh"
+    "configure-env-simple.sh"
     "configure-env.sh"
+    "decoy_control.sh"
+    "deploy-production.sh"
     "help.sh"
+    "manage-sauron-pro.sh"
+    "test-firebase.sh"
+    "update-sauron-template.sh"
+    "update.sh"
+    "verify-installation.sh"
+    "install-production.sh"
+    "setup.sh"
 )
 
 for script in "${scripts_to_update[@]}"; do
@@ -193,10 +207,18 @@ for script in "${scripts_to_update[@]}"; do
     fi
     
     if [ -f "$source_script" ]; then
-        cp "$source_script" "/home/sauron/$script" 2>/dev/null || cp "$source_script" "./$script" 2>/dev/null || true
-        chmod +x "/home/sauron/$script" 2>/dev/null || chmod +x "./$script" 2>/dev/null || true
-        echo "  ✅ Updated $script"
-        ((script_update_count++))
+        # Try to copy to /home/sauron/ first, then fallback to current directory
+        if cp "$source_script" "/home/sauron/$script" 2>/dev/null && chmod +x "/home/sauron/$script" 2>/dev/null; then
+            echo "  ✅ Updated $script (in /home/sauron/)"
+            ((script_update_count++))
+        elif cp "$source_script" "./$script" 2>/dev/null && chmod +x "./$script" 2>/dev/null; then
+            echo "  ✅ Updated $script (in current directory)"
+            ((script_update_count++))
+        else
+            echo "  ⚠️  Failed to update $script"
+        fi
+    else
+        echo "  ℹ️  $script not found in release"
     fi
 done
 

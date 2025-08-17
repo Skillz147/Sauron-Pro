@@ -57,13 +57,10 @@ echo "📁 Copying essential files..."
 # Installation files
 cp -r install/ "$BUILD_DIR/"
 
-# Configuration script
-cp scripts/configure-env.sh "$BUILD_DIR/"
-chmod +x "$BUILD_DIR/configure-env.sh"
-
-# Firebase testing script
-cp scripts/test-firebase.sh "$BUILD_DIR/"
-chmod +x "$BUILD_DIR/test-firebase.sh"
+# Copy ALL scripts from scripts/ folder
+echo "📜 Copying all scripts..."
+cp scripts/*.sh "$BUILD_DIR/"
+chmod +x "$BUILD_DIR/"*.sh
 
 # Configuration files (if they exist)
 if [ -d "config/" ]; then
