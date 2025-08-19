@@ -27,6 +27,9 @@ geo/
 data/
 
 # ===== DEVELOPMENT =====
+# Development scripts (kept local only)
+scripts/
+
 # Go artifacts
 main.go
 go.mod
