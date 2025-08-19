@@ -214,10 +214,12 @@
                                 <li><code>build-release.sh</code></li>
                                 <li><code>verify-installation.sh</code></li>
                                 <li><code>configure-env.sh</code></li>
+                                <li><code>fleet-master.sh</code> - Fleet master setup</li>
+                                <li><code>fleet-agent.sh</code> - Fleet agent setup</li>
                                 <li><code>test-firebase.sh</code></li>
                                 <li><code>manage-sauron-pro.sh</code></li>
                                 <li><code>auto-deploy.sh</code></li>
-                                <li>+ 8 more validated scripts</li>
+                                <li>+ 6 more validated scripts</li>
                             </ul>
                         </div>
                         <div>
@@ -454,6 +456,109 @@
             </div>
         </section>
 
+        <!-- Security & Utility Endpoints -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">🔒 Security & Utility Endpoints</h2>
+            
+            <div class="space-y-6">
+                <!-- Turnstile Verification -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">POST /admin/turnstile</h3>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="text-left p-3 border">Parameter</th>
+                                    <th class="text-left p-3 border">Type</th>
+                                    <th class="text-left p-3 border">Required</th>
+                                    <th class="text-left p-3 border">Description</th>
+                                    <th class="text-left p-3 border">Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-3 border font-mono">token</td>
+                                    <td class="p-3 border">string</td>
+                                    <td class="p-3 border text-red-600">✓ Required</td>
+                                    <td class="p-3 border">Turnstile verification token</td>
+                                    <td class="p-3 border font-mono">"0.token_here"</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border font-mono">admin_key</td>
+                                    <td class="p-3 border">string</td>
+                                    <td class="p-3 border text-red-600">✓ Required</td>
+                                    <td class="p-3 border">Admin authentication key</td>
+                                    <td class="p-3 border font-mono">"your_admin_key"</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Auto Cleanup Configuration -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET/POST /admin/cleanup/config</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">GET Method:</h4>
+                            <code class="text-sm bg-gray-100 p-2 rounded block">X-Admin-Key: your_admin_key</code>
+                            <p class="text-sm text-gray-600 mt-1">Returns current auto-cleanup configuration</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">POST Method:</h4>
+                            <p class="text-sm text-gray-600">Configure automatic log cleanup intervals and retention policies</p>
+                        </div>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="text-left p-3 border">Parameter</th>
+                                    <th class="text-left p-3 border">Type</th>
+                                    <th class="text-left p-3 border">Required</th>
+                                    <th class="text-left p-3 border">Description</th>
+                                    <th class="text-left p-3 border">Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="p-3 border font-mono">admin_key</td>
+                                    <td class="p-3 border">string</td>
+                                    <td class="p-3 border text-red-600">✓ Required</td>
+                                    <td class="p-3 border">Admin authentication key</td>
+                                    <td class="p-3 border font-mono">"your_admin_key"</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border font-mono">cleanup_interval</td>
+                                    <td class="p-3 border">duration</td>
+                                    <td class="p-3 border text-gray-600">Optional</td>
+                                    <td class="p-3 border">How often to run cleanup</td>
+                                    <td class="p-3 border font-mono">"1h"</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border font-mono">retention_days</td>
+                                    <td class="p-3 border">int</td>
+                                    <td class="p-3 border text-gray-600">Optional</td>
+                                    <td class="p-3 border">Days to retain logs</td>
+                                    <td class="p-3 border font-mono">7</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 border font-mono">enabled</td>
+                                    <td class="p-3 border">boolean</td>
+                                    <td class="p-3 border text-gray-600">Optional</td>
+                                    <td class="p-3 border">Enable auto-cleanup</td>
+                                    <td class="p-3 border font-mono">true</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Quick Reference -->
         <section class="mb-12">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6">⚡ Quick Command Reference</h2>
@@ -491,6 +596,14 @@
                         <div>
                             <code class="bg-purple-100 text-purple-700 p-1 rounded">GET /fleet/register</code>
                             <p class="text-gray-600 mt-1">List fleet instances</p>
+                        </div>
+                        <div>
+                            <code class="bg-cyan-100 text-cyan-700 p-1 rounded">POST /admin/turnstile</code>
+                            <p class="text-gray-600 mt-1">Turnstile verification</p>
+                        </div>
+                        <div>
+                            <code class="bg-indigo-100 text-indigo-700 p-1 rounded">GET /admin/cleanup/config</code>
+                            <p class="text-gray-600 mt-1">Auto-cleanup configuration</p>
                         </div>
                     </div>
                 </div>
