@@ -240,14 +240,29 @@ grep -i "firebase\|firestore" logs/system.log
 
 Deploy and control multiple VPS instances from a central master:
 
+#### Interactive Configuration (Recommended)
+
 ```bash
-# Deploy master controller
+# Configure fleet master interactively
+sudo ./scripts/fleet-master.sh
+
+# Configure VPS agent interactively
+sudo ./scripts/fleet-agent.sh
+```
+
+#### Manual Configuration (Advanced)
+
+```bash
+# Deploy master controller manually
 export DOMAIN=master.example.com && sudo ./deploy-fleet-master.sh
 
-# Deploy VPS agents
+# Deploy VPS agents manually  
 export MASTER_URL=https://master.example.com:8443 && sudo ./deploy-vps-agent.sh
+```
 
-# Fleet management commands
+#### Fleet Management Commands
+
+```bash
 /opt/sauron-pro/bin/fleet-status                    # View all VPS instances
 /opt/sauron-pro/bin/fleet-command vps-001 status    # Send commands to specific VPS
 /opt/sauron-pro/bin/fleet-command vps-001 restart   # Restart specific VPS

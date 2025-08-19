@@ -54,7 +54,16 @@ Connected VPS Instances
    - Domain pointing to server (e.g., `master.example.com`)
    - SSL certificate configured
 
-2. **Deployment**:
+2. **Deployment Options**:
+
+   **Option A: Interactive Configuration (Recommended)**
+
+   ```bash
+   # Run interactive configuration wizard
+   sudo ./scripts/fleet-master.sh
+   ```
+
+   **Option B: Manual Configuration (Advanced)**
 
    ```bash
    # Set your domain
@@ -84,7 +93,16 @@ Connected VPS Instances
    - Go 1.19+ installed
    - Network connectivity to master controller
 
-2. **Deployment** (on each VPS):
+2. **Deployment Options** (on each VPS):
+
+   **Option A: Interactive Configuration (Recommended)**
+
+   ```bash
+   # Run interactive configuration wizard
+   sudo ./scripts/fleet-agent.sh
+   ```
+
+   **Option B: Manual Configuration (Advanced)**
 
    ```bash
    # Set master controller URL
@@ -359,7 +377,17 @@ curl -s https://master.example.com:8443/fleet/instances | jq '.instances[] | sel
 
 ### Complete Deployment Example
 
-**Step 1: Deploy Master Controller**
+#### Step 1: Deploy Master Controller
+
+**Interactive Setup (Recommended)**:
+
+```bash
+# On master server (master.example.com)
+sudo ./scripts/fleet-master.sh
+# Follow prompts for domain, ports, security settings
+```
+
+**Manual Setup (Advanced)**:
 
 ```bash
 # On master server (master.example.com)
@@ -367,7 +395,21 @@ export DOMAIN=master.example.com
 sudo ./scripts/deploy-fleet-master.sh
 ```
 
-**Step 2: Deploy VPS Agents**
+#### Step 2: Deploy VPS Agents
+
+**Interactive Setup (Recommended)**:
+
+```bash
+# On VPS-001 (vps1.example.com)
+sudo ./scripts/fleet-agent.sh
+# Follow prompts for master URL, VPS ID, domain
+
+# On VPS-002 (vps2.example.com)  
+sudo ./scripts/fleet-agent.sh
+# Follow prompts for master URL, VPS ID, domain
+```
+
+**Manual Setup (Advanced)**:
 
 ```bash
 # On VPS-001 (vps1.example.com)
@@ -383,7 +425,7 @@ export VPS_DOMAIN=vps2.example.com
 sudo ./scripts/deploy-vps-agent.sh
 ```
 
-**Step 3: Verify Fleet**
+#### Step 3: Verify Fleet
 
 ```bash
 # Check fleet status
