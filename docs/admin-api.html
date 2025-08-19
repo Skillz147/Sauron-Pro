@@ -198,6 +198,486 @@ Response:
             </div>
         </section>
 
+        <!-- Kill Switch Management -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">🔴 Kill Switch System</h2>
+            
+            <div class="space-y-6">
+                <!-- POST /admin/killswitch -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-red-200">
+                    <h3 class="text-lg font-semibold mb-4 text-red-600">POST /admin/killswitch</h3>
+                    <p class="text-gray-600 mb-4">⚠️ <strong>CRITICAL:</strong> Emergency kill switch for immediate system destruction</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">Destruction Levels:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>1</code> - Memory purge only</li>
+                                <li><code>2</code> - Memory + data obliteration</li>
+                                <li><code>3</code> - System corruption</li>
+                                <li><code>4</code> - Hardware-level destruction</li>
+                                <li><code>5</code> - Stealth exit simulation</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Required Parameters:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>admin_key</code> - Admin authentication</li>
+                                <li><code>confirmation_code</code> - Must be "OMEGA-DESTROY"</li>
+                                <li><code>destruction_level</code> - Level 1-5</li>
+                                <li><code>reason</code> - Audit trail reason</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-900 text-red-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /admin/killswitch
+Content-Type: application/json
+
+{
+  "admin_key": "your_admin_key_here",
+  "vps_id": "",  // Empty = all VPS instances
+  "destruction_level": 3,
+  "delay_seconds": 30,
+  "reason": "Law enforcement detected",
+  "confirmation_code": "OMEGA-DESTROY"
+}
+
+Response:
+{
+  "success": true,
+  "vps_id": "",
+  "stage": "INITIATION",
+  "message": "Kill switch activated - destruction imminent",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "time_to_live": 30
+}</pre>
+                    </div>
+                    
+                    <div class="mt-4 p-4 bg-red-50 border-l-4 border-red-400">
+                        <p class="text-red-700 text-sm font-semibold">
+                            ⚠️ WARNING: This endpoint permanently destroys data and systems. Use only in emergency situations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fleet Management -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">🚁 Fleet Management</h2>
+            
+            <div class="space-y-6">
+                <!-- GET /fleet/register -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /fleet/register</h3>
+                    <p class="text-gray-600 mb-4">List all registered VPS instances in the fleet</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>GET /fleet/register
+X-Admin-Key: your_admin_key_here
+
+Response:
+{
+  "success": true,
+  "instances": [
+    {
+      "vps_id": "vps-abc123",
+      "ip": "192.168.1.100",
+      "domain": "secure.company.com",
+      "admin_domain": "admin.company.com",
+      "status": "active",
+      "last_seen": "2024-01-15T10:29:00Z",
+      "version": "v2.1.0",
+      "location": "US-East",
+      "registered_at": "2024-01-10T08:00:00Z"
+    }
+  ],
+  "fleet_stats": {
+    "total_vps": 5,
+    "active_vps": 4
+  },
+  "timestamp": "2024-01-15T10:30:00Z"
+}</pre>
+                    </div>
+                </div>
+
+                <!-- POST /fleet/register -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">POST /fleet/register</h3>
+                    <p class="text-gray-600 mb-4">Register or update a VPS instance in the fleet</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /fleet/register
+Content-Type: application/json
+X-VPS-ID: vps-abc123
+
+{
+  "ip": "192.168.1.100",
+  "domain": "secure.company.com",
+  "admin_domain": "admin.company.com",
+  "version": "v2.1.0",
+  "location": "US-East"
+}
+
+Response:
+{
+  "success": true,
+  "vps_id": "vps-abc123",
+  "status": "registered",
+  "next_heartbeat": 300,
+  "timestamp": "2024-01-15T10:30:00Z"
+}</pre>
+                    </div>
+                </div>
+
+                <!-- POST /fleet/command -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">POST /fleet/command</h3>
+                    <p class="text-gray-600 mb-4">Send commands to specific VPS instances</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">Available Commands:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>script</code> - Deploy/update injection scripts</li>
+                                <li><code>config</code> - Update configuration</li>
+                                <li><code>restart</code> - Restart services</li>
+                                <li><code>status</code> - Get system status</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Command Parameters:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>admin_key</code> - Authentication key</li>
+                                <li><code>vps_id</code> - Target VPS ID</li>
+                                <li><code>command</code> - Command type</li>
+                                <li><code>payload</code> - Command data</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /fleet/command
+Content-Type: application/json
+
+{
+  "admin_key": "your_admin_key_here",
+  "vps_id": "vps-abc123",
+  "command": "script",
+  "payload": {
+    "script_type": "injection",
+    "content": "updated_script_content"
+  },
+  "timeout": 30
+}
+
+Response:
+{
+  "success": true,
+  "vps_id": "vps-abc123",
+  "command": "script",
+  "result": {
+    "message": "Script updated successfully",
+    "status": "deployed"
+  },
+  "duration": "2.5s",
+  "timestamp": "2024-01-15T10:30:00Z"
+}</pre>
+                    </div>
+                </div>
+
+                <!-- POST /vps/command -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">POST /vps/command</h3>
+                    <p class="text-gray-600 mb-4">VPS agent endpoint for receiving commands from fleet master</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /vps/command
+Content-Type: application/json
+
+{
+  "command": "script",
+  "payload": {
+    "script_type": "injection",
+    "content": "updated_script_content"
+  },
+  "source": "fleet-master"
+}
+
+Response:
+{
+  "success": true,
+  "vps_id": "vps-abc123",
+  "command": "script",
+  "result": {
+    "message": "Command executed successfully",
+    "status": "completed"
+  },
+  "timestamp": "2024-01-15T10:30:00Z"
+}</pre>
+                    </div>
+                    
+                    <div class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-400">
+                        <p class="text-blue-700 text-sm">
+                            💡 <strong>Note:</strong> This endpoint is used by VPS agents to receive commands from the fleet master. It's automatically called when commands are distributed via /fleet/command.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- POST /vps/killswitch -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-red-200">
+                    <h3 class="text-lg font-semibold mb-4 text-red-600">POST /vps/killswitch</h3>
+                    <p class="text-gray-600 mb-4">VPS agent kill switch endpoint for receiving destruction commands</p>
+                    
+                    <div class="bg-gray-900 text-red-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /vps/killswitch
+Content-Type: application/json
+
+{
+  "admin_key": "your_admin_key_here",
+  "destruction_level": 3,
+  "delay_seconds": 0,
+  "reason": "Emergency destruction command"
+}
+
+Response:
+{
+  "success": true,
+  "vps_id": "vps-abc123",
+  "stage": "RECEIVED",
+  "message": "Kill switch command received",
+  "timestamp": "2024-01-15T10:30:00Z"
+}</pre>
+                    </div>
+                    
+                    <div class="mt-4 p-4 bg-red-50 border-l-4 border-red-400">
+                        <p class="text-red-700 text-sm font-semibold">
+                            ⚠️ WARNING: This endpoint executes immediate destruction upon receiving valid commands. Used by fleet-wide kill switch operations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Script Management -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">📜 Script Management</h2>
+            
+            <div class="space-y-6">
+                <!-- GET /admin/scripts -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /admin/scripts</h3>
+                    <p class="text-gray-600 mb-4">List available scripts with categories and status</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>GET /admin/scripts?category=build
+X-Admin-Key: your_admin_key_here
+
+Response:
+{
+  "scripts": [
+    {
+      "name": "build-release.sh",
+      "description": "Build and package release",
+      "category": "build",
+      "available": true,
+      "path": "./scripts/build-release.sh"
+    }
+  ],
+  "count": 14,
+  "categories": ["build", "install", "test", "deployment", "management", "maintenance", "security", "documentation", "update"],
+  "timestamp": "2024-01-15T10:30:00Z"
+}</pre>
+                    </div>
+                </div>
+
+                <!-- POST /admin/scripts -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">POST /admin/scripts</h3>
+                    <p class="text-gray-600 mb-4">Execute shell scripts remotely with proper validation</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">Available Scripts:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>build-release.sh</code> - Build and package release</li>
+                                <li><code>verify-installation.sh</code> - Verify installation status</li>
+                                <li><code>configure-env.sh</code> - Interactive configuration wizard</li>
+                                <li><code>test-firebase.sh</code> - Test Firebase integration</li>
+                                <li><code>manage-sauron-pro.sh</code> - Main management interface</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Script Categories:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>build</code> - Build and packaging scripts</li>
+                                <li><code>install</code> - Installation and setup</li>
+                                <li><code>test</code> - Testing and validation</li>
+                                <li><code>deployment</code> - Deployment automation</li>
+                                <li><code>management</code> - System management</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /admin/scripts
+Content-Type: application/json
+
+{
+  "admin_key": "your_admin_key_here",
+  "script": "verify-installation.sh",
+  "arguments": ["--verbose", "--check-dependencies"],
+  "working_dir": "/opt/sauron",
+  "environment": {
+    "NODE_ENV": "production",
+    "DEBUG": "true"
+  },
+  "dry_run": false
+}
+
+Response:
+{
+  "success": true,
+  "script": "verify-installation.sh",
+  "exit_code": 0,
+  "output": "Installation verified successfully\nAll dependencies found\nConfiguration valid",
+  "duration": "2.34s",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "dry_run": false
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dead Man's Switch -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">⏰ Dead Man's Switch</h2>
+            
+            <div class="space-y-6">
+                <!-- GET /admin/deadmans -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">GET /admin/deadmans</h3>
+                    <p class="text-gray-600 mb-4">Get current dead man's switch configuration and status</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>GET /admin/deadmans
+Authorization: Bearer your_admin_key_here
+
+Response:
+{
+  "enabled": true,
+  "check_interval": "5m0s",
+  "master_timeout": "15m0s",
+  "last_heartbeat": "2024-01-15T10:25:00Z",
+  "auto_destruct": false,
+  "destruction_level": 3
+}</pre>
+                    </div>
+                </div>
+
+                <!-- POST /admin/deadmans -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">POST /admin/deadmans</h3>
+                    <p class="text-gray-600 mb-4">Configure automated kill switch based on operator activity</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">Configuration Parameters:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>enabled</code> - Enable/disable the dead man's switch</li>
+                                <li><code>check_interval</code> - How often to check (duration)</li>
+                                <li><code>master_timeout</code> - Timeout before activation</li>
+                                <li><code>auto_destruct</code> - Auto-activate kill switch</li>
+                                <li><code>destruction_level</code> - Kill switch level (1-5)</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Time Formats:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>"5m"</code> - 5 minutes</li>
+                                <li><code>"1h"</code> - 1 hour</li>
+                                <li><code>"30s"</code> - 30 seconds</li>
+                                <li><code>"24h"</code> - 24 hours</li>
+                                <li>Go duration format supported</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /admin/deadmans
+Authorization: Bearer your_admin_key_here
+Content-Type: application/json
+
+{
+  "enabled": true,
+  "check_interval": "5m",
+  "master_timeout": "15m",
+  "auto_destruct": false,
+  "destruction_level": 3
+}
+
+Response:
+{
+  "success": true
+}</pre>
+                    </div>
+                </div>
+
+                <!-- POST /admin/deadmans/heartbeat -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">POST /admin/deadmans/heartbeat</h3>
+                    <p class="text-gray-600 mb-4">Send heartbeat signal to reset the dead man's switch timer</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /admin/deadmans/heartbeat
+Authorization: Bearer your_admin_key_here
+
+Response:
+{
+  "success": true,
+  "timestamp": "2024-01-15T10:30:00Z",
+  "status": "heartbeat_acknowledged"
+}</pre>
+                    </div>
+                    
+                    <div class="mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-400">
+                        <p class="text-yellow-700 text-sm">
+                            💡 <strong>Note:</strong> Regular heartbeat signals prevent automatic destruction. If no heartbeat is received within the configured timeout, the system will automatically activate the kill switch if auto_destruct is enabled.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+                    </div>
+                </div>
+
+                <!-- POST /admin/deadmans/heartbeat -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-purple-600">POST /admin/deadmans/heartbeat</h3>
+                    <p class="text-gray-600 mb-4">Send heartbeat to prevent dead man's switch activation</p>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>POST /admin/deadmans/heartbeat
+Content-Type: application/json
+
+{
+  "admin_key": "your_admin_key_here"
+}
+
+Response:
+{
+  "success": true,
+  "heartbeat_recorded": "2024-01-15T10:30:00Z",
+  "next_required": "2024-01-16T10:30:00Z",
+  "time_remaining": "23h 59m 30s"
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Decoy System Management -->
         <section class="mb-12">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6">Intelligent Decoy System</h2>

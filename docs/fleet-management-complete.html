@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fleet Management - Sauron Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-xl font-bold text-purple-600">← Back to Sauron</a>
+                <div class="text-sm text-gray-600">Fleet Management</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <h1 class="text-4xl font-bold text-gray-800 mb-8">🚁 Fleet Management System</h1>
+        
+        <!-- Overview -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Overview</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <p class="text-gray-600 mb-4">
+                    The Sauron Fleet Management System enables centralized control and coordination of multiple VPS instances. 
+                    This distributed architecture provides scalability, redundancy, and enhanced operational security.
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-6 mt-6">
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🎛️</div>
+                        <h3 class="font-semibold mb-2">Centralized Control</h3>
+                        <p class="text-sm text-gray-600">Single point of command for all VPS instances</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">📡</div>
+                        <h3 class="font-semibold mb-2">Real-time Communication</h3>
+                        <p class="text-sm text-gray-600">Live status updates and command execution</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🔄</div>
+                        <h3 class="font-semibold mb-2">Auto-Scaling</h3>
+                        <p class="text-sm text-gray-600">Dynamic deployment and management</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Architecture</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">Fleet Components</h3>
+                
+                <div class="space-y-6">
+                    <div class="border-l-4 border-blue-400 pl-4">
+                        <h4 class="font-semibold text-blue-600 mb-2">Fleet Master Controller</h4>
+                        <p class="text-sm text-gray-600 mb-2">
+                            Central command and control server that manages all VPS instances in the fleet.
+                        </p>
+                        <ul class="text-xs text-gray-500 space-y-1">
+                            <li>• VPS registration and heartbeat monitoring</li>
+                            <li>• Command distribution and execution</li>
+                            <li>• Fleet-wide analytics and reporting</li>
+                            <li>• Emergency kill switch coordination</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="border-l-4 border-green-400 pl-4">
+                        <h4 class="font-semibold text-green-600 mb-2">VPS Agents</h4>
+                        <p class="text-sm text-gray-600 mb-2">
+                            Individual Sauron instances running on distributed VPS servers.
+                        </p>
+                        <ul class="text-xs text-gray-500 space-y-1">
+                            <li>• Automatic registration with fleet master</li>
+                            <li>• Periodic heartbeat and status reporting</li>
+                            <li>• Command execution and response</li>
+                            <li>• Local kill switch capabilities</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="border-l-4 border-purple-400 pl-4">
+                        <h4 class="font-semibold text-purple-600 mb-2">Communication Protocol</h4>
+                        <p class="text-sm text-gray-600 mb-2">
+                            Secure HTTPS-based communication with mutual authentication.
+                        </p>
+                        <ul class="text-xs text-gray-500 space-y-1">
+                            <li>• TLS 1.3 encryption for all communications</li>
+                            <li>• Admin key authentication</li>
+                            <li>• Automatic failover and retry logic</li>
+                            <li>• Steganographic command embedding</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Setup and Configuration -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Setup and Configuration</h2>
+            
+            <div class="space-y-6">
+                <!-- Fleet Master Setup -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-blue-600">Fleet Master Setup</h3>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre># 1. Run interactive fleet master configuration
+./scripts/fleet-master.sh
+
+# 2. Configure domain and ports
+Domain: admin.yourdomain.com
+Admin Port: 8443
+Fleet Port: 8444
+
+# 3. Security settings
+Admin Key: [auto-generated or custom]
+SSL Email: admin@yourdomain.com
+
+# 4. Fleet capacity
+Max VPS Instances: 50
+Heartbeat Timeout: 300 seconds
+
+# 5. Deploy fleet master
+sudo -E scripts/deploy-fleet-master.sh</pre>
+                    </div>
+                    
+                    <div class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-400">
+                        <p class="text-blue-700 text-sm">
+                            The fleet master should be deployed on a dedicated server with high availability.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- VPS Agent Setup -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4 text-green-600">VPS Agent Setup</h3>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre># 1. Run interactive fleet agent configuration
+./scripts/fleet-agent.sh
+
+# 2. Auto-discovery will detect:
+Public IP: [auto-detected]
+VPS Provider: DigitalOcean/AWS/Vultr/etc
+System Specs: 4 cores, 8GB RAM, 160GB SSD
+
+# 3. Fleet master connection
+Master Host: admin.yourdomain.com
+Master Port: 8444
+Admin Key: [from fleet master]
+
+# 4. Agent configuration
+Agent ID: [auto-generated unique ID]
+Agent Name: digitalocean-agent-1
+Auto Updates: enabled
+Heartbeat Interval: 60 seconds
+
+# 5. Deploy fleet agent
+sudo -E scripts/deploy-fleet-agent.sh</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fleet Operations -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Fleet Operations</h2>
+            
+            <div class="space-y-6">
+                <!-- VPS Registration -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">VPS Registration and Heartbeat</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">Registration Process:</h4>
+                            <ol class="text-sm space-y-1 list-decimal list-inside">
+                                <li>VPS agent starts and auto-detects configuration</li>
+                                <li>Generates unique VPS ID if not exists</li>
+                                <li>Registers with fleet master via HTTPS</li>
+                                <li>Receives confirmation and heartbeat schedule</li>
+                            </ol>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Heartbeat Monitoring:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Every 5 minutes by default</li>
+                                <li>• Includes system status and metrics</li>
+                                <li>• Automatic retry on failures</li>
+                                <li>• Failover to backup masters</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre># Check fleet status
+curl -H "X-Admin-Key: $ADMIN_KEY" \
+     https://admin.yourdomain.com:8444/fleet/register
+
+# Force VPS re-registration
+systemctl restart sauron-fleet-agent
+
+# View fleet logs
+journalctl -u sauron-fleet-master -f</pre>
+                    </div>
+                </div>
+
+                <!-- Command Distribution -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Command Distribution</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">Available Commands:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li><code>script</code> - Deploy/update injection scripts</li>
+                                <li><code>config</code> - Update configuration files</li>
+                                <li><code>restart</code> - Restart services</li>
+                                <li><code>status</code> - Get detailed system status</li>
+                                <li><code>killswitch</code> - Emergency destruction</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Execution Flow:</h4>
+                            <ol class="text-sm space-y-1 list-decimal list-inside">
+                                <li>Command sent via fleet master API</li>
+                                <li>Master validates and queues command</li>
+                                <li>Command delivered to target VPS(es)</li>
+                                <li>Agent executes and reports results</li>
+                            </ol>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre># Send command to specific VPS
+curl -X POST https://admin.yourdomain.com:8444/fleet/command \
+  -H "Content-Type: application/json" \
+  -d '{
+    "admin_key": "your_admin_key",
+    "vps_id": "vps-abc123",
+    "command": "status",
+    "timeout": 30
+  }'
+
+# Broadcast command to all VPS instances
+curl -X POST https://admin.yourdomain.com:8444/fleet/command \
+  -H "Content-Type: application/json" \
+  -d '{
+    "admin_key": "your_admin_key",
+    "vps_id": "*",
+    "command": "script",
+    "payload": {
+      "script_type": "injection",
+      "content": "base64_encoded_script"
+    }
+  }'</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Emergency Procedures -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">🚨 Emergency Procedures</h2>
+            
+            <div class="space-y-6">
+                <!-- Fleet-wide Kill Switch -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-red-200">
+                    <h3 class="text-lg font-semibold mb-4 text-red-600">Fleet-wide Kill Switch</h3>
+                    
+                    <div class="bg-red-50 p-4 rounded-lg mb-4">
+                        <p class="text-red-700 text-sm font-semibold">
+                            ⚠️ WARNING: This procedure permanently destroys all fleet data and systems.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-gray-900 text-red-400 p-4 rounded-lg font-mono text-sm">
+<pre># Emergency fleet destruction
+curl -X POST https://admin.yourdomain.com:8443/admin/killswitch \
+  -H "Content-Type: application/json" \
+  -d '{
+    "admin_key": "your_admin_key",
+    "vps_id": "",
+    "destruction_level": 5,
+    "delay_seconds": 0,
+    "reason": "Law enforcement detected",
+    "confirmation_code": "OMEGA-DESTROY"
+  }'
+
+# Alternative: Script-based emergency kill
+./scripts/emergency-kill.sh --fleet --level 5 --confirm OMEGA-DESTROY</pre>
+                    </div>
+                </div>
+
+                <!-- Dead Man's Switch -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border border-yellow-200">
+                    <h3 class="text-lg font-semibold mb-4 text-yellow-600">Dead Man's Switch</h3>
+                    
+                    <p class="text-gray-600 mb-4">
+                        Automatic fleet destruction if operator fails to send heartbeat within configured timeframe.
+                    </p>
+                    
+                    <div class="bg-gray-900 text-yellow-400 p-4 rounded-lg font-mono text-sm">
+<pre># Configure dead man's switch (24 hour timeout)
+curl -X POST https://admin.yourdomain.com:8443/admin/deadmans \
+  -H "Content-Type: application/json" \
+  -d '{
+    "admin_key": "your_admin_key",
+    "action": "configure",
+    "timeout_hours": 24,
+    "destruction_level": 4,
+    "enabled": true
+  }'
+
+# Send operator heartbeat
+curl -X POST https://admin.yourdomain.com:8443/admin/deadmans/heartbeat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "admin_key": "your_admin_key"
+  }'
+
+# Check dead man's switch status
+curl -H "X-Admin-Key: your_admin_key" \
+     https://admin.yourdomain.com:8443/admin/deadmans</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Monitoring and Analytics -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">📊 Monitoring and Analytics</h2>
+            
+            <div class="space-y-6">
+                <!-- Fleet Dashboard -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Fleet Dashboard</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-2">Real-time Metrics:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Active VPS instances</li>
+                                <li>• Total fleet capacity</li>
+                                <li>• Geographic distribution</li>
+                                <li>• Performance metrics</li>
+                                <li>• Security alerts</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold mb-2">Historical Analytics:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>• Fleet growth over time</li>
+                                <li>• Regional performance comparison</li>
+                                <li>• Uptime and reliability stats</li>
+                                <li>• Command execution history</li>
+                                <li>• Incident response times</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mt-4">
+<pre># Access fleet dashboard
+https://admin.yourdomain.com:8443/dashboard
+
+# Get fleet metrics via API
+curl -H "X-Admin-Key: your_admin_key" \
+     https://admin.yourdomain.com:8443/api/metrics/fleet
+
+# Generate fleet report
+./scripts/fleet-report.sh --period 7d --format json</pre>
+                    </div>
+                </div>
+
+                <!-- Security Monitoring -->
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Security Monitoring</h3>
+                    
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-green-600 mb-2">Threat Detection</h4>
+                            <ul class="text-xs text-green-700 space-y-1">
+                                <li>• Law enforcement IP detection</li>
+                                <li>• Honeypot identification</li>
+                                <li>• Behavioral analysis</li>
+                                <li>• Geographic anomalies</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-blue-600 mb-2">Fleet Security</h4>
+                            <ul class="text-xs text-blue-700 space-y-1">
+                                <li>• Inter-VPS communication monitoring</li>
+                                <li>• Command authentication logs</li>
+                                <li>• Heartbeat anomaly detection</li>
+                                <li>• Unauthorized access attempts</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-yellow-50 p-4 rounded-lg">
+                            <h4 class="font-semibold text-yellow-600 mb-2">Automated Response</h4>
+                            <ul class="text-xs text-yellow-700 space-y-1">
+                                <li>• Automatic VPS isolation</li>
+                                <li>• Progressive kill switch activation</li>
+                                <li>• Evidence destruction protocols</li>
+                                <li>• Emergency communication channels</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Best Practices -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Best Practices</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-green-50 border border-green-200 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-green-800 mb-4">✅ Recommended Practices</h3>
+                    <ul class="space-y-2 text-sm text-green-700">
+                        <li>• Deploy fleet master on high-availability infrastructure</li>
+                        <li>• Use geographically distributed VPS providers</li>
+                        <li>• Implement automated backup and recovery procedures</li>
+                        <li>• Regular security audits and penetration testing</li>
+                        <li>• Maintain multiple communication channels</li>
+                        <li>• Configure dead man's switch with appropriate timeouts</li>
+                        <li>• Monitor fleet health and performance continuously</li>
+                        <li>• Use unique admin keys for each deployment</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-red-50 border border-red-200 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-red-800 mb-4">⚠️ Security Considerations</h3>
+                    <ul class="space-y-2 text-sm text-red-700">
+                        <li>• Never use fleet management on shared hosting</li>
+                        <li>• Avoid predictable VPS provider patterns</li>
+                        <li>• Implement network-level access controls</li>
+                        <li>• Regular admin key rotation (weekly/bi-weekly)</li>
+                        <li>• Monitor for law enforcement infrastructure</li>
+                        <li>• Maintain operational security protocols</li>
+                        <li>• Test kill switch procedures regularly</li>
+                        <li>• Use secure communication channels only</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Troubleshooting</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold mb-4">Common Issues</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-yellow-400 pl-4">
+                            <h4 class="font-semibold mb-2">VPS Not Registering</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Check network connectivity to fleet master</li>
+                                <li>• Verify admin key configuration</li>
+                                <li>• Confirm DNS resolution for fleet master domain</li>
+                                <li>• Check firewall rules on both ends</li>
+                                <li>• Review VPS agent logs: <code>journalctl -u sauron-fleet-agent</code></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border-l-4 border-red-400 pl-4">
+                            <h4 class="font-semibold mb-2">Commands Not Executing</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Verify VPS is registered and active</li>
+                                <li>• Check command authentication</li>
+                                <li>• Review command payload format</li>
+                                <li>• Monitor fleet master logs for errors</li>
+                                <li>• Test with simple status command first</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="border-l-4 border-blue-400 pl-4">
+                            <h4 class="font-semibold mb-2">Fleet Master Unreachable</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Check fleet master server status</li>
+                                <li>• Verify SSL certificate validity</li>
+                                <li>• Test DNS resolution and routing</li>
+                                <li>• Review load balancer configuration</li>
+                                <li>• Implement backup fleet master if needed</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
