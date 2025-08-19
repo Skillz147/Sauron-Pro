@@ -259,12 +259,27 @@ else
         source_script="$source_dir/$script"
         
         if [ -f "$source_script" ]; then
-            # Try to copy to /home/sauron/ first, then fallback to current directory
-            if cp "$source_script" "/home/sauron/$script" 2>/dev/null && chmod +x "/home/sauron/$script" 2>/dev/null; then
-                echo "  ✅ Updated $script (in /home/sauron/)"
-                ((script_update_count++))
-            elif cp "$source_script" "./$script" 2>/dev/null && chmod +x "./$script" 2>/dev/null; then
-                echo "  ✅ Updated $script (in current directory)"
+            # Detect current sauron installation directory
+            SAURON_DIR=""
+            
+            # Check if we're in a sauron directory
+            if [[ "$(basename $(pwd))" == "sauron" ]] || [[ -f "./sauron" ]] || [[ -f "./.env" ]]; then
+                SAURON_DIR="$(pwd)"
+            # Check common sauron installation paths
+            elif [[ -d "/root/sauron" ]] && [[ -f "/root/sauron/sauron" || -f "/root/sauron/.env" ]]; then
+                SAURON_DIR="/root/sauron"
+            elif [[ -d "/home/sauron" ]] && [[ -f "/home/sauron/sauron" || -f "/home/sauron/.env" ]]; then
+                SAURON_DIR="/home/sauron"
+            elif [[ -d "/opt/sauron" ]] && [[ -f "/opt/sauron/sauron" || -f "/opt/sauron/.env" ]]; then
+                SAURON_DIR="/opt/sauron"
+            else
+                # Fallback to current directory
+                SAURON_DIR="$(pwd)"
+            fi
+            
+            # Try to copy to detected sauron directory
+            if cp "$source_script" "$SAURON_DIR/$script" 2>/dev/null && chmod +x "$SAURON_DIR/$script" 2>/dev/null; then
+                echo "  ✅ Updated $script (in $SAURON_DIR)"
                 ((script_update_count++))
             else
                 echo "  ⚠️  Failed to update $script"

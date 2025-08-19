@@ -8,8 +8,14 @@ set -euo pipefail
 
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOG_FILE="/var/log/sauron/heartbeat.log"
-PID_FILE="/var/run/sauron/heartbeat.pid"
+INSTALL_DIR="$(dirname "$SCRIPT_DIR")"
+
+# Create logs directory relative to installation
+mkdir -p "$INSTALL_DIR/logs"
+mkdir -p "$INSTALL_DIR/run"
+
+LOG_FILE="$INSTALL_DIR/logs/heartbeat.log"
+PID_FILE="$INSTALL_DIR/run/heartbeat.pid"
 ADMIN_KEY="${SAURON_ADMIN_KEY:-}"
 HEARTBEAT_INTERVAL="${HEARTBEAT_INTERVAL:-30}" # seconds
 VPS_LIST_FILE="/tmp/sauron_vps_list.json"

@@ -189,8 +189,8 @@ sudo journalctl -u sauron-heartbeat -f
 ### Log Files
 
 - **Kill Switch**: `/tmp/killswitch-*.log`
-- **Heartbeat**: `/var/log/sauron/heartbeat.log`
-- **System**: `/var/log/sauron/system.log`
+- **Heartbeat**: `<install-path>/logs/heartbeat.log`
+- **System**: `<install-path>/logs/system.log`
 - **Test Results**: `/tmp/killswitch-test-*.log`
 
 ### Fleet Health
