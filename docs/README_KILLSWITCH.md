@@ -74,7 +74,7 @@ This directory contains the complete kill switch system implementation for Sauro
 ./kill-switch.sh
 
 # Direct fleet destruction (extreme emergency)
-SAURON_FIRESTORE_AUTH="your_key" ./kill-switch.sh ALL 5 0 "CODE RED"
+SAURON_ADMIN_KEY="your_key" ./kill-switch.sh ALL 5 0 "CODE RED"
 ```
 
 ### 2. Dead Man's Switch Setup
@@ -86,7 +86,7 @@ sudo systemctl daemon-reload
 sudo systemctl enable sauron-heartbeat
 
 # Configure environment
-export SAURON_FIRESTORE_AUTH="[firestore_auth]"
+export SAURON_ADMIN_KEY="your_admin_key"
 export SAURON_MASTER_URL="https://master.sauron.pro"
 
 # Start heartbeat service
@@ -109,7 +109,7 @@ cat /tmp/killswitch-test-*.log
 
 ```bash
 # Required
-export SAURON_FIRESTORE_AUTH="[firestore_auth]"
+export SAURON_ADMIN_KEY="your_admin_key"
 
 # Optional
 export SAURON_MASTER_URL="https://master.sauron.pro"

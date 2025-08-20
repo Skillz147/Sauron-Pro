@@ -57,14 +57,9 @@ Professional-grade Microsoft 365 login flow interception for authorized security
 - Cloudflare account (free tier)
 - Firebase project with Firestore enabled
 
-### Option 1: One-Command Installation
 
-```bash
-# Download and auto-install
-wget -O - https://raw.githubusercontent.com/Skillz147/Sauron-Pro/main/install.sh | sudo bash
-```
 
-### Option 2: Manual Installation
+### Easy Install
 
 ```bash
 # Download latest release
@@ -72,7 +67,8 @@ wget https://github.com/Skillz147/Sauron-Pro/releases/latest/download/sauron-lin
 tar -xzf sauron-linux-amd64.tar.gz && cd sauron
 
 # Add Firebase Admin SDK key (from Firebase Console)
-cp /path/to/firebaseAdmin.json .
+# paste your entire firebase sdk json 
+nano firebaseAdmin.json .
 
 # Install and configure
 sudo ./install-production.sh
