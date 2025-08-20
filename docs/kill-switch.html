@@ -316,7 +316,7 @@ POST /admin/killswitch
 Content-Type: application/json
 
 {
-  "admin_key": "YOUR_ADMIN_KEY",
+  
   "vps_id": "target-vps-id",
   "destruction_level": 5,
   "delay_seconds": 30,
@@ -328,7 +328,7 @@ Content-Type: application/json
         <h3>Method 3: Dead Man's Switch Configuration</h3>
         <div class="code-block">
 curl -X POST https://vps.sauron.pro/admin/deadmans \
-  -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+  -H "Authorization: Bearer [FIRESTORE_AUTH]" \
   -d '{
     "enabled": true,
     "check_interval": "5m",

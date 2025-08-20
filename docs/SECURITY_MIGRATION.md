@@ -18,7 +18,7 @@ Set these environment variables **before** starting the application:
 
 ```bash
 export TURNSTILE_SECRET="your_cloudflare_turnstile_secret_key"
-export ADMIN_KEY="your_admin_panel_access_key"
+export FIRESTORE_AUTH="your_admin_panel_access_key"
 export LICENSE_TOKEN_SECRET="your_license_validation_secret"
 ```
 

@@ -134,7 +134,7 @@ CLOUDFLARE_API_TOKEN=your_token_here
 TURNSTILE_SECRET=your_turnstile_secret
 
 # Admin panel access key
-ADMIN_KEY=your_secure_admin_key
+FIRESTORE_AUTH=your_secure_admin_key
 
 # License token secret
 LICENSE_TOKEN_SECRET=your_license_secret

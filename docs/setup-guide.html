@@ -193,7 +193,8 @@ chmod +x configure-env.sh install-production.sh
                 
                 <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
                     <p class="text-yellow-700 text-sm">
-                        The interactive setup will prompt you for your domain, Cloudflare API token, and Turnstile secret.
+                        The interactive setup will prompt you for your domain, Cloudflare API token, Turnstile secret, and admin key.
+                        <strong>Keep your admin key secure</strong> - it's used for system authentication and encryption key derivation.
                     </p>
                 </div>
             </div>
@@ -203,11 +204,16 @@ chmod +x configure-env.sh install-production.sh
         <section class="mb-12">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6">Step 4: Configuration</h2>
             
-            <div class="bg-white p-6 rounded-lg shadow-sm border">
+            <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
                 <h3 class="text-lg font-semibold mb-4">4.1 Environment Setup</h3>
                 <p class="text-gray-600 mb-4">The setup script will ask for these values:</p>
                 
                 <div class="space-y-4">
+                    <div class="border-l-4 border-purple-400 pl-4">
+                        <h4 class="font-semibold">ADMIN_KEY</h4>
+                        <p class="text-sm text-gray-600">Master authentication key for admin panel and system encryption (generate a strong 64+ character key)</p>
+                    </div>
+                    
                     <div class="border-l-4 border-purple-400 pl-4">
                         <h4 class="font-semibold">SAURON_DOMAIN</h4>
                         <p class="text-sm text-gray-600">Your purchased domain (e.g., securelogin365.com)</p>
@@ -222,6 +228,64 @@ chmod +x configure-env.sh install-production.sh
                         <h4 class="font-semibold">TURNSTILE_SECRET</h4>
                         <p class="text-sm text-gray-600">The Turnstile secret key (starts with 0x)</p>
                     </div>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold mb-4">4.2 Admin Key Security</h3>
+                <p class="text-gray-600 mb-4">The admin key is a critical security component that:</p>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="space-y-3">
+                        <h4 class="font-semibold text-green-600">🔐 Security Functions</h4>
+                        <ul class="text-sm space-y-1">
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                Admin panel authentication
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                Firestore encryption key derivation
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                System configuration protection
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-3"></span>
+                                Secure session management
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <h4 class="font-semibold text-blue-600">💡 Best Practices</h4>
+                        <ul class="text-sm space-y-1">
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                Use 64+ character random string
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                Include symbols and mixed case
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                Store securely (password manager)
+                            </li>
+                            <li class="flex items-center">
+                                <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
+                                Never share or expose publicly
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-red-50 border-l-4 border-red-400 p-4 mt-4">
+                    <p class="text-red-700 text-sm">
+                        <strong>⚠️ Critical:</strong> Your admin key is automatically cleared from environment variables 
+                        after startup for security. Make sure to store it safely as it cannot be recovered from the system.
+                    </p>
                 </div>
             </div>
         </section>

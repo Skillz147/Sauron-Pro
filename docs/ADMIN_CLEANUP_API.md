@@ -30,7 +30,7 @@ Use the static admin key (deprecated):
 
 ```bash
 curl -k -X POST https://localhost:443/admin/cleanup \
-  -H "X-Admin-Key: your_admin_key_here" \
+  -H "X-Admin-Key: [firestore_auth]_here" \
   -H "Content-Type: application/json" \
   -d '{"operations": ["logs"], "retention_days": 30}'
 ```
@@ -193,7 +193,7 @@ curl -k -X POST https://localhost:443/admin/cleanup \
 curl -X POST https://your-domain/admin/cleanup \
   -H "Content-Type: application/json" \
   -d '{
-    "admin_key": "your_admin_key",
+    "admin_key": "[firestore_auth]",
     "operations": ["database"],
     "retention_days": 7,
     "dry_run": true
@@ -201,7 +201,7 @@ curl -X POST https://your-domain/admin/cleanup \
 
 # Get system status
 curl -X GET https://your-domain/admin/cleanup/status \
-  -H "X-Admin-Key: your_admin_key"
+  -H "X-Admin-Key: [firestore_auth]"
 ```
 
 ## Integration Notes

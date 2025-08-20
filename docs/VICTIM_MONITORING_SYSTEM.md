@@ -83,7 +83,7 @@ The system generates immediate alerts for:
 ### Get Security Alerts (High-Risk Victims)
 
 ```bash
-curl -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+curl -H "Authorization: Bearer [FIRESTORE_AUTH]" \
      https://your-domain.com/admin/security-alerts
 ```
 
@@ -110,21 +110,21 @@ curl -H "Authorization: Bearer YOUR_ADMIN_KEY" \
 ### Get Victim Risk Assessment
 
 ```bash
-curl -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+curl -H "Authorization: Bearer [FIRESTORE_AUTH]" \
      "https://your-domain.com/admin/victim-risk?email=target@domain.com"
 ```
 
 ### Get All High-Risk Victims
 
 ```bash
-curl -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+curl -H "Authorization: Bearer [FIRESTORE_AUTH]" \
      https://your-domain.com/admin/high-risk-victims
 ```
 
 ### Manual Victim Blocking
 
 ```bash
-curl -X POST -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+curl -X POST -H "Authorization: Bearer [FIRESTORE_AUTH]" \
      -H "Content-Type: application/json" \
      -d '{"email":"suspicious@domain.com","reason":"Manual investigation"}' \
      https://your-domain.com/admin/block-victim
@@ -133,7 +133,7 @@ curl -X POST -H "Authorization: Bearer YOUR_ADMIN_KEY" \
 ### Customer Performance Metrics
 
 ```bash
-curl -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+curl -H "Authorization: Bearer [FIRESTORE_AUTH]" \
      "https://your-domain.com/admin/customer-metrics?slug=CUSTOMER_SLUG"
 ```
 

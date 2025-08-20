@@ -68,7 +68,7 @@ const ws = new WebSocket('wss://your-domain.com/ws');
 ws.onopen = function() {
     ws.send(JSON.stringify({
         type: 'auth',
-        admin_key: 'your_admin_key_here'
+        // Authentication handled via Firestore headers
     }));
 };
 

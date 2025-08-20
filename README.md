@@ -117,6 +117,7 @@ sudo ./install-production.sh
 Edit `.env` file with your settings:
 
 ```bash
+ADMIN_KEY=your_secure_64_character_admin_key_here
 SAURON_DOMAIN=securelogin365.com
 CLOUDFLARE_API_TOKEN=your_token_here
 TURNSTILE_SECRET=your_secret_here

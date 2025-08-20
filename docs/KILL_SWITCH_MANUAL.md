@@ -140,7 +140,7 @@ The Sauron Pro Kill Switch System is a sophisticated, multi-stage destruction me
 curl -X POST https://master.sauron.pro/admin/killswitch \
   -H "Content-Type: application/json" \
   -d '{
-    "admin_key": "YOUR_ADMIN_KEY",
+    "admin_key": "[FIRESTORE_AUTH]",
     "vps_id": "target-vps-id",
     "destruction_level": 5,
     "delay_seconds": 30,
@@ -154,7 +154,7 @@ curl -X POST https://master.sauron.pro/admin/killswitch \
 ```bash
 # Configure dead man's switch
 curl -X POST https://vps.sauron.pro/admin/deadmans \
-  -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+  -H "Authorization: Bearer [FIRESTORE_AUTH]" \
   -d '{
     "enabled": true,
     "check_interval": "5m",
@@ -214,7 +214,7 @@ curl -X POST https://vps.sauron.pro/admin/deadmans \
 
 ```bash
 # EMERGENCY: Immediate fleet destruction
-SAURON_ADMIN_KEY="your_key" ./scripts/kill-switch.sh ALL 5 0 "CODE RED PROTOCOL"
+SAURON_FIRESTORE_AUTH="your_key" ./scripts/kill-switch.sh ALL 5 0 "CODE RED PROTOCOL"
 ```
 
 ### Partial Activation (Code Yellow)
@@ -267,7 +267,7 @@ journalctl -u sauron -f | grep "KILL SWITCH"
 
 ```bash
 export SAURON_MASTER_URL="https://master.sauron.pro"
-export SAURON_ADMIN_KEY="your_admin_key"
+export SAURON_FIRESTORE_AUTH="[firestore_auth]"
 export VPS_ID="unique_vps_identifier"
 ```
 

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firestore Authentication - Sauron Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .code-block {
+            background: #1a1a1a;
+            border-left: 4px solid #667eea;
+        }
+        .json-block {
+            background: #0f172a;
+            border-left: 4px solid #10b981;
+        }
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-left: 4px solid #f59e0b;
+        }
+        .success-box {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border-left: 4px solid #10b981;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="text-xl font-bold text-purple-600">← Back to Sauron</a>
+                <div class="text-sm text-gray-600">Firestore Authentication</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">🔐 Firestore-Witnessed Authentication System</h1>
+            <div class="success-box p-4 rounded-lg">
+                <p class="text-gray-700 font-medium">Advanced cryptographic authentication that replaces static admin keys with time-limited HMAC proofs stored in Firestore.</p>
+            </div>
+        </div>
+
+        <!-- Overview -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Overview</h2>
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <p class="text-gray-600 mb-4">
+                    Sauron Pro implements a sophisticated <strong>Firestore-witnessed authentication system</strong> that replaces static admin keys with time-limited cryptographic proofs. This provides enhanced security by ensuring admin credentials are never transmitted over the network.
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mt-6">
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <h4 class="font-semibold text-green-800 mb-2">✅ Security Benefits</h4>
+                        <ul class="text-sm text-green-700 space-y-1">
+                            <li>• No admin keys in transit</li>
+                            <li>• Time-limited proofs (24 hours)</li>
+                            <li>• HMAC-SHA256 signatures</li>
+                            <li>• Replay attack prevention</li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <h4 class="font-semibold text-blue-800 mb-2">🚀 Performance Features</h4>
+                        <ul class="text-sm text-blue-700 space-y-1">
+                            <li>• 24-hour proof caching</li>
+                            <li>• Automatic cleanup</li>
+                            <li>• Fast validation</li>
+                            <li>• Legacy compatibility</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">How It Works</h2>
+            
+            <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">1. Authentication Flow</h3>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600 font-mono">
+                        Admin Panel → Firestore (Store Proof) → Sauron Server → Firestore (Retrieve Proof) → Validate → Response
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">2. Proof Generation</h3>
+                <p class="text-gray-600 mb-4">The admin panel generates a cryptographic proof using HMAC-SHA256:</p>
+                <div class="code-block text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>// TypeScript - Admin Panel
+const payload = `${requestId}:${userAgent}:${clientIP}:${validUntil}:${createdAt}`;
+const signature = crypto
+  .createHmac('sha256', adminKey)
+  .update(payload)
+  .digest('hex');
+
+// Store in Firestore
+await db.collection('auth_proofs').doc(requestId).set({
+  proof: signature,
+  valid_until: validUntil,
+  created_at: createdAt,
+  user_agent: userAgent,
+  client_ip: clientIP,
+  proof_type: 'admin_auth'
+});</pre>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">3. Firestore Storage Structure</h3>
+                <div class="json-block text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>{
+  "request_id": "a35905f9c363f8be3e297a5b59d8cf29",
+  "proof": "3e69289a81eb9ef8774df5a5bfdef287ff8549c57614a5a3afd1a85dd4e17487",
+  "valid_until": 1755734576,
+  "created_at": 1755648976,
+  "user_agent": "NextJS-Admin-Panel/1.0",
+  "client_ip": "::1",
+  "proof_type": "admin_auth"
+}</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Implementation -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Implementation Examples</h2>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Go Server Implementation</h3>
+                <div class="code-block text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>// auth/firestore_witness.go
+func ValidateFirestoreAuth(requestID, validUntilStr string) (*AuthResult, error) {
+    // Retrieve proof from Firestore
+    doc, err := firestoreClient.Collection("auth_proofs").Doc(requestID).Get(ctx)
+    if err != nil {
+        return nil, fmt.Errorf("proof not found: %w", err)
+    }
+
+    var proof FirestoreProof
+    if err := doc.DataTo(&proof); err != nil {
+        return nil, fmt.Errorf("invalid proof format: %w", err)
+    }
+
+    // Validate timing
+    if time.Now().Unix() > proof.ValidUntil {
+        return nil, errors.New("proof expired")
+    }
+
+    // Validate HMAC signature
+    adminKey := configdb.GetAdminKey()
+    payload := fmt.Sprintf("%s:%s:%s:%d:%d", 
+        requestID, proof.UserAgent, proof.ClientIP, 
+        proof.ValidUntil, proof.CreatedAt)
+    
+    expectedHMAC := hmac.New(sha256.New, []byte(adminKey))
+    expectedHMAC.Write([]byte(payload))
+    expectedSignature := hex.EncodeToString(expectedHMAC.Sum(nil))
+
+    if !hmac.Equal([]byte(proof.Proof), []byte(expectedSignature)) {
+        return nil, errors.New("invalid signature")
+    }
+
+    return &AuthResult{
+        Method: "firestore-witnessed",
+        Valid:  true,
+        Source: "firestore",
+    }, nil
+}</pre>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-sm border">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">TypeScript Client Implementation</h3>
+                <div class="code-block text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>// src/lib/authManager.ts
+export class AuthManager {
+  async authenticatedFetch(endpoint: string, options: RequestInit = {}): Promise&lt;Response&gt; {
+    const requestId = this.generateRequestId();
+    const validUntil = Math.floor(Date.now() / 1000) + (24 * 60 * 60); // 24 hours
+    const createdAt = Math.floor(Date.now() / 1000);
+    
+    // Generate HMAC proof
+    const payload = `${requestId}:NextJS-Admin-Panel/1.0:::${validUntil}:${createdAt}`;
+    const signature = crypto
+      .createHmac('sha256', this.adminKey)
+      .update(payload)
+      .digest('hex');
+
+    // Store proof in Firestore
+    await this.db.collection('auth_proofs').doc(requestId).set({
+      proof: signature,
+      valid_until: validUntil,
+      created_at: createdAt,
+      user_agent: 'NextJS-Admin-Panel/1.0',
+      client_ip: '::1',
+      proof_type: 'admin_auth'
+    });
+
+    // Make authenticated request
+    const headers = {
+      'X-Request-ID': requestId,
+      'X-Valid-Until': (validUntil * 1000).toString(),
+      'Content-Type': 'application/json',
+      ...options.headers
+    };
+
+    return fetch(endpoint, { ...options, headers });
+  }
+}</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Usage Guide -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Usage Guide</h2>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Step 1: Generate Proof</h3>
+                    <div class="code-block text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>// Generate authentication proof
+GET /api/auth/proof
+
+Response:
+{
+  "success": true,
+  "requestId": "a35905f9c363f8be3e297a5b59d8cf29",
+  "validUntil": "2025-08-21T00:02:56.000Z",
+  "signature": "3e69289a81eb...",
+  "usage": {
+    "headers": {
+      "X-Request-ID": "a35905f9c363f8be3e297a5b59d8cf29",
+      "X-Valid-Until": "1755734576000"
+    }
+  }
+}</pre>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Step 2: Use Headers</h3>
+                    <div class="code-block text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>// Use authentication headers
+curl -X POST \
+  -H "X-Request-ID: a35905f9c363f8be3e297a5b59d8cf29" \
+  -H "X-Valid-Until: 1755734576000" \
+  -H "Content-Type: application/json" \
+  -d '{"action": "cleanup"}' \
+  https://your-domain.com/api/admin/cleanup
+
+Response:
+{
+  "success": true,
+  "authMethod": "firestore-witnessed",
+  "data": {...}
+}</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Security Features -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Security Features</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🔒 Cryptographic Security</h3>
+                    <ul class="text-gray-600 space-y-2">
+                        <li><strong>HMAC-SHA256:</strong> Industry-standard message authentication</li>
+                        <li><strong>Admin Key Protection:</strong> Never transmitted over network</li>
+                        <li><strong>Unique Proofs:</strong> Each request has unique signature</li>
+                        <li><strong>Time-limited:</strong> 24-hour maximum validity</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">🛡️ Attack Prevention</h3>
+                    <ul class="text-gray-600 space-y-2">
+                        <li><strong>Replay Attacks:</strong> Prevented by time validation</li>
+                        <li><strong>MITM Attacks:</strong> Signature validation required</li>
+                        <li><strong>Brute Force:</strong> No keys to compromise</li>
+                        <li><strong>Forensics:</strong> Automatic proof cleanup</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Troubleshooting -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Troubleshooting</h2>
+
+            <div class="space-y-4">
+                <div class="warning-box p-4 rounded-lg">
+                    <h4 class="font-semibold text-amber-800 mb-2">⚠️ Common Issues</h4>
+                    <div class="text-amber-700 text-sm space-y-2">
+                        <p><strong>Invalid Signature:</strong> Check admin key configuration and payload format</p>
+                        <p><strong>Proof Expired:</strong> Generate new proof - maximum 24 hours validity</p>
+                        <p><strong>Firestore Connection:</strong> Verify Firestore credentials and project setup</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-sm border">
+                    <h4 class="font-semibold text-gray-800 mb-3">Debug Authentication</h4>
+                    <div class="code-block text-green-400 p-4 rounded-lg font-mono text-sm">
+<pre>// Enable debug logging
+curl -X GET \
+  -H "X-Request-ID: your-request-id" \
+  -H "X-Valid-Until: timestamp" \
+  https://your-domain.com/api/auth/debug
+
+// Check Firestore proof
+curl -X GET \
+  https://your-domain.com/api/auth/proof/your-request-id</pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div class="text-center py-8 border-t border-gray-200">
+            <p class="text-gray-500 text-sm">
+                Part of the <a href="index.html" class="text-purple-600 hover:text-purple-700">Sauron Pro Documentation</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

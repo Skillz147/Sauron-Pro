@@ -89,10 +89,10 @@
 Make sure both projects have the same `ADMIN_KEY`:
 ```env
 # /Users/webdev/Documents/0365-Slug-Fixing/.env
-ADMIN_KEY=your_admin_key_here
+FIRESTORE_AUTH=[firestore_auth]_here
 
 # /Users/webdev/Documents/sauron2fa/.env.local
-ADMIN_KEY=your_admin_key_here
+FIRESTORE_AUTH=[firestore_auth]_here
 ```
 
 ---

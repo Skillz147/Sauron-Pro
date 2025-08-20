@@ -25,9 +25,9 @@
             <h2 class="text-2xl font-semibold text-gray-800 mb-6">Authentication</h2>
             
             <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">🔐 Firestore-Witnessed Authentication (Recommended)</h3>
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">🔐 Firestore-Witnessed Authentication</h3>
                 <p class="text-gray-600 mb-4">
-                    Sauron Pro uses a sophisticated Firestore-witnessed authentication system that replaces static admin keys with time-limited cryptographic proofs. This provides enhanced security by ensuring admin credentials are never transmitted over the network.
+                    Sauron Pro uses a sophisticated Firestore-witnessed authentication system with time-limited cryptographic proofs. This provides enhanced security by ensuring admin credentials are never transmitted over the network.
                 </p>
                 
                 <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm mb-4">
@@ -55,28 +55,11 @@ X-Valid-Until: 1755734576000
 Content-Type: application/json</pre>
                 </div>
                 
-                <div class="mt-4 p-4 bg-green-50 border-l-4 border-green-400">
-                    <p class="text-green-700 text-sm">
-                        <strong>Security Benefits:</strong> No admin keys transmitted, 24-hour expiration, cryptographic signatures, replay protection
-                    </p>
-                </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-sm border">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">🔑 Legacy Admin Key Authentication (Fallback)</h3>
-                <p class="text-gray-600 mb-4">
-                    Static admin key authentication is supported for backward compatibility but is deprecated in favor of Firestore-witnessed authentication.
-                </p>
+                                </div>
                 
-                <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
-<pre>GET /admin/metrics
-X-Admin-Key: your_admin_key_here
-Content-Type: application/json</pre>
-                </div>
-                
-                <div class="mt-4 p-4 bg-yellow-50 border-l-4 border-yellow-400">
-                    <p class="text-yellow-700 text-sm">
-                        <strong>Deprecated:</strong> Use Firestore-witnessed authentication for enhanced security. Admin key method will be removed in future versions.
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <p class="text-sm text-blue-700">
+                        <strong>Security Benefits:</strong> No credentials transmitted, 24-hour expiration, cryptographic signatures, replay protection
                     </p>
                 </div>
             </div>
@@ -116,10 +99,11 @@ Response:
                     
                     <div class="bg-gray-900 text-red-400 p-4 rounded-lg font-mono text-sm">
 <pre>POST /vps/killswitch
+X-Request-ID: a35905f9c363f8be3e297a5b59d8cf29
+X-Valid-Until: 1755734576000
 Content-Type: application/json
 
 {
-  "admin_key": "your_admin_key_here",
   "destruction_level": 3,
   "reason": "Emergency activation"
 }

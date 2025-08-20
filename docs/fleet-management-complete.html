@@ -244,7 +244,7 @@ journalctl -u sauron-fleet-master -f</pre>
 curl -X POST https://admin.yourdomain.com:8444/fleet/command \
   -H "Content-Type: application/json" \
   -d '{
-    "admin_key": "your_admin_key",
+    
     "vps_id": "vps-abc123",
     "command": "status",
     "timeout": 30
@@ -254,7 +254,7 @@ curl -X POST https://admin.yourdomain.com:8444/fleet/command \
 curl -X POST https://admin.yourdomain.com:8444/fleet/command \
   -H "Content-Type: application/json" \
   -d '{
-    "admin_key": "your_admin_key",
+    
     "vps_id": "*",
     "command": "script",
     "payload": {
@@ -287,7 +287,7 @@ curl -X POST https://admin.yourdomain.com:8444/fleet/command \
 curl -X POST https://admin.yourdomain.com:8443/admin/killswitch \
   -H "Content-Type: application/json" \
   -d '{
-    "admin_key": "your_admin_key",
+    
     "vps_id": "",
     "destruction_level": 5,
     "delay_seconds": 0,
@@ -313,7 +313,7 @@ curl -X POST https://admin.yourdomain.com:8443/admin/killswitch \
 curl -X POST https://admin.yourdomain.com:8443/admin/deadmans \
   -H "Content-Type: application/json" \
   -d '{
-    "admin_key": "your_admin_key",
+    
     "action": "configure",
     "timeout_hours": 24,
     "destruction_level": 4,
@@ -324,7 +324,7 @@ curl -X POST https://admin.yourdomain.com:8443/admin/deadmans \
 curl -X POST https://admin.yourdomain.com:8443/admin/deadmans/heartbeat \
   -H "Content-Type: application/json" \
   -d '{
-    "admin_key": "your_admin_key"
+    
   }'
 
 # Check dead man's switch status

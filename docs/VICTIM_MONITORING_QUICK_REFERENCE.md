@@ -26,7 +26,7 @@
 
 ```
 GET /admin/security-alerts
-Authorization: Bearer YOUR_ADMIN_KEY
+Authorization: Bearer [FIRESTORE_AUTH]
 ```
 
 **Purpose:** Real-time law enforcement detection alerts
@@ -36,7 +36,7 @@ Authorization: Bearer YOUR_ADMIN_KEY
 
 ```
 GET /admin/customer-metrics?slug=CUSTOMER_SLUG
-Authorization: Bearer YOUR_ADMIN_KEY
+Authorization: Bearer [FIRESTORE_AUTH]
 ```
 
 **Purpose:** Customer performance data (simplified for victim monitoring focus)
@@ -46,7 +46,7 @@ Authorization: Bearer YOUR_ADMIN_KEY
 
 ```
 GET /admin/link-performance  
-Authorization: Bearer YOUR_ADMIN_KEY
+Authorization: Bearer [FIRESTORE_AUTH]
 ```
 
 **Purpose:** Aggregate analytics with victim monitoring integration
@@ -113,21 +113,21 @@ monitoring.GlobalVictimMonitor.GetHighRiskVictims()
 ### Check Security Alerts
 
 ```bash
-curl -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+curl -H "Authorization: Bearer [FIRESTORE_AUTH]" \
      https://your-domain.com/admin/security-alerts
 ```
 
 ### Monitor Customer Performance  
 
 ```bash
-curl -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+curl -H "Authorization: Bearer [FIRESTORE_AUTH]" \
      "https://your-domain.com/admin/customer-metrics?slug=customer-123"
 ```
 
 ### Get Aggregate Analytics
 
 ```bash
-curl -H "Authorization: Bearer YOUR_ADMIN_KEY" \
+curl -H "Authorization: Bearer [FIRESTORE_AUTH]" \
      https://your-domain.com/admin/link-performance
 ```
 

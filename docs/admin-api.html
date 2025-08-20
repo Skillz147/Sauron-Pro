@@ -30,15 +30,17 @@
                 </p>
                 
                 <div class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
-<pre># Using header authentication
+<pre># Using Firestore Authentication
 curl -X GET https://your-domain.com/admin/cleanup/status \
-  -H "X-Admin-Key: your_admin_key_here"
+  -H "X-Request-ID: a35905f9c363f8be3e297a5b59d8cf29" \
+  -H "X-Valid-Until: 1755734576000"
 
-# Using JSON body authentication
+# Using Firestore headers for POST requests
 curl -X POST https://your-domain.com/admin/cleanup \
+  -H "X-Request-ID: a35905f9c363f8be3e297a5b59d8cf29" \
+  -H "X-Valid-Until: 1755734576000" \
   -H "Content-Type: application/json" \
   -d '{
-    "admin_key": "your_admin_key_here",
     "operations": ["logs"]
   }'</pre>
                 </div>
@@ -69,7 +71,7 @@ curl -X POST https://your-domain.com/admin/cleanup \
                         <div>
                             <h4 class="font-semibold mb-2">Request Parameters:</h4>
                             <ul class="text-sm space-y-1">
-                                <li><code>admin_key</code> - Authentication key</li>
+                                <li><code>headers</code> - Firestore authentication headers</li>
                                 <li><code>operations</code> - Array of operations</li>
                                 <li><code>retention_days</code> - Keep data newer than N days</li>
                                 <li><code>dry_run</code> - Preview mode (optional)</li>
@@ -82,7 +84,7 @@ curl -X POST https://your-domain.com/admin/cleanup \
 Content-Type: application/json
 
 {
-  "admin_key": "your_admin_key_here",
+  
   "operations": ["logs", "database"],
   "retention_days": 30,
   "dry_run": false
@@ -154,7 +156,7 @@ Response:
 Content-Type: application/json
 
 {
-  "admin_key": "your_admin_key_here",
+  
   "action": "analyze",
   "customer_id": "optional_customer_id"
 }
@@ -235,7 +237,7 @@ Response:
 Content-Type: application/json
 
 {
-  "admin_key": "your_admin_key_here",
+  
   "vps_id": "",  // Empty = all VPS instances
   "destruction_level": 3,
   "delay_seconds": 30,
@@ -349,7 +351,7 @@ Response:
                         <div>
                             <h4 class="font-semibold mb-2">Command Parameters:</h4>
                             <ul class="text-sm space-y-1">
-                                <li><code>admin_key</code> - Authentication key</li>
+                                <li><code>headers</code> - Firestore authentication headers</li>
                                 <li><code>vps_id</code> - Target VPS ID</li>
                                 <li><code>command</code> - Command type</li>
                                 <li><code>payload</code> - Command data</li>
@@ -362,7 +364,7 @@ Response:
 Content-Type: application/json
 
 {
-  "admin_key": "your_admin_key_here",
+  
   "vps_id": "vps-abc123",
   "command": "script",
   "payload": {
@@ -435,7 +437,7 @@ Response:
 Content-Type: application/json
 
 {
-  "admin_key": "your_admin_key_here",
+  
   "destruction_level": 3,
   "delay_seconds": 0,
   "reason": "Emergency destruction command"
@@ -527,7 +529,7 @@ Response:
 Content-Type: application/json
 
 {
-  "admin_key": "your_admin_key_here",
+  
   "script": "verify-installation.sh",
   "arguments": ["--verbose", "--check-dependencies"],
   "working_dir": "/opt/sauron",
@@ -665,7 +667,7 @@ Response:
 Content-Type: application/json
 
 {
-  "admin_key": "your_admin_key_here"
+  
 }
 
 Response:
@@ -716,7 +718,7 @@ Response:
 Content-Type: application/json
 
 {
-  "admin_key": "your_admin_key_here",
+  
   "action": "configure",
   "config": {
     "intensity": 5,
@@ -785,7 +787,7 @@ Response:
 Content-Type: application/json
 
 {
-  "admin_key": "your_admin_key_here",
+  
   "token": "0.turnstile_token_here"
 }
 
@@ -821,7 +823,7 @@ POST /admin/cleanup/config
 Content-Type: application/json
 
 {
-  "admin_key": "your_admin_key_here",
+  
   "enabled": true,
   "cleanup_interval": "2h",
   "retention_days": 14
