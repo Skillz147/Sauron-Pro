@@ -30,6 +30,9 @@ data/
 # Development scripts (kept local only)
 scripts/
 
+# VS Code settings
+.vscode/
+
 # Go artifacts
 main.go
 go.mod
