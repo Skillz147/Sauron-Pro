@@ -6,7 +6,36 @@ The Admin Cleanup API provides controlled cleanup operations for the Sauron MITM
 
 ## Authentication
 
-All cleanup operations require admin authentication using the same admin key used for WebSocket connections.
+The Admin Cleanup API supports two authentication methods:
+
+### 🔐 Firestore-Witnessed Authentication (Recommended)
+
+Generate a cryptographic proof and use the returned headers:
+
+```bash
+# Step 1: Generate proof via admin panel
+curl -s "http://localhost:3000/api/auth/proof" | jq .
+
+# Step 2: Use the returned headers
+curl -k -X POST https://localhost:443/admin/cleanup \
+  -H "X-Request-ID: [request_id_from_step_1]" \
+  -H "X-Valid-Until: [timestamp_from_step_1]" \
+  -H "Content-Type: application/json" \
+  -d '{"operations": ["logs"], "retention_days": 30}'
+```
+
+### 🔑 Legacy Admin Key Authentication (Fallback)
+
+Use the static admin key (deprecated):
+
+```bash
+curl -k -X POST https://localhost:443/admin/cleanup \
+  -H "X-Admin-Key: your_admin_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"operations": ["logs"], "retention_days": 30}'
+```
+
+> **Note**: Firestore-witnessed authentication is strongly recommended for enhanced security. Admin keys are never transmitted over the network with this method.
 
 ## Endpoints
 
@@ -18,7 +47,6 @@ All cleanup operations require admin authentication using the same admin key use
 
 ```json
 {
-  "admin_key": "your_admin_key_here",
   "operations": ["logs", "database", "credentials", "firestore", "all"],
   "retention_days": 30,
   "dry_run": false
@@ -27,7 +55,6 @@ All cleanup operations require admin authentication using the same admin key use
 
 **Parameters:**
 
-- `admin_key` (string, required): Admin authentication key
 - `operations` (array, required): List of cleanup operations to perform
   - `"logs"`: Remove old log files (preserves active logs)
   - `"database"`: Clean old user_links records and vacuum database
@@ -36,6 +63,8 @@ All cleanup operations require admin authentication using the same admin key use
   - `"all"`: Execute all cleanup operations
 - `retention_days` (integer): Keep data newer than N days (0 = delete all)
 - `dry_run` (boolean): Preview mode - shows what would be deleted without making changes
+
+> **Authentication**: Use Firestore-witnessed authentication headers (X-Request-ID, X-Valid-Until) or legacy X-Admin-Key header
 
 **Response:**
 
