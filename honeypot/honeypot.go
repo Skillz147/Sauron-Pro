@@ -150,14 +150,57 @@ func (h *HoneypotManager) looksLikeRandomString(s string) bool {
 	return hasUpper && hasLower && hasDigit
 }
 
+// sanitizeSlugForLogging safely sanitizes slugs for logging without revealing actual values
+func (h *HoneypotManager) sanitizeSlugForLogging(slug string) string {
+	enumerationType := h.detectEnumerationType(slug)
+
+	// For UUID patterns, show masked version like da92fa51-****-4228-****-e873f43f8c8f
+	if enumerationType == "uuid" || enumerationType == "uuid-format" {
+		if len(slug) == 36 && strings.Count(slug, "-") == 4 {
+			// UUID format: 8-4-4-4-12
+			parts := strings.Split(slug, "-")
+			if len(parts) == 5 {
+				return fmt.Sprintf("%s-****-%s-****-%s", parts[0], parts[2], parts[4])
+			}
+		}
+		return fmt.Sprintf("uuid_pattern_len_%d", len(slug))
+	}
+
+	// For known enumeration patterns, show category and first few chars
+	if enumerationType != "none" && enumerationType != "brute-force" {
+		if len(slug) > 3 {
+			return fmt.Sprintf("%s_pattern_%s***", enumerationType, slug[:3])
+		}
+		return fmt.Sprintf("%s_pattern_%s", enumerationType, slug)
+	}
+
+	// For brute force or unknown, just show length and character types
+	charTypes := ""
+	if regexp.MustCompile(`[a-z]`).MatchString(slug) {
+		charTypes += "lower"
+	}
+	if regexp.MustCompile(`[A-Z]`).MatchString(slug) {
+		charTypes += "upper"
+	}
+	if regexp.MustCompile(`[0-9]`).MatchString(slug) {
+		charTypes += "digit"
+	}
+	if regexp.MustCompile(`[^a-zA-Z0-9]`).MatchString(slug) {
+		charTypes += "special"
+	}
+
+	return fmt.Sprintf("unknown_len_%d_types_%s", len(slug), charTypes)
+}
+
 // executeImmediateBan performs immediate banning for detected enumeration attacks
 func (h *HoneypotManager) executeImmediateBan(clientIP, userAgent, invalidSlug, reason string) {
 	// Secure sanitized logging for immediate ban
 	GlobalSecureLogger.LogImmediateBan(clientIP, reason, h.detectEnumerationType(invalidSlug))
 
 	// Execute ban in secure database if available
-	// For now, use fail2ban as primary ban mechanism
-	fullReason := fmt.Sprintf("Honeypot enumeration: %s | Slug: %s", reason, invalidSlug)
+	// For now, use fail2ban as primary ban mechanism - sanitize slug to prevent leaks
+	sanitizedSlug := h.sanitizeSlugForLogging(invalidSlug)
+	fullReason := fmt.Sprintf("Honeypot enumeration: %s | Pattern: %s", reason, sanitizedSlug)
 	h.fail2ban.TriggerBan(clientIP, "slug-enumeration", fullReason)
 }
 

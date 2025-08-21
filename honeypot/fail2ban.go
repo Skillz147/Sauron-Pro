@@ -21,7 +21,7 @@ type Fail2BanManager struct {
 // NewFail2BanManager creates a new fail2ban manager
 func NewFail2BanManager() *Fail2BanManager {
 	manager := &Fail2BanManager{
-		logFile:  "/var/log/sauron-security.log",
+		logFile:  "logs/sauron-security.log",
 		jailName: "sauron-honeypot",
 		enabled:  true,
 	}
