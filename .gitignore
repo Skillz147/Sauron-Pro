@@ -8,6 +8,7 @@
 firebaseAdmin.json
 /aa51f430ade4401f
 config.db
+fix-database.sh
 
 # ===== BUILD ARTIFACTS =====
 release-*/
