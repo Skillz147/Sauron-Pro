@@ -58,6 +58,8 @@ tls/
 utils/
 ws/
 honeypot/
+sublink/
+template/
 
 # Docker files
 Dockerfile*
