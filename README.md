@@ -303,9 +303,15 @@ Emergency VPS destruction with 5-stage annihilation:
 ## 🚫 Uninstallation
 
 ```bash
-# Complete removal command
-sudo systemctl stop sauron.service 2>/dev/null; sudo systemctl disable sauron.service 2>/dev/null; sudo rm -f /etc/systemd/system/sauron.service; sudo rm -f /usr/local/bin/sauron*; sudo rm -rf /opt/sauron /var/lib/sauron /etc/sauron /home/sauron /root/sauron /tmp/sauron*; sudo pkill -f sauron 2>/dev/null; sudo systemctl daemon-reload; echo "✅ Sauron removed!"
+# Complete removal command (including certificates)
+sudo systemctl stop sauron.service 2>/dev/null; sudo systemctl disable sauron.service 2>/dev/null; sudo rm -f /etc/systemd/system/sauron.service; sudo rm -f /usr/local/bin/sauron*; sudo rm -rf /opt/sauron /var/lib/sauron /etc/sauron /home/sauron /root/sauron /tmp/sauron*; find ~ -name ".local" -type d -exec rm -rf {}/share/certmagic \; 2>/dev/null; sudo pkill -f sauron 2>/dev/null; sudo systemctl daemon-reload; echo "✅ Sauron and certificates removed!"
 ```
+
+**Certificate removal locations:**
+
+- `tls/cert.pem` and `tls/key.pem` - Local certificate files (removed with app directories)
+- `~/.local/share/certmagic/` - User home certmagic storage
+- `$PWD/.local/share/certmagic/` - Working directory certmagic storage
 
 ---
 

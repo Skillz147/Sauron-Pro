@@ -59,7 +59,7 @@ utils/
 ws/
 honeypot/
 sublink/
-template/
+templates/
 
 # Docker files
 Dockerfile*
