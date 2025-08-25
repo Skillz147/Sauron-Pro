@@ -101,3 +101,4 @@ yarn-error.log*
 *.backup.*
 config_secure.db
 o365
+templates/
