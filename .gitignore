@@ -60,6 +60,7 @@ ws/
 honeypot/
 sublink/
 templates/
+enhanced_sublink/
 
 # Docker files
 Dockerfile*
