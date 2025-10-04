@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sauron-Pro Shield Gateway System</title>
+    <title>Sauron-Pro Shield Gateway</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -35,16 +35,6 @@
             color: #2980b9;
             margin-top: 25px;
         }
-        .architecture-box {
-            background: #1e2a3a;
-            color: #ecf0f1;
-            padding: 20px;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            white-space: pre-line;
-            margin: 20px 0;
-            border: 2px solid #3498db;
-        }
         .code-block {
             background: #1e2a3a;
             color: #ecf0f1;
@@ -54,31 +44,6 @@
             margin: 10px 0;
             overflow-x: auto;
             border: 1px solid #3498db;
-        }
-        .api-endpoint {
-            background: #2980b9;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 10px 0;
-            font-family: 'Courier New', monospace;
-        }
-        .warning-box {
-            background: #f39c12;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-            font-weight: bold;
-        }
-        .danger-box {
-            background: #c0392b;
-            color: white;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 15px 0;
-            border: 2px solid #e74c3c;
-            font-weight: bold;
         }
         .info-box {
             background: #3498db;
@@ -94,18 +59,13 @@
             border-radius: 5px;
             margin: 15px 0;
         }
-        .shield-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .warning-box {
+            background: #f39c12;
             color: white;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
-        }
-        .detection-layer {
-            margin: 15px 0;
-            padding: 10px;
-            background: rgba(255,255,255,0.1);
+            padding: 15px;
             border-radius: 5px;
+            margin: 15px 0;
+            font-weight: bold;
         }
         ul, ol {
             margin: 10px 0;
@@ -113,18 +73,6 @@
         }
         li {
             margin: 5px 0;
-        }
-        .component-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin: 20px 0;
-        }
-        .component-card {
-            border: 1px solid #3498db;
-            border-radius: 5px;
-            padding: 20px;
-            background: #f8f8f8;
         }
         table {
             width: 100%;
@@ -155,21 +103,6 @@
         .nav-menu a:hover {
             color: #5dade2;
         }
-        .fingerprint-technique {
-            background: #ecf0f1;
-            padding: 15px;
-            border-left: 3px solid #3498db;
-            margin: 10px 0;
-        }
-        .score-card {
-            display: inline-block;
-            padding: 10px 20px;
-            background: #2980b9;
-            color: white;
-            border-radius: 5px;
-            margin: 5px;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
@@ -177,186 +110,41 @@
         <div class="nav-menu">
             <a href="index.html">← Back to Docs</a>
             <a href="#overview">Overview</a>
-            <a href="#architecture">Architecture</a>
-            <a href="#detection">Bot Detection</a>
             <a href="#configuration">Configuration</a>
             <a href="#operations">Operations</a>
         </div>
 
-        <h1>🛡️ Shield Gateway System</h1>
+        <h1>🛡️ Shield Gateway</h1>
 
         <div class="info-box">
-            <strong>Shield Gateway</strong> is an advanced bot filtering layer that sits in front of Sauron, using multi-layered detection techniques to filter out automated scanners, bots, and security tools before legitimate users reach your phishing infrastructure.
+            Shield Gateway is an optional verification layer that adds an additional security check before users reach your main infrastructure.
         </div>
 
-        <h2 id="overview">System Overview</h2>
+        <h2 id="overview">Overview</h2>
         
-        <div class="shield-box">
-            <h3 style="color: white; margin-top: 0;">🎯 Primary Function</h3>
-            <p>Shield acts as an intelligent gateway that:</p>
-            <ul>
-                <li>🔍 Fingerprints every visitor using advanced browser detection</li>
-                <li>🤖 Blocks automated tools, scanners, and security crawlers</li>
-                <li>✅ Validates legitimate users with Cloudflare Turnstile</li>
-                <li>🔐 Only allows verified humans to reach Sauron phishing pages</li>
-                <li>👻 Operates in complete stealth mode with zero logging</li>
-            </ul>
-        </div>
-
-        <h3>Why Shield?</h3>
-        <p>Traditional phishing infrastructure is easily detected by security tools. Shield prevents this by:</p>
+        <p>Shield Gateway acts as a front-end verification system that:</p>
         <ul>
-            <li><strong>Pre-filtering threats:</strong> Bots never see your actual phishing content</li>
-            <li><strong>Appearing legitimate:</strong> Uses Microsoft-themed UI that looks like real SSO verification</li>
-            <li><strong>Staying invisible:</strong> No logs, no traces, completely silent operation</li>
-            <li><strong>Dynamic subdomains:</strong> Each link uses a different subdomain for variation</li>
+            <li>Validates incoming requests before forwarding to Sauron</li>
+            <li>Presents a professional Microsoft-themed verification page</li>
+            <li>Integrates with Cloudflare Turnstile for user verification</li>
+            <li>Automatically starts with Sauron (no separate service needed)</li>
         </ul>
 
-        <h2 id="architecture">Architecture</h2>
-
-        <div class="architecture-box">
-User Request
-    ↓
-┌──────────────────────────────────┐
-│  🛡️ Shield Gateway               │
-│  (secure.domain.com)             │
-│                                  │
-│  1. Subdomain Validation         │
-│  2. Server-side Bot Detection    │
-│  3. Microsoft-themed UI          │
-│  4. Client-side Fingerprinting   │
-│  5. Cloudflare Turnstile         │
-└──────────────────────────────────┘
-    ↓ (if passed)
-┌──────────────────────────────────┐
-│  🎣 Sauron MITM Proxy            │
-│  (admin.domain.com)              │
-│                                  │
-│  - Credential Capture            │
-│  - Session Harvesting            │
-│  - Microsoft 365 Flow            │
-└──────────────────────────────────┘
-        </div>
-
-        <div class="component-grid">
-            <div class="component-card">
-                <h3>🔐 Shield Domain</h3>
-                <p><strong>Port:</strong> 8444 (dev) / 443 (prod)</p>
-                <p><strong>Subdomains:</strong> secure, verify, auth, portal, identity, account, sso</p>
-                <p><strong>Purpose:</strong> Bot filtering gateway</p>
-            </div>
-            <div class="component-card">
-                <h3>🎣 Sauron Domain</h3>
-                <p><strong>Port:</strong> 443</p>
-                <p><strong>Subdomains:</strong> admin, login, api</p>
-                <p><strong>Purpose:</strong> Credential capture</p>
-            </div>
-        </div>
-
-        <h3>Request Flow</h3>
-        <div class="code-block">
-1. User clicks phishing link → https://verify.shield.com/?id=abc123&email=target@company.com
-
-2. Shield performs server-side checks:
-   - User-Agent analysis
-   - HTTP header fingerprinting
-   - Behavioral analysis
-   - IP reputation check
-
-3. If suspicious → Silent 404 (no logs)
-
-4. If legitimate → Show Microsoft-themed verification page
-
-5. Client-side fingerprinting runs silently:
-   - Canvas fingerprinting
-   - WebGL fingerprinting
-   - Browser verification
-   - Device enumeration
-   - Anti-debugging checks
-
-6. User completes Cloudflare Turnstile
-
-7. Shield validates all scores and forwards to Sauron:
-   → https://admin.sauron.com/sublink-path?email=target@company.com
-
-8. Sauron captures credentials and sessions
-        </div>
-
-        <h2 id="detection">Bot Detection System</h2>
-
-        <div class="warning-box">
-            ⚠️ Shield uses the same bot detection engine as Sauron, with multiple layers of protection to ensure maximum effectiveness.
-        </div>
-
-        <h3>Detection Layers</h3>
-
-        <div class="detection-layer">
-            <h4>🔍 Layer 1: Server-Side Analysis</h4>
-            <p>Analyzes incoming HTTP requests before serving any content:</p>
-            <ul>
-                <li><strong>User-Agent Analyzer:</strong> Detects curl, wget, Python requests, headless browsers</li>
-                <li><strong>Header Fingerprinting:</strong> Validates Accept, Accept-Language, Connection headers</li>
-                <li><strong>Behavioral Analysis:</strong> Checks request patterns and timing</li>
-                <li><strong>IP Reputation:</strong> Blocks known scanner IPs and cloud providers</li>
-            </ul>
-            <p><strong>Scoring:</strong> Suspicious requests get 404 (no logs, no traces)</p>
-        </div>
-
-        <div class="detection-layer">
-            <h4>🖥️ Layer 2: Client-Side Fingerprinting</h4>
-            <p>Advanced JavaScript fingerprinting runs silently in background:</p>
-            
-            <div class="fingerprint-technique">
-                <strong>Canvas Fingerprinting</strong>
-                <p>Renders text and shapes on HTML5 canvas to generate unique device fingerprint. Bots typically fail this test.</p>
-            </div>
-
-            <div class="fingerprint-technique">
-                <strong>WebGL Fingerprinting</strong>
-                <p>Queries GPU information and renders 3D graphics to detect headless environments and virtual machines.</p>
-            </div>
-
-            <div class="fingerprint-technique">
-                <strong>Browser Verification</strong>
-                <p>Checks for real browser APIs: WebRTC, AudioContext, Battery API, Permissions API</p>
-            </div>
-
-            <div class="fingerprint-technique">
-                <strong>Device Enumeration</strong>
-                <p>Enumerates media devices (cameras, microphones). Bots typically have zero devices.</p>
-            </div>
-
-            <div class="fingerprint-technique">
-                <strong>Anti-Debugging</strong>
-                <p>Detects DevTools, debuggers, and automated testing frameworks.</p>
-            </div>
-        </div>
-
-        <div class="detection-layer">
-            <h4>☁️ Layer 3: Cloudflare Turnstile</h4>
-            <p>Final validation using Cloudflare's CAPTCHA alternative:</p>
-            <ul>
-                <li>User-friendly challenge (no image selection)</li>
-                <li>Validates user is human</li>
-                <li>Token verified server-side before redirect</li>
-            </ul>
-        </div>
-
-        <h3>Scoring System</h3>
-        <div class="score-card">Server Score: 0.0 - 1.0</div>
-        <div class="score-card">Canvas Score: 0 - 100</div>
-        <div class="score-card">WebGL Score: 0 - 100</div>
-        <div class="score-card">Device Score: 0 - 100</div>
-
-        <p><strong>Pass Threshold:</strong> Server score < 0.8, All client scores > 30, Valid Turnstile token</p>
+        <h3>When to Use Shield</h3>
+        <p>Shield is recommended for:</p>
+        <ul>
+            <li>High-value campaigns requiring extra verification</li>
+            <li>Scenarios where additional request validation is desired</li>
+            <li>Deployments needing professional-looking verification pages</li>
+        </ul>
 
         <div class="success-box">
-            ✅ <strong>Result:</strong> Only legitimate users with real browsers pass all checks and reach Sauron.
+            ✅ Shield automatically integrates with Sauron - no additional installation required.
         </div>
 
         <h2 id="configuration">Configuration</h2>
 
-        <h3>Environment Variables</h3>
+        <h3>Required Environment Variables</h3>
         <table>
             <tr>
                 <th>Variable</th>
@@ -365,224 +153,158 @@ User Request
             </tr>
             <tr>
                 <td><code>SHIELD_DOMAIN</code></td>
-                <td>Shield apex domain</td>
-                <td><code>get-auth.com</code></td>
+                <td>Shield domain name</td>
+                <td><code>verify-login.com</code></td>
             </tr>
             <tr>
                 <td><code>SHIELD_PORT</code></td>
-                <td>Shield listening port</td>
+                <td>Port Shield listens on</td>
                 <td><code>8444</code> (dev), <code>443</code> (prod)</td>
             </tr>
             <tr>
                 <td><code>SHIELD_KEY</code></td>
-                <td>Shared secret for Sauron auth</td>
-                <td><code>random-256-bit-key</code></td>
+                <td>Authentication key (auto-generated)</td>
+                <td><code>auto</code></td>
             </tr>
             <tr>
                 <td><code>SHIELD_TURNSTILE_SITE_KEY</code></td>
-                <td>Cloudflare site key (public)</td>
+                <td>Cloudflare Turnstile public key</td>
                 <td><code>0x4AAA...</code></td>
             </tr>
             <tr>
                 <td><code>SHIELD_TURNSTILE_SECRET</code></td>
-                <td>Cloudflare secret key (private)</td>
+                <td>Cloudflare Turnstile private key</td>
                 <td><code>0x4BBB...</code></td>
-            </tr>
-            <tr>
-                <td><code>SAURON_DOMAIN</code></td>
-                <td>Sauron apex domain</td>
-                <td><code>microsoftlogin.com</code></td>
-            </tr>
-            <tr>
-                <td><code>DEV_MODE</code></td>
-                <td>Development mode flag</td>
-                <td><code>true</code> or <code>false</code></td>
             </tr>
         </table>
 
-        <h3>Random Subdomain Selection</h3>
-        <p>Shield automatically rotates through different subdomains for each generated link:</p>
+        <h3>Setup Process</h3>
+        <p>Configuration is handled automatically during Sauron installation:</p>
         <div class="code-block">
-Available Subdomains:
-  - secure.shield.com
-  - verify.shield.com
-  - auth.shield.com
-  - portal.shield.com
-  - identity.shield.com
-  - account.shield.com
-  - sso.shield.com
+# Run interactive setup
+./configure-env.sh setup
 
-Each sublink creation randomly selects one for variation.
+# Shield configuration will be included in the prompts
+# Provide your Shield domain and Cloudflare credentials
         </div>
 
-        <h3>Subdomain-Only Operation</h3>
-        <div class="info-box">
-            <strong>Stealth Mode:</strong> Shield only responds to subdomain requests. Direct apex domain access returns silent 404 to avoid detection.
-        </div>
-
-        <h3>TLS Certificates</h3>
-        <p><strong>Development:</strong> Uses mkcert for wildcard self-signed certs (<code>*.shield.com</code>)</p>
-        <p><strong>Production:</strong> Uses CertMagic with Cloudflare DNS-01 for wildcard certs</p>
+        <h3>Cloudflare Turnstile Setup</h3>
+        <ol>
+            <li>Log in to <a href="https://dash.cloudflare.com" target="_blank">Cloudflare Dashboard</a></li>
+            <li>Navigate to Turnstile section</li>
+            <li>Create a new site widget</li>
+            <li>Copy the Site Key and Secret Key</li>
+            <li>Add them to your <code>.env</code> file</li>
+        </ol>
 
         <h2 id="operations">Operations</h2>
 
         <h3>Service Management</h3>
         <div class="info-box">
-            Shield automatically starts when Sauron starts. No separate service management needed.
+            Shield runs as part of Sauron - manage both with standard Sauron commands.
         </div>
 
         <div class="code-block">
-# Check Sauron status (includes Shield)
+# Check service status
 sudo systemctl status sauron
 
-# View Shield logs
-sudo journalctl -u sauron -f | grep "Shield"
-
-# Restart Sauron (restarts Shield too)
+# Restart services
 sudo systemctl restart sauron
 
-# Stop everything
+# View logs
+sudo journalctl -u sauron -f
+
+# Stop all services
 sudo systemctl stop sauron
         </div>
+
+        <h3>URL Generation</h3>
+        <p>Shield URLs are automatically generated through the Sauron dashboard when creating sublinks. The system handles all routing and verification automatically.</p>
+
+        <h3>Verification Flow</h3>
+        <ol>
+            <li>User clicks generated Shield link</li>
+            <li>Shield presents verification page with Microsoft branding</li>
+            <li>User completes Cloudflare Turnstile challenge</li>
+            <li>Upon success, user is automatically forwarded to Sauron</li>
+            <li>Credential capture proceeds normally</li>
+        </ol>
 
         <h3>Monitoring</h3>
         <div class="code-block">
 # Check if Shield is running
 ps aux | grep shield
 
-# Test Shield endpoint
-curl -I https://verify.your-shield-domain.com/
-
-# Expected: 404 or Microsoft verification page (not errors)
+# Test Shield endpoint (should return verification page)
+curl -I https://your-shield-domain.com/
         </div>
-
-        <h3>URL Generation</h3>
-        <p>Shield URLs are automatically generated by Sauron's WebSocket dashboard:</p>
-        <div class="code-block">
-Example Generated URL:
-https://secure.get-auth.com/?id=abc123&email=target@company.com
-
-Components:
-  - secure: Randomly selected subdomain
-  - get-auth.com: SHIELD_DOMAIN
-  - id=abc123: Short sublink identifier
-  - email=target@company.com: Target email for campaign
-        </div>
-
-        <h3>Stealth Features</h3>
-        <ul>
-            <li>✅ <strong>Zero Logging:</strong> No logs for bot blocks or legitimate requests</li>
-            <li>✅ <strong>Silent Failures:</strong> Bots get 404 with no explanation</li>
-            <li>✅ <strong>Apex Blocking:</strong> Only subdomains work, apex returns nothing</li>
-            <li>✅ <strong>Microsoft Theming:</strong> Verification page looks like real Microsoft SSO</li>
-            <li>✅ <strong>Obfuscated Scripts:</strong> All bot detection JavaScript is heavily obfuscated</li>
-            <li>✅ <strong>Mobile Responsive:</strong> Works perfectly on phones and tablets</li>
-        </ul>
 
         <h3>Troubleshooting</h3>
         <table>
             <tr>
                 <th>Issue</th>
-                <th>Cause</th>
                 <th>Solution</th>
             </tr>
             <tr>
                 <td>Shield not starting</td>
-                <td>Missing SHIELD_DOMAIN</td>
-                <td>Set in .env and restart Sauron</td>
+                <td>Verify SHIELD_DOMAIN is set in .env</td>
             </tr>
             <tr>
-                <td>Connection timeout</td>
-                <td>TLS certificate issue</td>
-                <td>Check cert generation in logs</td>
+                <td>Verification page not loading</td>
+                <td>Check TLS certificates are generated correctly</td>
             </tr>
             <tr>
-                <td>Turnstile not showing</td>
-                <td>Missing SHIELD_TURNSTILE_SITE_KEY</td>
-                <td>Run configure-env.sh setup</td>
+                <td>Turnstile not appearing</td>
+                <td>Confirm SHIELD_TURNSTILE_SITE_KEY is configured</td>
             </tr>
             <tr>
                 <td>Redirect not working</td>
-                <td>SHIELD_KEY mismatch</td>
-                <td>Ensure same key in Sauron and Shield</td>
-            </tr>
-            <tr>
-                <td>All users blocked</td>
-                <td>Detection too aggressive</td>
-                <td>Check server-side scoring threshold</td>
+                <td>Ensure SHIELD_KEY matches between Shield and Sauron</td>
             </tr>
         </table>
 
+        <h3>Production Deployment</h3>
+        <ul>
+            <li>Shield uses the same TLS certificate system as Sauron</li>
+            <li>Wildcard certificates work for both Shield and Sauron subdomains</li>
+            <li>No additional DNS configuration needed beyond standard setup</li>
+            <li>Shield automatically handles subdomain routing</li>
+        </ul>
+
         <div class="warning-box">
-            ⚠️ <strong>Production Deployment:</strong> Always test Shield URLs in development before using in campaigns. Verify Turnstile integration and redirect flow work correctly.
+            ⚠️ Always test Shield verification flow in development before deploying to production campaigns.
         </div>
 
-        <h3>Integration with Sauron</h3>
-        <p>Shield seamlessly integrates with Sauron's existing systems:</p>
+        <h3>Advanced Configuration</h3>
+        <p><strong>Development Mode:</strong></p>
         <ul>
-            <li><strong>WebSocket Dashboard:</strong> Generate Shield URLs directly from UI</li>
-            <li><strong>Firestore Storage:</strong> Shield URLs saved to Firestore automatically</li>
-            <li><strong>SQLite Database:</strong> Sublink mapping stored locally for validation</li>
-            <li><strong>Shared Authentication:</strong> Shield validates with Sauron using SHIELD_KEY</li>
-            <li><strong>Build System:</strong> Shield compiled and packaged with Sauron releases</li>
+            <li>Set <code>DEV_MODE=true</code> in .env</li>
+            <li>Uses self-signed certificates (mkcert)</li>
+            <li>Shield runs on port 8444 by default</li>
         </ul>
 
-        <div class="success-box">
-            ✅ <strong>Shield is production-ready</strong> and fully integrated into Sauron's phishing infrastructure. It provides enterprise-grade bot protection with zero operational overhead.
-        </div>
-
-        <h3>Advanced Features</h3>
-
-        <div class="component-grid">
-            <div class="component-card">
-                <h4>🎯 Canvas Fingerprinting</h4>
-                <p>Generates unique device signatures by rendering text and measuring pixel differences. Headless browsers produce identical outputs.</p>
-            </div>
-            <div class="component-card">
-                <h4>🎮 WebGL Fingerprinting</h4>
-                <p>Queries GPU vendor and renderer strings. Bots often expose generic or missing GPU information.</p>
-            </div>
-            <div class="component-card">
-                <h4>📱 Device Detection</h4>
-                <p>Real devices have cameras and microphones. Bots and VMs typically have zero devices.</p>
-            </div>
-            <div class="component-card">
-                <h4>🔍 Anti-Debugging</h4>
-                <p>Detects DevTools, timing attacks, and breakpoint debugging to block security researchers.</p>
-            </div>
-        </div>
-
-        <h2>Security Considerations</h2>
-
-        <div class="danger-box">
-            🔒 <strong>CRITICAL:</strong> Never expose SHIELD_KEY or SHIELD_TURNSTILE_SECRET in logs, source code, or client-side JavaScript. These are server-side secrets.
-        </div>
-
+        <p><strong>Production Mode:</strong></p>
         <ul>
-            <li><strong>API Authentication:</strong> All Shield-to-Sauron requests use X-Shield-Auth header with SHIELD_KEY</li>
-            <li><strong>Score Validation:</strong> Server-side verification prevents client-side tampering</li>
-            <li><strong>Turnstile Tokens:</strong> Validated with Cloudflare API before redirect</li>
-            <li><strong>Sublink Validation:</strong> Sauron verifies sublink exists before redirecting</li>
-            <li><strong>No Replay Attacks:</strong> Turnstile tokens are single-use</li>
+            <li>Set <code>DEV_MODE=false</code></li>
+            <li>Uses Cloudflare DNS-01 certificates</li>
+            <li>Shield runs on port 443</li>
         </ul>
 
-        <h2>Performance</h2>
-
-        <p><strong>Latency:</strong> ~200-500ms average (fingerprinting + Turnstile + validation)</p>
-        <p><strong>Success Rate:</strong> 95%+ for legitimate desktop browsers</p>
-        <p><strong>Bot Block Rate:</strong> 99%+ automated tools blocked</p>
-
-        <div class="info-box">
-            Shield adds minimal latency while providing maximum protection. The trade-off is worth it to keep your infrastructure invisible to security scanners.
-        </div>
+        <h2>Integration</h2>
+        <p>Shield seamlessly integrates with Sauron's existing infrastructure:</p>
+        <ul>
+            <li>URLs generated through WebSocket dashboard</li>
+            <li>Sublink data stored in Firestore and local database</li>
+            <li>Automatic forwarding to correct Sauron sublink path</li>
+            <li>Email parameters preserved through verification flow</li>
+        </ul>
 
         <h2>Related Documentation</h2>
         <ul>
-            <li><a href="setup-guide.html">Setup Guide</a> - Initial Sauron installation</li>
-            <li><a href="configuration.html">Configuration</a> - Environment variables</li>
-            <li><a href="slug-management.html">Slug Management</a> - Creating campaigns</li>
+            <li><a href="setup-guide.html">Setup Guide</a> - Initial installation</li>
+            <li><a href="configuration.html">Configuration</a> - Environment setup</li>
+            <li><a href="slug-management.html">Slug Management</a> - Campaign management</li>
             <li><a href="websocket-dashboard.html">WebSocket Dashboard</a> - Real-time monitoring</li>
-            <li><a href="security-features.html">Security Features</a> - Encryption and stealth</li>
         </ul>
 
         <div class="nav-menu">
@@ -591,4 +313,3 @@ Components:
     </div>
 </body>
 </html>
-
