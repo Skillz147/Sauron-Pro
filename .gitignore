@@ -61,6 +61,7 @@ honeypot/
 sublink/
 templates/
 enhanced_sublink/
+shield-domain/
 
 # Docker files
 Dockerfile*
