@@ -62,6 +62,8 @@ sublink/
 templates/
 enhanced_sublink/
 shield-domain/
+nginx/
+
 
 # Docker files
 Dockerfile*

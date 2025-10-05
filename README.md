@@ -107,6 +107,8 @@ sudo ./install-production.sh
 ./configure-env.sh --check      # Validate configuration
 ./configure-env.sh --test-domain # Test domain connectivity
 ./configure-env.sh --check-ssl  # Check SSL certificates
+./configure-env.sh --test-shield # Test Shield Gateway
+./configure-env.sh --test-nginx # Test nginx + Shield integration
 ```
 
 ### Manual Configuration
@@ -142,8 +144,11 @@ tail -f logs/emits.log          # Capture logs
 
 ```bash
 # System verification
-./verify-installation.sh        # Full system check
+./verify-installation.sh        # Full system check (includes Shield)
+./verify-shield.sh              # Detailed Shield Gateway verification
+./test-shield-connectivity.sh   # Test Shield connectivity and functionality
 ./test-firebase.sh              # Test Firebase connectivity
+./test-nginx-shield.sh          # Test nginx + Shield integration
 
 # Updates
 sudo ./update-sauron.sh --check # Check for updates
@@ -177,6 +182,18 @@ sudo journalctl -u sauron -f | grep -i shield
 
 # Restart Shield (restart Sauron)
 sudo systemctl restart sauron
+
+# Verify Shield installation and configuration
+./verify-shield.sh
+
+# Test Shield connectivity and functionality
+./test-shield-connectivity.sh
+
+# Test Shield subdomain
+curl -k https://verify.yourdomain.com
+
+# Test nginx + Shield integration
+./test-nginx-shield.sh
 ```
 
 ### Configuration
@@ -263,6 +280,25 @@ ls -la firebaseAdmin.json
 
 # Verify Firestore logs
 grep -i "firebase\|firestore" logs/system.log
+```
+
+#### 🔴 Shield Gateway issues
+
+```bash
+# Verify Shield installation
+./verify-shield.sh
+
+# Check Shield status
+ps aux | grep shield
+
+# Test Shield connectivity
+curl -k https://verify.yourdomain.com
+
+# Check Shield logs
+sudo journalctl -u sauron -f | grep -i shield
+
+# Test nginx + Shield integration
+./test-nginx-shield.sh
 ```
 
 **If firebaseAdmin.json is missing:**
