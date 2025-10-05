@@ -1,4 +1,4 @@
-# 🛡️ Shield Auto-Start - COMPLETE!
+# 🛡️ Shield Auto-Start - COMPLETE
 
 ## ✅ **Sauron Now Automatically Starts Shield!**
 
@@ -13,6 +13,7 @@ go run main.go
 ```
 
 **Output:**
+
 ```
 🛡️  Starting Shield Gateway...
 ✅ Shield Gateway started successfully (PID: 12345)
@@ -83,6 +84,7 @@ export DEV_MODE=true
 ```
 
 **Expected Output:**
+
 ```
 [INFO] TLS ready (domain: microsoftlogin.com)
 [INFO] 🛡️  Starting Shield Gateway...
@@ -92,6 +94,7 @@ export DEV_MODE=true
 ```
 
 **Verify Both Running:**
+
 ```bash
 # Check processes
 ps aux | grep -E "o365|shield"
@@ -112,6 +115,7 @@ unset SHIELD_DOMAIN
 ```
 
 **Expected Output:**
+
 ```
 [WARN] ⚠️  SHIELD_DOMAIN not configured - Shield Gateway will not start
 [INFO] 🚀 MITM proxy starting (addr: :443)
@@ -128,6 +132,7 @@ mv shield-domain/shield shield-domain/shield.bak
 ```
 
 **Expected Output:**
+
 ```
 [WARN] ⚠️  Shield binary not found - run 'cd shield-domain && go build -o shield main.go'
 [INFO] 🚀 MITM proxy starting (addr: :443)
@@ -143,6 +148,7 @@ mv shield-domain/shield shield-domain/shield.bak
 ```
 
 **Expected Output:**
+
 ```
 ^C
 [INFO] 🛡️  Stopping Shield Gateway...
@@ -191,6 +197,7 @@ cd shield-domain
 ## 🛡️ **Benefits**
 
 ### **Before (Manual):**
+
 ```bash
 # Terminal 1
 ./o365
@@ -203,6 +210,7 @@ cd shield-domain
 ```
 
 ### **After (Auto-Start):**
+
 ```bash
 # Single terminal
 ./o365
@@ -237,11 +245,13 @@ cd shield-domain
 ## ⚠️ **Important Notes**
 
 ### **Development:**
+
 - Shield binary must be built: `cd shield-domain && go build -o shield main.go`
 - Both use same `.env` file
 - Both read `SHIELD_DOMAIN`, `DEV_MODE`, etc.
 
 ### **Production:**
+
 - Install script should build both Sauron + Shield
 - systemd service should use same approach (or separate services)
 - Shield binary: `shield-domain/shield`
@@ -250,11 +260,13 @@ cd shield-domain
 ### **Troubleshooting:**
 
 **Shield doesn't start:**
+
 1. Check `SHIELD_DOMAIN` is set: `echo $SHIELD_DOMAIN`
 2. Check Shield binary exists: `ls -lh shield-domain/shield`
 3. Check Shield compiles: `cd shield-domain && go build -o shield main.go`
 
 **Both start but Shield crashes:**
+
 - Check Shield logs in Sauron's output
 - Likely port conflict (8444 already in use)
 - Or missing `SHIELD_KEY` / other config
@@ -264,6 +276,7 @@ cd shield-domain
 ## ✅ **Summary**
 
 **Now:**
+
 - ✅ One command starts everything: `./o365`
 - ✅ Shield auto-starts as subprocess
 - ✅ Shield auto-stops when Sauron stops
@@ -271,4 +284,3 @@ cd shield-domain
 - ✅ All logs in one place
 
 **You never have to manually start Shield again!** 🎉
-
