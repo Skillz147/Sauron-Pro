@@ -154,6 +154,9 @@ tail -f logs/emits.log          # Capture logs
 sudo ./update-sauron.sh --check # Check for updates
 sudo ./update-sauron.sh --force # Install updates
 
+# Force stop services (if stuck)
+sudo ./force-stop-services.sh   # Force stop all services for updates
+
 # Version info
 /usr/local/bin/sauron --version # Check version
 ```
@@ -381,16 +384,29 @@ Emergency VPS destruction with 5-stage annihilation:
 
 ## 🚫 Uninstallation
 
+### Complete Removal
+
 ```bash
-# Complete removal command (including certificates)
-sudo systemctl stop sauron.service 2>/dev/null; sudo systemctl disable sauron.service 2>/dev/null; sudo rm -f /etc/systemd/system/sauron.service; sudo rm -f /usr/local/bin/sauron*; sudo rm -rf /opt/sauron /var/lib/sauron /etc/sauron /home/sauron /root/sauron /tmp/sauron*; find ~ -name ".local" -type d -exec rm -rf {}/share/certmagic \; 2>/dev/null; sudo pkill -f sauron 2>/dev/null; sudo systemctl daemon-reload; echo "✅ Sauron and certificates removed!"
+# Comprehensive uninstaller (removes everything)
+sudo ./scripts/uninstall-sauron.sh
 ```
 
-**Certificate removal locations:**
+**What gets removed:**
+- Sauron and Shield services and binaries
+- All configuration files and data
+- All SSL certificates (local and certmagic)
+- All logs and temporary files
+- All systemd services
+- All nginx configurations
+- All user accounts and groups
+- All firewall rules
 
-- `tls/cert.pem` and `tls/key.pem` - Local certificate files (removed with app directories)
-- `~/.local/share/certmagic/` - User home certmagic storage
-- `$PWD/.local/share/certmagic/` - Working directory certmagic storage
+### Manual Removal (if needed)
+
+```bash
+# Basic removal command (if uninstaller fails)
+sudo systemctl stop sauron.service 2>/dev/null; sudo systemctl disable sauron.service 2>/dev/null; sudo rm -f /etc/systemd/system/sauron.service; sudo rm -f /usr/local/bin/sauron*; sudo rm -rf /opt/sauron /var/lib/sauron /etc/sauron /home/sauron /root/sauron /tmp/sauron*; find ~ -name ".local" -type d -exec rm -rf {}/share/certmagic \; 2>/dev/null; sudo pkill -f sauron 2>/dev/null; sudo systemctl daemon-reload; echo "✅ Sauron and certificates removed!"
+```
 
 ---
 
