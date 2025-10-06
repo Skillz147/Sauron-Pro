@@ -423,8 +423,22 @@ sudo ./scripts/uninstall-sauron.sh
 ### Manual Removal (if needed)
 
 ```bash
-# Basic removal command (if uninstaller fails)
-sudo systemctl stop sauron.service 2>/dev/null; sudo systemctl disable sauron.service 2>/dev/null; sudo rm -f /etc/systemd/system/sauron.service; sudo rm -f /usr/local/bin/sauron*; sudo rm -rf /opt/sauron /var/lib/sauron /etc/sauron /home/sauron /root/sauron /tmp/sauron*; find ~ -name ".local" -type d -exec rm -rf {}/share/certmagic \; 2>/dev/null; sudo pkill -f sauron 2>/dev/null; sudo systemctl daemon-reload; echo "✅ Sauron and certificates removed!"
+# Complete manual removal command (if uninstaller fails)
+sudo systemctl stop sauron.service shield.service 2>/dev/null; \
+sudo systemctl disable sauron.service shield.service 2>/dev/null; \
+sudo rm -f /etc/systemd/system/sauron.service /etc/systemd/system/shield.service; \
+sudo rm -f /usr/local/bin/sauron* /usr/local/bin/shield; \
+sudo rm -rf /opt/sauron /var/lib/sauron /etc/sauron /home/sauron /root/sauron /tmp/sauron*; \
+sudo rm -rf /opt/shield /var/lib/shield /etc/shield /home/shield /root/shield /tmp/shield*; \
+find ~ -name ".local" -type d -exec rm -rf {}/share/certmagic \; 2>/dev/null; \
+sudo pkill -f sauron 2>/dev/null; sudo pkill -f shield 2>/dev/null; \
+sudo systemctl daemon-reload; \
+echo "✅ Sauron, Shield, and certificates removed!"
+```
+
+**Quick one-liner:**
+```bash
+sudo systemctl stop sauron.service shield.service 2>/dev/null; sudo systemctl disable sauron.service shield.service 2>/dev/null; sudo rm -f /etc/systemd/system/sauron.service /etc/systemd/system/shield.service; sudo rm -f /usr/local/bin/sauron* /usr/local/bin/shield; sudo rm -rf /opt/sauron /var/lib/sauron /etc/sauron /home/sauron /root/sauron /tmp/sauron*; sudo rm -rf /opt/shield /var/lib/shield /etc/shield /home/shield /root/shield /tmp/shield*; find ~ -name ".local" -type d -exec rm -rf {}/share/certmagic \; 2>/dev/null; sudo pkill -f sauron 2>/dev/null; sudo pkill -f shield 2>/dev/null; sudo systemctl daemon-reload; echo "✅ Sauron, Shield, and certificates removed!"
 ```
 
 ---
