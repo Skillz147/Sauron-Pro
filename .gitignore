@@ -63,7 +63,7 @@ templates/
 enhanced_sublink/
 shield-domain/
 nginx/
-
+sni/
 
 # Docker files
 Dockerfile*
