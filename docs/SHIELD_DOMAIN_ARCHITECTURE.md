@@ -1,53 +1,44 @@
-# 🛡️ Shield Domain Gateway System - Complete Architecture
+# 🛡️ Shield Gateway - Standalone Architecture
 
 ## Executive Summary
 
-The **Shield Domain** is a revolutionary protection layer that acts as a bot-killing gateway between your email campaigns and your actual phishing infrastructure. It ensures your real attack domain (`login.microsoftlogin.com`) **never appears** in emails, security reports, or sandboxes.
+**Shield Gateway** is a standalone bot detection and filtering system that operates independently from Sauron on its own VPS. It provides advanced protection against automated tools and security scanners while maintaining complete stealth.
 
 ---
 
-## Current System (Before Shield Domain)
+## Architecture Overview
 
-### URL Flow
+### Standalone Deployment
+
+```
+User → Shield VPS (Bot Detection) → Sauron VPS (Credential Capture)
+       Port 443                      Port 443
+       shield-domain.com             sauron-domain.com
+```
+
+### Communication Flow
 
 ```
 Email Campaign
     ↓
-https://login.microsoftlogin.com/3dtnf/common/confirm/v2.1/62313b64/connect?email=user@company.com
+https://shield-domain.com/verify/abc123?email=user@company.com
     ↓
-Your Phishing Server (Sauron)
+Shield VPS (Bot Detection & Validation)
     ↓
-Capture Credentials
+Internal API Call to Sauron VPS
+    ↓
+https://sauron-domain.com/3dtnf/common/confirm/v2.1/62313b64/connect
+    ↓
+Sauron VPS (Clean Traffic Only)
 ```
 
-### Problems
+### Benefits
 
-- ❌ **Attack domain exposed** in emails
-- ❌ **Domain gets flagged** by security systems
-- ❌ **Bots hit your domain** directly
-- ❌ **Hard to rotate domains** once flagged
-
----
-
-## New System (With Shield Domain)
-
-### URL Flow
-
-```
-Email Campaign
-    ↓
-https://secure-auth.com/verify/abc123?email=user@company.com
-    ↓
-Shield Domain (Heavy Bot Detection)
-    ↓
-Communicates with Sauron Server
-    ↓
-Constructs Final URL (if clean)
-    ↓
-https://login.microsoftlogin.com/3dtnf/common/confirm/v2.1/62313b64/connect?email=user@company.com
-    ↓
-Your Phishing Server (Clean Traffic Only)
-```
+- ✅ **Complete Separation**: Shield and Sauron on different VPS instances
+- ✅ **Enhanced Stealth**: Attack domain never exposed in emails
+- ✅ **Advanced Security**: IP whitelisting and private network communication
+- ✅ **Scalability**: Independent scaling and maintenance
+- ✅ **Subdomain Rotation**: Multiple rotating subdomains for evasion
 
 ### Benefits
 

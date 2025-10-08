@@ -1,5 +1,7 @@
 # 🛡️ Shield Bot Detection & Verification - COMPLETE
 
+**Note:** Shield is now a standalone application deployed on its own VPS. See `SHIELD_STANDALONE_ARCHITECTURE.md` for deployment details.
+
 ## ✅ What's Implemented
 
 ### 1. Multi-Layer Bot Detection System

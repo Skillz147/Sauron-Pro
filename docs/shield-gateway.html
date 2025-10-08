@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sauron-Pro Shield Gateway</title>
+    <title>Sauron-Pro Shield Gateway - Standalone Architecture</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -114,32 +114,31 @@
             <a href="#operations">Operations</a>
         </div>
 
-        <h1>🛡️ Shield Gateway</h1>
+        <h1>🛡️ Shield Gateway - Standalone Architecture</h1>
 
         <div class="info-box">
-            Shield Gateway is an optional verification layer that adds an additional security check before users reach your main infrastructure.
+            <strong>NEW:</strong> Shield is now a standalone application deployed on its own VPS for maximum stealth and security.
         </div>
 
-        <h2 id="overview">Overview</h2>
+        <h2 id="overview">Architecture Overview</h2>
         
-        <p>Shield Gateway acts as a front-end verification system that:</p>
+        <p>Shield Gateway operates independently from Sauron:</p>
         <ul>
-            <li>Validates incoming requests before forwarding to Sauron</li>
-            <li>Presents a professional Microsoft-themed verification page</li>
-            <li>Integrates with Cloudflare Turnstile for user verification</li>
-            <li>Automatically starts with Sauron (no separate service needed)</li>
+            <li><strong>Separate VPS:</strong> Deployed on its own server instance</li>
+            <li><strong>Bot Detection:</strong> Advanced filtering before reaching Sauron</li>
+            <li><strong>Secure Communication:</strong> Private API calls to Sauron VPS</li>
+            <li><strong>Subdomain Rotation:</strong> Multiple rotating subdomains for stealth</li>
         </ul>
 
-        <h3>When to Use Shield</h3>
-        <p>Shield is recommended for:</p>
-        <ul>
-            <li>High-value campaigns requiring extra verification</li>
-            <li>Scenarios where additional request validation is desired</li>
-            <li>Deployments needing professional-looking verification pages</li>
-        </ul>
+        <h3>Communication Flow</h3>
+        <div class="code-block">
+User → Shield VPS (Bot Detection) → Sauron VPS (Credential Capture)
+       Port 443                      Port 443
+       shield-domain.com             sauron-domain.com
+        </div>
 
-        <div class="success-box">
-            ✅ Shield automatically integrates with Sauron - no additional installation required.
+        <div class="warning-box">
+            ⚠️ Shield requires separate deployment and configuration from Sauron.
         </div>
 
         <h2 id="configuration">Configuration</h2>

