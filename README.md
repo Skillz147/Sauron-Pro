@@ -106,7 +106,7 @@ sudo ./install-production.sh
 ./configure-env.sh --check      # Validate configuration
 ./configure-env.sh --test-domain # Test domain connectivity
 ./configure-env.sh --check-ssl  # Check SSL certificates
-./configure-env.sh --test-shield # Test Shield Gateway
+./scripts/test-shield-connection.sh # Test Shield Gateway connection
 ```
 
 ### Manual Configuration
@@ -127,23 +127,19 @@ TURNSTILE_SECRET=your_secret_here
 ### Service Control
 
 ```bash
-# Service operations
-sudo systemctl status sauron shield  # Check both service status
-sudo systemctl restart sauron shield # Restart both services
-sudo systemctl stop sauron shield   # Stop both services
-sudo systemctl start sauron shield  # Start both services
-
-# Individual service operations
-sudo systemctl status sauron        # Check Sauron only
-sudo systemctl status shield        # Check Shield only
-sudo systemctl restart sauron       # Restart Sauron only
-sudo systemctl restart shield       # Restart Shield only
+# Service operations (Sauron only)
+sudo systemctl status sauron        # Check Sauron service status
+sudo systemctl restart sauron       # Restart Sauron service
+sudo systemctl stop sauron          # Stop Sauron service
+sudo systemctl start sauron          # Start Sauron service
 
 # View logs
 sudo journalctl -u sauron -f        # Live Sauron logs
-sudo journalctl -u shield -f        # Live Shield logs
 tail -f logs/system.log              # System logs
 tail -f logs/emits.log               # Capture logs
+
+# Note: Shield Gateway runs on separate VPS with its own service
+# Use ./scripts/test-shield-connection.sh to verify Shield connectivity
 ```
 
 ### System Operations
@@ -151,8 +147,7 @@ tail -f logs/emits.log               # Capture logs
 ```bash
 # System verification
 ./verify-installation.sh        # Full system check (includes Shield)
-./verify-shield.sh              # Detailed Shield Gateway verification
-./test-shield-connectivity.sh   # Test Shield connectivity and functionality
+./scripts/test-shield-connection.sh
 ./test-firebase.sh              # Test Firebase connectivity
 
 # Updates
@@ -255,7 +250,7 @@ grep -i "firebase\|firestore" logs/system.log
 
 ```bash
 # Verify Shield installation
-./verify-shield.sh
+./scripts/test-shield-connection.sh
 
 # Check Shield status
 ps aux | grep shield
@@ -368,23 +363,22 @@ sudo ./scripts/uninstall-sauron.sh
 ### Manual Removal (if needed)
 
 ```bash
-# Complete manual removal command (if uninstaller fails)
-sudo systemctl stop sauron.service shield.service 2>/dev/null; \
-sudo systemctl disable sauron.service shield.service 2>/dev/null; \
-sudo rm -f /etc/systemd/system/sauron.service /etc/systemd/system/shield.service; \
-sudo rm -f /usr/local/bin/sauron* /usr/local/bin/shield; \
+# Complete manual removal command (Sauron only - Shield runs on separate VPS)
+sudo systemctl stop sauron.service 2>/dev/null; \
+sudo systemctl disable sauron.service 2>/dev/null; \
+sudo rm -f /etc/systemd/system/sauron.service; \
+sudo rm -f /usr/local/bin/sauron*; \
 sudo rm -rf /opt/sauron /var/lib/sauron /etc/sauron /home/sauron /root/sauron /tmp/sauron*; \
-sudo rm -rf /opt/shield /var/lib/shield /etc/shield /home/shield /root/shield /tmp/shield*; \
 find ~ -name ".local" -type d -exec rm -rf {}/share/certmagic \; 2>/dev/null; \
-sudo pkill -f sauron 2>/dev/null; sudo pkill -f shield 2>/dev/null; \
+sudo pkill -f sauron 2>/dev/null; \
 sudo systemctl daemon-reload; \
-echo "✅ Sauron, Shield, and certificates removed!"
+echo "✅ Sauron and certificates removed! (Shield runs on separate VPS)"
 ```
 
 **Quick one-liner:**
 
 ```bash
-sudo systemctl stop sauron.service shield.service 2>/dev/null; sudo systemctl disable sauron.service shield.service 2>/dev/null; sudo rm -f /etc/systemd/system/sauron.service /etc/systemd/system/shield.service; sudo rm -f /usr/local/bin/sauron* /usr/local/bin/shield; sudo rm -rf /opt/sauron /var/lib/sauron /etc/sauron /home/sauron /root/sauron /tmp/sauron*; sudo rm -rf /opt/shield /var/lib/shield /etc/shield /home/shield /root/shield /tmp/shield*; find ~ -name ".local" -type d -exec rm -rf {}/share/certmagic \; 2>/dev/null; sudo pkill -f sauron 2>/dev/null; sudo pkill -f shield 2>/dev/null; sudo systemctl daemon-reload; echo "✅ Sauron, Shield, and certificates removed!"
+sudo systemctl stop sauron.service 2>/dev/null; sudo systemctl disable sauron.service 2>/dev/null; sudo rm -f /etc/systemd/system/sauron.service; sudo rm -f /usr/local/bin/sauron*; sudo rm -rf /opt/sauron /var/lib/sauron /etc/sauron /home/sauron /root/sauron /tmp/sauron*; find ~ -name ".local" -type d -exec rm -rf {}/share/certmagic \; 2>/dev/null; sudo pkill -f sauron 2>/dev/null; sudo systemctl daemon-reload; echo "✅ Sauron removed! (Shield runs on separate VPS)"
 ```
 
 ---
